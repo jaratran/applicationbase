@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "ryannaddy.laravel-artisan",
+        "onecentlin.laravel5-snippets",
+        "amiralizadeh9480.laravel-extra-intellisense",
+        "xdebug.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "mikestead.dotenv"
+    ]
+}

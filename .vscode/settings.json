@@ -1,0 +1,39 @@
+// This file contains settings for the Visual Studio Code editor.
+// It is used to configure various aspects of the editor, such as formatting, linting, and debugging.
+
+{
+  "php.validate.executablePath": "C:\\xampp-8.2.12\\php\\php8.exe",
+  "php.suggest.basic": false,
+
+  "intelephense.environment.phpVersion": "8.2",
+
+  "php.debug.idekey": "VSCODE",
+  "php.debug.executablePath": "C:\\xampp-8.2.12\\php\\php8.exe",
+  "php.debug.port": 9003,
+  "php.debug.remoteHost": "localhost",
+  "php.debug.remotePort": 9003,
+  "php.debug.remoteAutostart": true,
+  "php.debug.remoteConnectBack": false,
+
+  "workbench.colorTheme": "Monokai",
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#1f6fd0",
+    "activityBar.background": "#1f6fd0",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#ee90bb",
+    "activityBarBadge.foreground": "#15202b",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#1f6fd0",
+    "statusBar.background": "#1857a4",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#1f6fd0",
+    "statusBarItem.remoteBackground": "#1857a4",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#1857a4",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#1857a499",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#1857a4"
+}
