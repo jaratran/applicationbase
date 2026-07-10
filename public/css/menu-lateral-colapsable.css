@@ -1,0 +1,92 @@
+body {
+    min-height: 100vh;
+}
+
+#toggleSidebar {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    z-index: 1050;
+    background: transparent;
+    border: none;
+}
+
+/* Sidebar principal */
+#sidebar {
+    width: 330px;
+    max-height: calc(100vh - 45px); /* restamos la altura del navbar si existe */
+
+    position: fixed;
+    top: 45px; /* Ajusta si tu navbar tiene una altura diferente */
+    left: -330px;
+    z-index: 1040;
+    background-color: #f8f9fa;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    transition: left 0.3s, box-shadow 0.3s;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+    min-height: 100vh;   
+}
+#sidebar.active {
+    left: 0;
+}
+
+/* Estilo de enlaces dentro del sidebar */
+#sidebar .nav-link {
+    color: #000;
+    font-size: 0.875rem; /* fs-6 equivalente */
+}
+
+/*  Opción seleccionada (active) se muestre con letra blanca */
+#sidebar .nav-link.active {
+    color: #fff;
+    background-color: var(--bs-primary); /* Aquí usamos la variable */
+    border-radius: 0.375rem;
+}
+#sidebar .nav-link.active i {
+    color: white !important; /* El ícono en font awesome también en blanco */
+}
+
+/* Color de fondo al pasar el mouse */
+#sidebar .nav-link:hover {
+    background-color: var(--bs-secondary);
+    color: #fff;
+    border-radius: 0.375rem;
+}
+#sidebar .nav-link:hover i {
+    color: white !important; /* El ícono en font awesome también en blanco */
+}
+
+/* Estilos CSS para el overlay que cubre toda la pantalla y oscurece el fondo cuando el sidebar está activo */
+#sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2); /* Oscurece la pantalla */
+    z-index: 1035; /* Debajo del sidebar (1040) pero encima del resto */
+    display: none; /* Oculto por defecto */
+    transition: opacity 0.3s ease;
+}
+#sidebar-overlay.active {
+    display: block;
+}
+
+/* Clase para bloquear el scroll del <body> cuando el menú lateral está activo */
+body.no-scroll {
+    overflow: hidden;
+}
+
+/* Diseño más moderno del scroll (sólo visible en navegadores Webkit y derivados) */
+#sidebar::-webkit-scrollbar {
+    width: 12px;
+}
+#sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+#sidebar::-webkit-scrollbar-track {
+    background-color: transparent;
+}

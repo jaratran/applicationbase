@@ -1,0 +1,36 @@
+/* === Ajustar el alto de los Select2 para que todos sean iguales en altura */
+.select2-container .select2-selection--single {
+    min-height: 38px; /* mismo que .form-control de Bootstrap */
+    display: flex;
+    align-items: center; /* Centra verticalmente */
+}
+
+/* === Personalización de la opción destacada al hacer hover o foco con el color primario personalizado  === */
+.select2-container--bootstrap .select2-results__option--highlighted {
+    background-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+/* === Personalización de Marco de enfoque del Select2  === */
+/* Select2 enfoque personalizado usando el color primario */
+.select2-container--bootstrap .select2-selection--single:focus,
+.select2-container--bootstrap .select2-selection--multiple:focus,
+.select2-container--bootstrap.select2-container--focus .select2-selection {
+    border-color: var(--bs-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25) !important;
+}
+
+/* === Asegurar bordes por defecto de inputs y Select2 === */
+.select2-container--bootstrap {
+    border-color: var(--bs-primary) !important;
+}
+
+/* === Select2: dropdown y opciones sometidas al color primario === */
+.select2-container--bootstrap .select2-dropdown {
+    border-color: var(--bs-primary) !important;
+}
+
+/* === Asegura que el select2 se comporte igual que un form-control y ocupe el 100% del ancho disponible, incluso en pantallas angostas. === */
+.form-group .select2-container {
+    width: 100% !important;
+}

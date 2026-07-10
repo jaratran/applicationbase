@@ -1,0 +1,68 @@
+/* === Botones generales de DataTables (exportar, filtros, etc.) === */
+.dt-button, .dt-button.buttons-html5 {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+.dt-button:hover, .dt-button:focus {
+    background-color: var(--bs-secondary) !important;
+    border-color: var(--bs-secondary) !important;
+    color: #fff !important;
+}
+
+/* === DataTables: Colores personalizados en botones de paginación === */
+.pagination{
+    --bs-pagination-color: var(--bs-primary) !important;
+    --bs-pagination-hover-color: var(--bs-secondary) !important;
+    --bs-pagination-focus-color: var(--bs-primary) !important;
+    --bs-pagination-active-bg: var(--bs-primary) !important;
+    --bs-pagination-active-border-color: var(--bs-primary) !important;
+}
+
+/* === DataTables: Personalización de colores para botones de Filtros === */
+
+/* PRIMARY */
+/* Inactivo (no checked) → estilo outlined */
+.filtro .btn-check:not(:checked) + .filtro-btn-primary {
+    background-color: transparent;
+    border: 1px solid var(--bs-primary);
+    color: var(--bs-primary);
+}
+
+/* Activo (checked) → estilo sólido */
+.filtro .btn-check:checked + .filtro-btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+}
+
+/* SECONDARY */
+/* Inactivo (no checked) → estilo outlined */
+.filtro .btn-check:not(:checked) + .filtro-btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--bs-secondary);
+    color: var(--bs-secondary);
+}
+
+/* Activo (checked) → estilo sólido */
+.filtro .btn-check:checked + .filtro-btn-secondary {
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+    color: #fff;
+}
+
+/* INFO */
+/* Inactivo (no checked) → estilo outlined */
+.filtro .btn-check:not(:checked)+.filtro-btn-info {
+	background-color: transparent;
+	border: 1px solid var(--bs-info);
+	color: var(--bs-info);
+}
+
+/* Activo (checked) → estilo sólido */
+.filtro .btn-check:checked+.filtro-btn-info {
+	background-color: var(--bs-info);
+	border-color: var(--bs-info);
+	color: #fff;
+}

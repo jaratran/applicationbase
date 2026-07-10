@@ -1,0 +1,31 @@
+.table-scroll {
+    overflow-x: auto;
+}
+.top-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    height: 15px;
+
+    position: sticky;
+    top: 45px; /* Ajusta según el alto de tu header si es fijo */
+    z-index: 20;
+}
+.top-scroll div {
+    height: 1px;
+}
+
+/* --- MODO MÓVIL --- */
+@media (max-width: 768px) {
+    /* Ocultar scrolls auxiliares */
+    .top-scroll,
+    .bottom-scroll {
+        display: none !important;
+    }
+
+    /* Habilitar scroll táctil directo sobre la tabla */
+    .table-scroll {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+}
