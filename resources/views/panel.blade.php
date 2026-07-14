@@ -1,11 +1,16 @@
 @extends('layouts.app')
 
 @section('head-scripts')
+    <!-- DataTables, integración con Bootstrap 5 y extensión Buttons para exportación -->
     <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
+
+    <!-- Estilos compartidos de DataTables: scroll sincronizado, filtros y colores configurables -->
     <link rel="stylesheet" href="{{ asset('css/scrolls-dataTables.css') }}">
     <link rel="stylesheet" href="{{ asset('css/filtros-dataTables.css') }}">
     <link rel="stylesheet" href="{{ asset('css/sobrescribir-colores-dataTables.css') }}">
+
+    <!-- Estilos específicos del Panel: tarjetas KPI, gráficos y ajustes responsive -->
     <style>
         .panel-kpi-card { border: 0; border-left: .25rem solid var(--bs-primary); }
         .panel-kpi-card.border-success { border-left-color: var(--bs-success) !important; }
@@ -14,6 +19,8 @@
         .panel-kpi-icon { width: 2.75rem; height: 2.75rem; }
         .panel-chart { position: relative; min-height: 280px; }
         @media (max-width: 575.98px) { .panel-chart { min-height: 240px; } }
+
+        /* Reduce el tamaño y espaciado del paginador de DataTables en pantallas angostas. */
         @media (max-width: 480px) {
             #panelActividadesTable #dt-paginate .pagination {
                 --bs-pagination-padding-x: 0.50rem;
