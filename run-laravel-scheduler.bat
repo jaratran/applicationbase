@@ -1,9 +1,9 @@
 @echo off
-title LaPortada - Laravel Scheduler (Telegram y Programa Diario)
+title Laravel Scheduler
 cd /d D:\Apps-Apache-htdocs\laportada
 
 echo --------------------------------------------------------------------------------------------------------------
-echo Iniciando ejecucion continua del scheduler Laravel (telegram:procesar-mensajes y programa-diario:emitir-auto)
+echo Iniciando ejecucion continua del scheduler Laravel
 echo Aplicacion: LaPortada
 echo Path: %CD%
 echo --------------------------------------------------------------------------------------------------------------

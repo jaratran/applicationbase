@@ -18,10 +18,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->everyMinute()
                 ->withoutOverlapping();   // evita solapes si una ejecución demora
 
-        // 👇 NUEVO: Emisión automática del Programa Diario cada 5 minutos
-        $schedule->command('programa-diario:emitir-auto')
-                ->everyFiveMinutes()
-                ->withoutOverlapping();   // evita solapes si una ejecución demora
     })
 
     ->withMiddleware(function (Middleware $middleware) {

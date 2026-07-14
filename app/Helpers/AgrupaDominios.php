@@ -11,8 +11,8 @@ class AgrupaDominios
         * Agrupa direcciones de correo por dominio (To + CC).
         * Si un dominio no tiene To, pero sí CC, mueve todos los CC a To.
         * 
-        * USADO en el siguiente método : enviarCorreoProgramaDiarioEmitido, el cual considera enviarl a misma notificación muchos destinatarios.
-        * El próposito es evitar la excepción bloqueante de GMAIL 'Error 451 Multiple destination domains' ocasionada cuando los correos pertenenen a más de un dominio.
+        * Usado al enviar una misma notificación a destinatarios de varios dominios.
+        * El propósito es evitar la excepción bloqueante de GMAIL 'Error 451 Multiple destination domains'.
         *
         * @param array $to Lista de destinatarios principales (To)
         * @param array $cc Lista de destinatarios en copia (CC)

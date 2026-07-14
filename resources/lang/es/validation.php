@@ -390,12 +390,6 @@ return [
             'string' => 'El teléfono de soporte debe ser una cadena de texto.',
             'max' => 'El teléfono de soporte no debe exceder los :max caracteres.',
         ],
-        'daily_program_execution_time' => [
-            'date_format' => 'La hora de ejecución del programa debe tener el formato HH:MM.',
-        ],
-        'auto_emit_daily_program' => [
-            'boolean' => 'El valor de emisión automática debe ser verdadero o falso.',
-        ],
         'audit_email' => [
             'email' => 'El correo de auditoría debe ser válido.',
             'max' => 'El correo de auditoría no debe exceder los :max caracteres.',
@@ -700,8 +694,6 @@ return [
         // Mensajes de validación para tabla operational_parameters
         'support_email' => 'correo de soporte',
         'support_telefono' => 'teléfono de soporte',
-        'daily_program_execution_time' => 'hora de ejecución del programa diario',
-        'auto_emit_daily_program' => 'emisión automática del programa diario',
         'audit_email' => 'correo de auditoría',
         'audit_email_enabled' => 'habilitación de auditoría de correos',
         'notify_admins_as_coordinators' => 'enviar notificaciones también a administradores IT',

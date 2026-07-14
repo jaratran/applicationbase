@@ -137,39 +137,5 @@
             </ul>
         </li>
 
-        <!-- PROGRAMAS DIARIOS -->
-        <!-- Esto es para Admin-IT, Coodinadores y roles internos -->
-        @if( in_array( Auth::user()->rol_id, [  config('constantes.ROL_COORDINADOR'),       config('constantes.ROL_ADMINISTRADOR_IT'),      // Admin-IT y Coordinadores
-                                                config('constantes.ROL_PERSONAL_GERENCIA'), config('constantes.ROL_PERSONAL_PRODUCCION'),   // Roles Internos
-                                                config('constantes.ROL_PERSONAL_CALIDAD'),  config('constantes.ROL_PERSONAL_MANTENCION'),
-                                                config('constantes.ROL_PERSONAL_ROMANA') ] ))
-
-            <li class="nav-item">
-                <div class="nav-link fw-bold">
-                    <i class="fa fa-cube"></i> Programas Diarios
-                </div>
-                <ul class="sidebar-submenu nav flex-column ms-3 ps-3 list-unstyled">
-
-                    @if( in_array(Auth::user()->rol_id, [ config('constantes.ROL_COORDINADOR'), config('constantes.ROL_ADMINISTRADOR_IT') ]) )
-                        <li>
-                            <a href="{{ route('programa-diario.preparar-emision') }}"
-                            class="nav-link {{ Route::is('programa-diario.preparar-emision') ? 'active' : '' }}"
-                            {{ Route::is('programa-diario.preparar-emision') ? 'aria-current=page' : '' }}>
-                            <i class="fas fa-file-alt me-2 text-secondary"></i>Emitir Programa Diario
-                            </a>
-                        </li>
-                    @endif
-
-                    <li>
-                        <a href="{{ route('programa-diario.index') }}"
-                        class="nav-link {{ Route::is('programa-diario.index') ? 'active' : '' }}"
-                        {{ Route::is('programa-diario.index') ? 'aria-current=page' : '' }}>
-                        <i class="fas fa-history me-2 text-secondary"></i>Programas y Consolidados Anteriores
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-        @endif
     </ul>
 </div>

@@ -20,7 +20,6 @@ use App\Http\Controllers\Actores\ConductorController;
 use App\Http\Controllers\Actores\RamplaController;
 use App\Http\Controllers\SolicitudesRetiroController;
 use App\Http\Controllers\PlanificacionesRetiroController;
-use App\Http\Controllers\ProgramaDiarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -264,29 +263,4 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/ver-planificacion/{token}',  [PlanificacionesRetiroController::class, 'verDesdeToken'])->name('planificaciones-retiro.ver-desde-token');
 	Route::get('planificaciones-retiro/{id}', [PlanificacionesRetiroController::class, 'show'])->name('planificaciones-retiro.show');
 
-	//----------------------------------------------------------------------------------------------------------------------------------------------
-	// PROGRAMAS DIARIOS
-	// Esto es sólo para Admin-IT y Coodinadores
-	Route::middleware(['check.role:' . config('constantes.ROL_COORDINADOR') . ','
-										. config('constantes.ROL_ADMINISTRADOR_IT')])->group(function () {
-
-		Route::get('programa-diario/preparar-emision',      [ProgramaDiarioController::class, 'create'])->name('programa-diario.preparar-emision');
-		Route::get('programa-diario/previsualizar-emision', [ProgramaDiarioController::class, 'previsualizarEmision'])->name('programa-diario.previsualizar-emision');
-		Route::post('programa-diario/efectuar-emision',     [ProgramaDiarioController::class, 'store'])->name('programa-diario.efectuar-emision');
-	});
-
-	//----------------------------------------------------------------------------------------------------------------------------------------------
-	// VISUALIZACIÓN DE PROGRAMAS DIARIOS (abierto a roles internos)
-	Route::middleware(['check.role:' . config('constantes.ROL_COORDINADOR')       . ',' . config('constantes.ROL_ADMINISTRADOR_IT') . ','
-										. config('constantes.ROL_PERSONAL_GERENCIA') . ',' . config('constantes.ROL_PERSONAL_PRODUCCION') . ','
-										. config('constantes.ROL_PERSONAL_CALIDAD')  . ',' . config('constantes.ROL_PERSONAL_MANTENCION') . ','
-										. config('constantes.ROL_PERSONAL_ROMANA')])->group(function () {
-
-		Route::get('programa-diario',                       [ProgramaDiarioController::class, 'index'])->name('programa-diario.index');
-		Route::get('programa-diario/{fecha}/ver',           [ProgramaDiarioController::class, 'show'])->name('programa-diario.ver');
-		Route::get('programa-diario/consolidados/{fecha}',  [ProgramaDiarioController::class, 'consolidados'])->name('programa-diario.consolidados');
-
-		// 🆕 Nueva ruta con token cifrado para acceder desde el correo
-		Route::get('programa-diario/ver-desde-token/{token}', [ProgramaDiarioController::class, 'verDesdeToken'])->name('programa-diario.ver-desde-token');
-	});
 });

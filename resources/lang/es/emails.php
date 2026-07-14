@@ -14,8 +14,6 @@ return [
 
     'token_invalido_expirado'                  => 'Token de acceso inválido o expirado.',
 
-    'programa_diario_interno_subject'          => 'EcoRuta / Programa Diario Emitido - :fechaPrograma (Versión :versionPrograma)',
-    'programa_diario_transportista_subject'    => 'EcoRuta / Programación de Camiones del Día :fechaPrograma / :transportistaNombre',
 
     'planificacion_cancelada_subject'          => 'EcoRuta / Cancelación de Retiro Programado - Notificación Oficial',
 

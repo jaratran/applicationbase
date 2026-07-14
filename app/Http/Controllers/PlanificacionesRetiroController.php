@@ -1323,8 +1323,7 @@ class PlanificacionesRetiroController extends Controller
             $planificacion->save();
             $planificacion->sincronizarEstadoRetiro($request->comentario_anulacion);
 
-            if ($estadoOriginal == config('constantes.ESTADO_RETIRO_PROGRAMADO')) {                         // ✅ Solo sincroniza con Programas Diarios si estaba en estado PROGRAMADA
-                $planificacion->sincronizarEstadosDetallesProgramasDiarios();
+            if ($estadoOriginal == config('constantes.ESTADO_RETIRO_PROGRAMADO')) {                         // Solo notifica la cancelación si estaba programada
 
                 try {                                                                                       // ✅ Y notificac por anulación (cancelación) si estaba en estado PROGRAMADA
                     $this->notificarTransportistaCorreo($planificacion);
@@ -1615,7 +1614,6 @@ class PlanificacionesRetiroController extends Controller
 			}
 
             $planificacion->sincronizarEstadoRetiro();
-            $planificacion->sincronizarEstadosDetallesProgramasDiarios();
 
             return redirect()
                 ->route('planificaciones-retiro.index')

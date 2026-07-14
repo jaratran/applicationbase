@@ -187,8 +187,6 @@ class ParameterController extends Controller
                 $operationalParameter = OperationalParameter::create([
                     'support_email' => null,
                     'support_telefono' => null, // Nuevo campo
-                    'daily_program_execution_time' => null,
-                    'auto_emit_daily_program' => 0,
                     'audit_email' => null,
                     'audit_email_enabled' => 0,
                     'notify_admins_as_coordinators' => 0,
@@ -205,7 +203,6 @@ class ParameterController extends Controller
 
             // Aseguramos que los checkboxes no enviados se interpreten como 'false'
             $request->merge([
-                'auto_emit_daily_program'       => $request->has('auto_emit_daily_program') ? 1 : 0,
                 'audit_email_enabled'           => $request->has('audit_email_enabled') ? 1 : 0,
                 'notify_admins_as_coordinators' => $request->has('notify_admins_as_coordinators') ? 1 : 0,
                 'allow_profile_editing'         => $request->has('allow_profile_editing') ? 1 : 0,
@@ -215,8 +212,6 @@ class ParameterController extends Controller
             $request->validate([
                 'support_email'                     => 'nullable|email|max:255',
                 'support_telefono'                  => 'nullable|string|max:20', // Nuevo campo
-                'daily_program_execution_time'      => 'nullable|date_format:H:i',
-                'auto_emit_daily_program'           => 'nullable|boolean',
                 'audit_email'                       => 'nullable|email|max:255',
                 'audit_email_enabled'               => 'nullable|boolean',
                 'notify_admins_as_coordinators'     => 'nullable|boolean',
@@ -231,17 +226,9 @@ class ParameterController extends Controller
 				'delay_arribo_eta_hours'            => 'nullable|integer|min:1|max:23',
 			]);
 
-            // Comparamos manualmente si la hora cambió antes de asignar
-            $horaOriginal = $operationalParameter->daily_program_execution_time;
-            $horaNueva = $request->input('daily_program_execution_time');
-
-            $horaNormalizada = $horaNueva ? date('H:i', strtotime($horaNueva)) : null;
-            $horaOriginalNormalizada = $horaOriginal ? date('H:i', strtotime($horaOriginal)) : null;
-
             // Asignar campos manualmente
             $operationalParameter->support_email                    = $request->input('support_email');
             $operationalParameter->support_telefono                 = $request->input('support_telefono'); // Nuevo campo
-            $operationalParameter->auto_emit_daily_program          = $request->input('auto_emit_daily_program');
             $operationalParameter->audit_email                      = $request->input('audit_email');
             $operationalParameter->audit_email_enabled              = $request->input('audit_email_enabled');
             $operationalParameter->notify_admins_as_coordinators    = $request->input('notify_admins_as_coordinators');
@@ -254,10 +241,6 @@ class ParameterController extends Controller
 			$operationalParameter->terrestrial_transit_duration_days= $request->input('terrestrial_transit_duration_days');
 			$operationalParameter->combined_transit_duration_days   = $request->input('combined_transit_duration_days');
 			$operationalParameter->delay_arribo_eta_hours           = $request->input('delay_arribo_eta_hours');
-
-            if ($horaNormalizada !== $horaOriginalNormalizada) {
-                $operationalParameter->daily_program_execution_time = $horaNormalizada;
-            }
 
             // Verificamos si hubo cambios reales
             if ($operationalParameter->isDirty()) {

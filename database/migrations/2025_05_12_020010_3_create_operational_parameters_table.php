@@ -14,12 +14,6 @@ return new class extends Migration
             // Email de contacto de soporte IT
             $table->string('support_email', 255)->nullable();
     
-            // Hora de ejecución del programa diario
-            $table->time('daily_program_execution_time')->nullable();
-    
-            // Indica si se necesita emisión automática del programa diario
-            $table->boolean('auto_emit_daily_program')->default(false);
-    
             // Casilla donde se enviará copia de todos los correos para auditoría
             $table->string('audit_email', 255)->nullable();
     

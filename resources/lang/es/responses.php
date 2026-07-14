@@ -50,20 +50,6 @@ return [
         'error_vinculacion'         => '❌ Ocurrió un error al intentar completar la vinculación. Contactese con el coordinador.',        
     ],
 
-    'programa' => [
-        'previsualizacion_fecha_invalida' => 'La fecha proporcionada para previsualización no es válida.',
-        'previsualizacion_error'          => 'Error inesperado al cargar datos del programa diario.',
-
-        'emitido_exito'                   => 'Programa Diario emitido exitosamente para el :fecha (Version :version).',
-        'fecha_invalida'                  => 'La fecha del programa diario no es válida.',
-        'sin_detalle'                     => 'No se recibió la información de detalle del programa.',
-        'detalle_invalido'                => 'El formato del detalle del programa es inválido.',
-        'error_emision'                   => 'Ocurrió un error al emitir el Programa Diario. Intente nuevamente.',
-
-        'fecha_invalida'                  => 'La fecha seleccionada no tiene un formato válido.',
-        'sin_versiones_en_fecha'          => 'No hay versiones emitidas para la fecha :fecha.',
-    ],
-
     // Aquí puedes ir agrupando por módulo o tipo
     // 'usuarios' => [
     //     'update_success' => 'El usuario fue actualizado correctamente.',

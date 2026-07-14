@@ -168,22 +168,3 @@
 
 	</div>
 </div>
-
-<div class="bg-light border rounded p-3 mb-4">
-    <h5>Programa Diario</h5>
-    <div class="row">
-        <div class="form-group col-md-4">
-            <label for="daily_program_execution_time" class="form-label">Hora de Emisión del Programa Diario</label>
-            <input type="time" class="form-control" id="daily_program_execution_time" name="daily_program_execution_time" value="{{ old('daily_program_execution_time', isset($operationalParameter->daily_program_execution_time) ? \Carbon\Carbon::createFromFormat('H:i:s', $operationalParameter->daily_program_execution_time)->format('H:i') : '') }}">
-        </div>
-        <div class="form-group col-md-4 pt-3">
-            <div class="form-check mt-4">
-                <input class="form-check-input" type="checkbox" style="transform: scale(1.4); transform-origin: center;"
-                        id="auto_emit_daily_program" name="auto_emit_daily_program" value="1" {{ old('auto_emit_daily_program', $operationalParameter->auto_emit_daily_program ?? false) ? 'checked' : '' }}>
-                <label class="form-check-label" for="auto_emit_daily_program">
-                    Emisión Automática del Programa Diario
-                </label>
-            </div>
-        </div>
-    </div>
-</div>

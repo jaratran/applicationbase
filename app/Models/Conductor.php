@@ -87,7 +87,7 @@ class Conductor extends Model
 		try {
 			$token = config('services.telegram.bot_token');
 
-			Log::info('[Programa Diario] Preparando envío de notificación por telegram a conductor', [
+			Log::info('[Telegram] Preparando envío de notificación a conductor', [
 				'token'   => $token,
 				'chat_id' => $chatId
 			]);

@@ -54,7 +54,7 @@
 
             const $filtro = $contenedor.find('.filtro').filter(function () {
                 // return this.id && this.id.toLowerCase() === textoTh;
-                return this.id && this.id.toLowerCase().startsWith(textoTh);    // Esta mejora es para extender uso a versiones de Programa Diario en distintas TAB
+                return this.id && this.id.toLowerCase().startsWith(textoTh);
             });
 
             if ($filtro.length) {

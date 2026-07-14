@@ -389,52 +389,10 @@ class CorreoHelper
         }
     }
 
-    public static function enviarCorreoProgramaTransportista($empresa, $programaDiario, $datos)
-    {
-        try {
-            $destinatario = [ $empresa->email_contacto ]; // ✔️ Array con un solo correo destinatario
-
-            $subject = __('emails.programa_diario_transportista_subject', [
-                                                                                'fechaPrograma'   => \Carbon\Carbon::parse($programaDiario->fecha_programa)->format('d-m-Y'),
-                                                                                'transportistaNombre' => $empresa->razon_social,
-                                                                            ]);
-            $operationalParameter = OperationalParameter::first();
-
-            Log::info('[Programa Diario] Preparando envío de notificación a transportistas', [
-                'programa_diario_id' => $programaDiario->id,
-                'version'            => $programaDiario->version,
-                'to'                 => $destinatario,
-                'cc'                 => [],
-                'bcc'                => !empty(optional($operationalParameter)->audit_email)
-                                            ? [optional($operationalParameter)->audit_email]
-                                            : []
-            ]);
-
-            Mail::send(new NotificacionCorreoMailable(
-                $destinatario,                                 // 📬 Correo destinatario
-                [],                                             // 🕶 Sin CC
-
-                $subject,                                       // 📌 Subject personalizado
-                'emails.programa-diario-transportista',         // 📄 Blade del correo
-                '',                                             // 🚫 Sin URL destino para botón en correo
-
-                [                                               // 📦 Contenido del correo
-                    'empresa'         => $empresa,
-                    'programaDiario'  => $programaDiario,
-                    'datos'           => $datos,
-                ]
-            ));
-        } catch (\Exception $e) {
-            Log::error("Error al enviar correo a empresa transportista ID {$empresa->id}: " . $e->getMessage());
-        }
-    }
-
     /**
      * Envía un correo a usuarios con roles internos notificando la creación de una planificación para Región XII.
      *
-     * @param  array                           $destinatarios     Arreglo con correos electrónicos
-     * @param  \App\Models\ProgramaDiario      $programaDiario    Cabecera del programa diario
-     * @param  \Illuminate\Support\Collection  $detalles          Detalle emitido de la última versión
+     * @param  \App\Models\Planificacion $planificacion Planificación que se notificará
      * @return void
      */
 	public static function enviarCorreoTransportistaPlanificacionRegionXII($planificacion)
@@ -512,99 +470,9 @@ class CorreoHelper
 	}
 
     /**
-     * Envía un correo a usuarios internos notificando la emisión del Programa Diario.
-     *
-     * @param  array                           $destinatarios     Arreglo con correos electrónicos
-     * @param  \App\Models\ProgramaDiario      $programaDiario    Cabecera del programa diario
-     * @param  \Illuminate\Support\Collection  $detalles          Detalle emitido de la última versión
-     * @return void
-     */
-    public static function enviarCorreoProgramaDiarioEmitido(array $destinatarios, $programaDiario, $detalles)
-    {
-        try {
-            $subject = __('emails.programa_diario_interno_subject', [
-                                                                        'fechaPrograma'   => $programaDiario->fecha_programa->format('d-m-Y'),
-                                                                        'versionPrograma' => $programaDiario->version,
-                                                                    ]);
-
-            $pivote = [
-                'campo' => 'programa_diario_id',
-                'valor' => $programaDiario->id,
-            ];
-
-            $urlPivoteCorreo = route('programa-diario.ver-desde-token', [
-                                                                            'token' => Crypt::encrypt($pivote),
-                                                                        ]);
-
-            // 🧮 Cálculo del total de kilogramos estimados (con exclusión de cancelados)
-            $totalKilosEstimados = $detalles
-                                        ->filter(fn($detalle) => $detalle['estado'] !== config('constantes.ESTADO_RETIRO_CANCELADO'))
-                                        ->sum('kg_estimados');
-
-
-            // Agrupar todos los destinatarios por dominio.
-            // Para evitar la excepción bloqueante de GMAIL 'Error 451 Multiple destination domains' ocasionada cuando los correos pertenenen a más de un dominio.
-            $toArray = $destinatarios['destinatariosRolesInternos'] ?? [];
-            $ccArray = $destinatarios['destinatariosAdminIT']      ?? [];
-
-            $grupos  = AgrupaDominios::agrupaDominios($toArray, $ccArray);
-
-            $operationalParameter = OperationalParameter::first();
-
-            foreach ($grupos as $dominio => $destinos) {                // Recorrer cada grupo (un dominio a la vez)
-
-                // INSERCCION PARA EVITAR ERROR CUANDO NO VIENE NADA EN TO o CC
-                $to = $destinos['to'] ?? [];
-                $cc = $destinos['cc'] ?? [];
-
-                // Si un grupo viene sin destinatarios, se omite de forma segura
-                if (empty($to) && empty($cc)) {
-                    Log::warning('[Programa Diario] Grupo sin destinatarios, se omite envío', [
-                        'programa_diario_id' => $programaDiario->id,
-                        'version'            => $programaDiario->version,
-                        'dominio'            => $dominio,
-                    ]);
-                    continue;
-                }
-
-                Log::info('[Programa Diario] Preparando envío de notificación a usuarios internos', [
-                    'programa_diario_id' => $programaDiario->id,
-                    'version'            => $programaDiario->version,
-                    'dominio'            => $dominio,
-                    'to'                 => $to,
-                    'cc'                 => $cc,
-                    'bcc'                => !empty(optional($operationalParameter)->audit_email)
-                                                ? [optional($operationalParameter)->audit_email]
-                                                : []
-                ]);
-
-                Mail::send(new NotificacionCorreoMailable(
-                    $to,                                                // 📬 To: destinatariosRolesInternos
-                    $cc,                                                // 🕶  CC: destinatariosAdminIT
-
-                    $subject,                                           // 📌 Subject personalizado
-                    'emails.programa-diario-interno',                   // 📄 Blade del correo
-                    $urlPivoteCorreo,                                   // 🔗 URL con botón para ver el programa
-
-                    [                                                   // 📦 Datos disponibles en el blade
-                        'programaDiario'      => $programaDiario,
-                        'detalles'            => $detalles,
-                        'totalKilosEstimados' => $totalKilosEstimados
-                    ]
-                ));
-            }
-
-        } catch (\Exception $e) {
-            Log::error("Error al enviar correo de programa diario ID {$programaDiario->id}: " . $e->getMessage());
-        }
-    }
-
-    /**
      * Envía un correo a usuarios con roles internos notificando la creación de una planificación para Región XII.
      *
-     * @param  array                           $destinatarios     Arreglo con correos electrónicos
-     * @param  \App\Models\ProgramaDiario      $programaDiario    Cabecera del programa diario
-     * @param  \Illuminate\Support\Collection  $detalles          Detalle emitido de la última versión
+     * @param  \App\Models\Planificacion $planificacion Planificación que se notificará
      * @return void
      */
 	public static function enviarCorreoRolesInternosPlanificacionRegionXII($planificacion)
@@ -650,7 +518,7 @@ class CorreoHelper
 											->toArray();
 
 			if (empty($destinatariosRolesInternos) && empty($destinatariosAdminIT)) {
-				Log::warning("No se encontraron destinatarios internos para notificar programa diario ID {$programaDiario->id}");
+                Log::warning("No se encontraron destinatarios internos para notificar planificación ID {$planificacion->id}");
 				return;
 			}
 
@@ -713,9 +581,7 @@ class CorreoHelper
     /**
      * Envía un correo al Transportista señalando el que retiro se cancelo antes de ser efectuadoa (cierre) .
      *
-     * @param  array                           $destinatarios     Arreglo con correos electrónicos
-     * @param  \App\Models\ProgramaDiario      $programaDiario    Cabecera del programa diario
-     * @param  \Illuminate\Support\Collection  $detalles          Detalle emitido de la última versión
+     * @param  \App\Models\Planificacion $planificacion Planificación cancelada
      * @return void
      */
     public static function enviarCorreoPlanificacionCancelada($planificacion)
