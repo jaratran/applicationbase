@@ -540,9 +540,39 @@ docs/
 				To https://github.com/jaratran/applicationbase.git
 				   6cf9106..90148cc  main -> main
 
+=============================================================================================================================
+*** Agregamos este documento en la carpeta /docs y lo subimos al repositorio.
+
 
 =============================================================================================================================
-***
+*** Agregamos el DUMP al consolidado
+
+	$> git add docs
+
+		warning: in the working copy of 'docs/db_laportada_v2_2026-07-09.sql', CRLF will be replaced by LF the next time Git touches it
+		warning: in the working copy of 'docs/restaura_dump_applicationbase.bat', CRLF will be replaced by LF the next time Git touches it
+
+	$> git commit -m "Add initial database dump"
+
+		[main 62227a8] Add initial database dump
+		 2 files changed, 1110 insertions(+)
+		 create mode 100644 docs/db_laportada_v2_2026-07-09.sql
+		 create mode 100644 docs/restaura_dump_applicationbase.bat
+
+	$> git push
+
+		Enumerating objects: 7, done.
+		Counting objects: 100% (7/7), done.
+		Delta compression using up to 4 threads
+		Compressing objects: 100% (5/5), done.
+		Writing objects: 100% (5/5), 120.90 KiB | 4.03 MiB/s, done.
+		Total 5 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+		To https://github.com/jaratran/applicationbase.git
+		   f3ac442..62227a8  main -> main
+
+=============================================================================================================================
+*** Crear un Release 1.0.0 en GitHub con un nombre como: ApplicationBase 1.0.0 - Initial Baseline
+
 
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
