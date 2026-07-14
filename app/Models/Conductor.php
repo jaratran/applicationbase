@@ -127,12 +127,6 @@ class Conductor extends Model
 	}
 
 
-	// Planificaciones asignadas a este conductor
-	public function planificaciones()
-	{
-		return $this->hasMany(Planificacion::class, 'conductor_id');
-	}
-
 	/**
 	 * Todos los vínculos Telegram históricos
 	 */

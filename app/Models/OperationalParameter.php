@@ -17,8 +17,6 @@ class OperationalParameter extends Model
         'audit_email_enabled'           => 'boolean',
         'notify_admins_as_coordinators' => 'boolean',
         'allow_profile_editing'         => 'boolean',
-		'maritime_transit_duration_days'    => 'integer',
-		'terrestrial_transit_duration_days' => 'integer',
     ];
 
     /**
@@ -34,8 +32,5 @@ class OperationalParameter extends Model
         'notify_admins_as_coordinators',      // 📌 Nuevo campo
         'verification_expiration_time',       // 📌 Nuevo campo
         'allow_profile_editing',
-        'average_truck_speed',
-		'maritime_transit_duration_days',        // 📌 Nuevo campo (XII Región)
-		'terrestrial_transit_duration_days',     // 📌 Nuevo campo (XII Región)
     ];
 }

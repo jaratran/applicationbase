@@ -408,10 +408,6 @@ return [
         'allow_profile_editing' => [
             'boolean' => 'El permiso de edición de perfil debe ser verdadero o falso.',
         ],
-        'average_truck_speed' => [
-            'integer' => 'La velocidad promedio debe ser un número entero.',
-            'min' => 'La velocidad promedio no puede ser negativa.',
-        ],
 
         // Validaciones personalizadas - ProfileController
         'rut_usuario' => [
@@ -539,33 +535,6 @@ return [
         'cantidad_bins.*' => [
             'integer' => 'La cantidad de Bins debe ser un número entero.',
             'min'     => 'La cantidad de Bins no puede ser negativa.',
-        ],
-
-        // Validaciones personalizadas - PlanificacionesRetiroController
-        'fecha_planificada.required'      => 'Debe ingresar una fecha y hora para la planificación.',
-        'horas_viaje.required'            => 'Debe indicar la duración estimada del viaje.',
-        'hora_llegada.required'           => 'Debe calcularse la hora estimada de llegada.',
-        'tipo_materia_prima.exists'       => 'Debe seleccionar un tipo de materia prima válido.',
-        'especie.exists'                  => 'Debe seleccionar una especie válida.',
-        'patente_camion.exists'           => 'Debe seleccionar una patente de camión válida.',
-        'conductor.exists'                => 'Debe seleccionar un conductor válido.',
-        'motivo_modificacion.required'    => 'Debe seleccionar un motivo de modificación.',
-        'motivo_modificacion.exists'      => 'El motivo seleccionado no es válido.',
-        'cantidad_bins.integer'           => 'La cantidad de bins debe ser un número entero.',
-        'cantidad_bins.min'               => 'La cantidad de bins no puede ser negativa.',
-
-		'secuencia' => [
-			'planificada_menor_retiro'    => 'La planificación no puede ser anterior al retiro.',
-			'embarque_menor_planificada'  => 'El embarque no puede ser anterior a la planificación.',
-			'arribo_menor_embarque'       => 'El arribo no puede ser anterior al embarque.',
-			'eta_menor_arribo'            => 'La ETA no puede ser anterior al arribo.',
-		],
-
-        // Validaciones personalizadas - Cierre de Planificación - PlanificacionesRetiroController
-        'ticket_cierre' => [
-            'required'     => 'El ticket de cierre es obligatorio.',
-            'string'       => 'El ticket de cierre debe ser una cadena de texto.',
-            'max'          => 'El ticket de cierre no debe exceder los :max caracteres.',
         ],
 
     ],
@@ -699,7 +668,6 @@ return [
         'notify_admins_as_coordinators' => 'enviar notificaciones también a administradores IT',
         'verification_expiration_time' => 'tiempo de expiración de verificación',
         'allow_profile_editing' => 'permiso de edición de perfil',
-        'average_truck_speed' => 'velocidad promedio de camión',
 
         // Mensajes de validación para tabla password_resets
         'email' => 'correo electrónico',
@@ -773,27 +741,5 @@ return [
         // Mensajes para comentarios al la Solicitud de Retiro
         'comentario'                       => 'comentario de observación',
 
-        // Mensajes de validación para tabla planificaciones
-        'fecha_planificada'                => 'fecha y hora planificada',
-        'fecha_planificada.*'              => 'fecha y hora planificada',
-        'duracion_viaje'                   => 'duración del viaje',
-        'duracion_viaje.*'                 => 'duración del viaje',
-        'hora_llegada_estimada_hidden'     => 'hora estimada de llegada',
-        'hora_llegada_estimada_hidden.*'   => 'hora estimada de llegada',
-        'tipo_materia_prima'               => 'tipo de materia prima',
-        'tipo_materia_prima.*'             => 'tipo de materia prima',
-        'especie'                          => 'especie',
-        'especie.*'                        => 'especie',
-        'tiene_restriccion_hidden'         => 'tiene restricción',
-        'tiene_restriccion_hidden.*'       => 'tiene restricción',
-        'patente_camion'                   => 'patente del camión',
-        'patente_camion.*'                 => 'patente del camión',
-        'patente_rampla'                   => 'patente de la rampla',
-        'patente_rampla.*'                 => 'patente de la rampla',
-        'conductor'                        => 'conductor',
-        'conductor.*'                      => 'conductor',
-        'motivo_modificacion'              => 'Motivo de la modificación',
-        'motivo_modificacion_final'        => 'motivo de la modificación',
-        'ticket_cierre'                    => 'Ticket de cierre de planificación',
     ],
 ];

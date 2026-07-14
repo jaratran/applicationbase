@@ -95,41 +95,6 @@ $('#formSolicitud').on('submit', function (e) {
 	}
 
 
-	// 💥 Validación de secuencia de fechas para el transporte (solo si es PLANIFICACION y estamos en Región XII)
-	if (window.contextoVista?.esPlanificacion && window.regionOperativa === REGION_XII) {
-
-		let hayErrores = false;
-		let primerErrorGlobal = null;
-
-		$('.retiro-region-xii').filter(function () {									// Buscamos todos los selectorRegion del contexto regional activo
-			return $(this).closest('.retiro-item-template').length === 0;				// pero omitimos el del Template
-		}).each(function () {
-
-			// Si el SWITCH está CHECKED (TRUE) es REPOSICION y si es FALSE es RETIRO NORMAL
-			const checkReposicion = $(this).find('.tipo_operacion').prop('checked');
-			if (!checkReposicion) {														// La validación de fechas se efectúa si es RETIRO (NO es REPOSICION)
-				const error = validarSecuenciaFechas($(this));
-
-				if (error) {
-					hayErrores = true;
-					if (!primerErrorGlobal) primerErrorGlobal = error;
-				}
-			}
-
-		});
-
-		if (hayErrores) {
-			e.preventDefault();
-
-			if (primerErrorGlobal) {
-				primerErrorGlobal.reportValidity();
-				primerErrorGlobal.focus();
-			}
-
-			return; // ⛔ Detener submit
-		}
-	}
-
     // 💣 Eliminar template vacío si existe
     if ($('.retiro-item-template').length) {            // 💣 Si existe el Template ...
         $('.retiro-item-template').remove();            // lo removemos preventivamente (porque esta vacío y no aporta)
@@ -220,31 +185,6 @@ $('#formSolicitud').on('submit', function (e) {
 
 		}
 
-		const checkReposicion = $(this).find('.tipo_operacion').prop('checked');			// Si el SWITCH está CHECKED (TRUE) es REPOSICION y si es FALSE es RETIRO NORMAL
-		const tienePlanificacion = $item.find('.detalle-planificacion').length > 0;
-
-		if (!checkReposicion && tienePlanificacion) {										// La validación se efectúa si es RETIRO y TIENE PLANIFICACION
-			const $tieneRestriccion = $item.find(`#tiene_restriccion_${index}`);
-			const $hiddenTieneRestriccion = $item.find(`#tiene_restriccion_hidden_${index}`);
-
-			// Verificación del par cantidad (visible y hidden) antes de usar is(':checked')
-			if ($tieneRestriccion.length && $hiddenTieneRestriccion.length) {
-				const valorCheck = $tieneRestriccion.is(':checked') ? '1' : '0';
-				$hiddenTieneRestriccion.val(valorCheck);
-			} else {
-				console.warn(`⚠️ Missing tiene_restriccion campos en index ${index}`);
-			}
-
-			// Y si estamos en Región XII debemos forzar preventivamente la habilitación del campo duración...
-			if (window.regionOperativa === REGION_XII) {
-				const $duracion = $item.find(`#duracion_estimada_dias_${index}`);
-				$duracion
-					.prop('disabled', false)						// Porque si el TipoTransporte es Barcaza debió quedar disabled y así no llega al BACK
-					.prop('readonly', true)							// Pero lo bloqueamos a nivel de Front, para que el usuario no lo pueda modificar
-					.addClass('bg-secondary-subtle text-muted')		// 👈 opcional: feedback visual tipo Bootstrap
-					.css('cursor', 'not-allowed');					// 👈 opcional: el cursor refuerza la intención
-			}
-		}
 	});
 
     // ⛔ Deshabilita botón de submit y pone spinner

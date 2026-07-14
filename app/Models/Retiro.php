@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-
 use App\Models\RetiroHistorial;
 use App\Models\RetiroComentario;
 
@@ -108,87 +106,6 @@ class Retiro extends Model
         ]);
     }
 
-    /**
-     * Método: Para crear la planificación inicial asociada al retiro.
-     */
-	public function crearPlanificacionInicial(): void
-	{
-		if ($this->planificacion) {
-			return; // Ya existe, no se debe duplicar
-		}
-
-		$regionOperativa = $this->solicitud->region_operativa_id;
-
-		// El registro de planificación se debe crear vacío, limpio, en blanco, etc.
-		switch ($regionOperativa) {
-			case config('constantes.REGION_X'):
-				Planificacion::create([
-					'retiro_id'               => $this->id,                                     // ✔️ FK a retiros.id, protegido con ON DELETE CASCADE
-					'region_operativa_id'     => $regionOperativa,                              // Regió Operativa, campo que además de Solicitud también lo posee Planificación
-
-					'fecha_hora_planificada'  => Carbon::create(1970, 1, 1, 0, 0, 0),           // ✔️ Obligatorio, valor válido
-
-					'tipo_operacion'          => $this->tipo_operacion,
-
-					'duracion_viaje'          => '00:00',                                       // ✔️ Obligatorio, valor válido
-					'hora_llegada_estimada'   => Carbon::create(1970, 1, 1, 0, 0, 0),           // ✔️ Obligatorio, valor válido
-
-					'especie_id'              => config('constantes.CATALOGO_NO_ESPECIFICADO'), // ⚠️ FK -> catalogos.id
-					'tipo_materia_prima_id'   => config('constantes.CATALOGO_NO_ESPECIFICADO'), // ⚠️ FK -> catalogos.id
-					'tiene_restriccion'       => false,
-
-					'camion_id'               => 0,                                             // ⚠️ FK -> camiones.id
-					'patente_rampla'          => null,
-					'conductor_id'            => 0,                                             // ⚠️ FK -> conductores.id
-
-					'motivo_modificacion_id'  => config('constantes.CATALOGO_NO_ESPECIFICADO'), // ⚠️ FK -> catalogos.id
-					'estado_id'               => config('constantes.CATALOGO_NO_ESPECIFICADO'), // ⚠️ FK -> catalogos.id
-					'activo'                  => true,
-				]);
-				break;
-
-			case config('constantes.REGION_XII'):
-				Planificacion::create([
-					'retiro_id'               => $this->id,                                     // ✔️ FK a retiros.id, protegido con ON DELETE CASCADE
-					'region_operativa_id'     => $regionOperativa,                              // Regió Operativa, campo que además de Solicitud también lo posee Planificación
-
-					'fecha_hora_planificada'  => Carbon::create(1970, 1, 1, 0, 0, 0),
-
-					'tipo_operacion'          => $this->tipo_operacion,
-
-					'duracion_estimada_dias'  => 0,
-					'eta_calculada'           => Carbon::create(1970, 1, 1, 0, 0, 0),
-
-					'tipo_materia_prima_id'   => config('constantes.CATALOGO_NO_ESPECIFICADO'),
-					'especie_id'              => config('constantes.CATALOGO_NO_ESPECIFICADO'),
-					'tiene_restriccion'       => false,
-
-					'tipo_transporte_id'      => config('constantes.CATALOGO_NO_ESPECIFICADO'),
-					'fecha_embarque'          => null,
-					'fecha_arribo_puerto'     => null,
-
-					'rampla_id'               => 0,
-					'estado_rampla_id'        => config('constantes.CATALOGO_NO_ESPECIFICADO'),
-					'camion_id'               => 0,
-					'conductor_id'            => 0,
-
-					'fecha_rescate_puerto'    => null,
-					'camion_rescate_id'       => 0,
-					'conductor_rescate_id'    => 0,
-
-					'motivo_modificacion_id'  => config('constantes.CATALOGO_NO_ESPECIFICADO'),
-					'estado_id'               => config('constantes.CATALOGO_NO_ESPECIFICADO'),
-					'activo'                  => true,
-				]);
-				break;
-
-			default:
-				throw new \LogicException(
-					"Región operativa no soportada al crear planificación inicial (Retiro ID {$this->id})"
-				);
-		}
-	}
-
 	/**
 	 * Scope: Limita los retiros a las regiones operativas del usuario en sesión.
 	 */
@@ -242,14 +159,6 @@ class Retiro extends Model
     public function comentarios()
     {
         return $this->hasMany(RetiroComentario::class)->orderByDesc('id');
-    }
-
-    /**
-     * Relación uno a uno: cada retiro tiene UNA planificación
-     */
-    public function planificacion()
-    {
-        return $this->hasOne(Planificacion::class);
     }
 
 }

@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 use App\Models\Rampla;
-use App\Models\Catalogo;
 
 class RamplaController extends Controller
 {
@@ -242,51 +241,4 @@ class RamplaController extends Controller
 		}
 	}
 
-    public function obtenerRamplas()
-    {
-        return Rampla::where('activo', true)
-                    ->where('id', '!=', 0)              // Ignoramos aquel registro id=0
-                    ->orderBy("patente", "asc")
-                    ->get(['id', 'patente']);
-	}
-
-	public function estadosPorTipoTransporte(int $tipoTransporteId)
-	{
-		// Mapa explícito de reglas de negocio
-		$mapaEstados = [
-			config('constantes.TIPO_TRANSPORTE_TIERRA') => [
-				config('constantes.EN_PLANTA_ORIGEN'),
-				config('constantes.EN_TRANSITO_TERRESTRE'),
-				config('constantes.ENTREGADA_LA_PORTADA'),
-			],
-
-			config('constantes.TIPO_TRANSPORTE_BARCAZA') => [
-				config('constantes.EN_PLANTA_ORIGEN'),
-				config('constantes.EN_PUERTO'),
-				config('constantes.EN_TRANSITO_MARITIMO'),
-				config('constantes.ARRIBADA_PUERTO_MONTT'),
-				config('constantes.ENTREGADA_LA_PORTADA'),
-			],
-
-			config('constantes.TIPO_TRANSPORTE_COMBINADO') => [
-				config('constantes.EN_PLANTA_ORIGEN'),
-				config('constantes.EN_PUERTO'),
-				config('constantes.EN_TRANSITO_MARITIMO'),
-				config('constantes.ARRIBADA_PUERTO_MONTT'),
-				config('constantes.ASIGNADA_A_CAMIÓN'),
-				config('constantes.ENTREGADA_LA_PORTADA'),
-			],
-		];
-
-		if (!isset($mapaEstados[$tipoTransporteId])) {
-			return response()->json([]);
-		}
-
-		$estados = Catalogo::whereIn('id', $mapaEstados[$tipoTransporteId])
-			->activos()
-			->orderBy('orden')
-			->get(['id', 'nombre']);
-
-		return response()->json($estados);
-	}
 }

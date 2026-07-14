@@ -14,7 +14,7 @@ class LocationController extends Controller
 		$idRegion = $request->get('idRegion');
 
 		$region = Region::with('comunas')
-			->where('id', '!=', 0)     // Ignoramos registro id=0 porque aquel es sólo para permitir crear Planificaciones Vacias
+			->where('id', '!=', 0)     // El registro neutro no corresponde a una ubicación seleccionable
 			->find($idRegion);         // Carga la relación comunas definida en el modelo Region buscando la región por su ID
 
 		return $region?->comunas ?? collect();         // Accede a las comunas de la región si existe y si $region es null retorna una colección vacía (en lugar de lanzar error).
@@ -23,16 +23,15 @@ class LocationController extends Controller
 	public function obtenerRegion()
 	{
 		return Region::orderBy("orden", "asc")
-			->where('id', '!=', 0)         // Ignoramos registro id=0 porque aquel es sólo para permitir crear Planificaciones Vacias
+			->where('id', '!=', 0)         // El registro neutro no corresponde a una ubicación seleccionable
 			->get();
 	}
 
 	public function obtenerRegionOperativa()
 	{
 		return Region::orderBy("orden", "asc")
-			->where('id', '!=', 0)         // Ignoramos registro id=0 porque aquel es sólo para permitir crear Planificaciones Vacias
+			->where('id', '!=', 0)         // El registro neutro no corresponde a una ubicación seleccionable
 			->where('operativa', true)     // Lo mismo que obtenerRegion pero estas son las operativas
 			->get();
 	}
 }
-

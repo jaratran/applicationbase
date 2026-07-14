@@ -1,11 +1,10 @@
 @php
 	/**
-	* Wrapper neutro para un ítem de Retiro / Retiro+Planificación
+	* Wrapper neutro para un ítem de Retiro.
 	*
 	* Variables esperadas:
 	* - $index           : índice del retiro
 	* - $retiro          : modelo Retiro o null
-	* - $esPlanificacion : bool (true si incluye planificación)
 	*
 	* NOTA:
 	* La región operativa NO se decide aquí.
@@ -20,7 +19,6 @@
 		@include('includes.partial-retiro-item-x-region', [
 			'index'           => $index,
 			'retiro'          => $retiro,
-			'esPlanificacion' => $esPlanificacion,
 		])
 	</div>
 
@@ -29,7 +27,6 @@
 		@include('includes.partial-retiro-item-xii-region', [
 			'index'           => $index,
 			'retiro'          => $retiro,
-			'esPlanificacion' => $esPlanificacion,
 		])
 	</div>
 

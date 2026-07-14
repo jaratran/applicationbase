@@ -231,11 +231,4 @@ $('#sucursal_retiro').on('change', function () {
 	// en el listener document.addEventListener('DOMContentLoaded', inicializarSolicitudRetiro);
 	inicializarSolicitudRetiro();
 
-	// ⚠️ DEPENDENCIA:
-	// Este módulo invoca inicializarPlanificacionRetiro()
-	// definida en planificacion-retiro-form-controls.js
-	// SOLO en contexto de planificación (creación manual de solicitud y planificación) ...
-	if (window.contextoVista.esPlanificacion) {
-		inicializarPlanificacionRetiro();				// ... volvemos a inicializar elementos tal cual al principio (cuando carga el DOM)
-	}
 });

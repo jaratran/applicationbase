@@ -74,7 +74,7 @@ class Solicitud extends Model
     /**
      * Scope local de Eloquent para filtrado según el tipo de solicitante en el modelo Solicitud.
      * Encapsula la lógica de visibilidad de solicitudes según el rol del usuario solicitante.
-     * Se usa en métodos index de controladores SolicitudesRetiroController y PlanificacionesRetiroController
+     * Se usa en el listado de Solicitudes de Retiro.
      * para evitar repetición de lógica condicional.
      */
     public function scopeVisiblesSegunRol($query, $esSolicitantePlanta, $esSolicitanteProductor)

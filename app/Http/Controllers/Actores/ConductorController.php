@@ -27,7 +27,7 @@ class ConductorController extends Controller
 			'regionOperativa:id,nombre',
 		])
 			// ->where('activo', true) -- Se omite este filtro para que salgan todos.
-			->where('id', '!=', 0)              // Ignoramos registro id=0 porque aquel es sólo para permitir crear Planificaciones Vacias
+			->where('id', '!=', 0)              // El registro neutro no corresponde a un conductor seleccionable
 			->get([
 				'activo',
 				'id',
@@ -287,7 +287,7 @@ class ConductorController extends Controller
 
 	/**
 	 * Método para obtener los conductores por empresa:
-	 * Esto permite rellenar el select2 en Create/Edit de Planificaciones de Retiro.
+	 * Permite rellenar el selector de conductores utilizado por el mantenedor de Camiones.
 	 * Laravel incluye automáticamente nombre_completo porque lo tenemos en $appends del modelo Conductor.
 	 */
 	public function obtenerConductoresPorEmpresa($empresaId)

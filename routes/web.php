@@ -19,7 +19,6 @@ use App\Http\Controllers\Actores\CamionController;
 use App\Http\Controllers\Actores\ConductorController;
 use App\Http\Controllers\Actores\RamplaController;
 use App\Http\Controllers\SolicitudesRetiroController;
-use App\Http\Controllers\PlanificacionesRetiroController;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,7 +138,7 @@ Route::middleware(['auth'])->group(function () {
 		//----------------------------------------------------------------------------------------------------------------------------------------------
 		Route::post('conductores/{conductor}/telegram/generar-pin', [ConductorController::class, 'generarPinTelegram'])->name('conductores.telegram.generar-pin');
 		Route::post('conductores/{conductor}/telegram/desvincular', [ConductorController::class, 'desvincularTelegram'])->name('conductores.telegram.desvincular');
-		// Route::get('conductores/empresa/{id}',                      [ConductorController::class, 'obtenerConductoresPorEmpresa']);
+		Route::get('conductores/empresa/{id}', [ConductorController::class, 'obtenerConductoresPorEmpresa']);
 		Route::resource('actores/conductor', ConductorController::class)->names([
 			'index'   => 'conductor.index',
 			'create'  => 'conductor.create',
@@ -153,7 +152,6 @@ Route::middleware(['auth'])->group(function () {
 		//----------------------------------------------------------------------------------------------------------------------------------------------
 		Route::get('camiones/detalle/{id}', [CamionController::class, 'detalleCamion'])->name('camiones.detalle');
 		Route::get('camiones',              [CamionController::class, 'obtenerCamiones']);
-		// Route::get('camiones/region-operativa/{id}',  [CamionController::class, 'obtenerCamionesPorRegionOperativa'])->name('camiones.por-region-operativa');
 		Route::get('camiones/empresa/{id}', [CamionController::class, 'obtenerCamionesPorEmpresa']);
 		Route::get('camiones/tipo/{id}',    [CamionController::class, 'obtenerCamionesPorTipo'])->name('camiones.por-tipo');
 		Route::resource('actores/camion', CamionController::class)->names([
@@ -167,8 +165,6 @@ Route::middleware(['auth'])->group(function () {
 		]);
 
 		//----------------------------------------------------------------------------------------------------------------------------------------------
-		// Route::get('ramplas',                                           [RamplaController::class, 'obtenerRamplas']);
-		// Route::get('ramplas/estados-por-transporte/{tipoTransporteId}', [RamplaController::class, 'estadosPorTipoTransporte']);
 		Route::resource('actores/rampla', RamplaController::class)->names([
 			'index'   => 'rampla.index',
 			'create'  => 'rampla.create',
@@ -221,46 +217,18 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('solicitudes-retiro/{id}', [SolicitudesRetiroController::class, 'show'])->name('solicitudes-retiro.show');
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------
-	// CREACIÓN de SOLICITUDES y CREACION MANUAL de PLANIFICACIONES y CIERRE DE PLANIFICACIONES (Ingreso de TICKET)
 	// LISTADOS DE PLANTAS y/o EMPRESAS VINCULADAS EN MAQUILAS
 	Route::middleware(['check.role:'	. config('constantes.ROL_SOLICITANTE_PLANTA')    . ',' . config('constantes.ROL_SOLICITANTE_PLANTA_XII') . ','
 										. config('constantes.ROL_SOLICITANTE_PRODUCTOR') . ','
 										. config('constantes.ROL_COORDINADOR')           . ',' . config('constantes.ROL_COORDINADOR_XII') . ','
 										. config('constantes.ROL_ADMINISTRADOR_IT') ])->group(function () {
 
-		Route::get('productora/{id}/plantas-vinculadas', [EmpresaController::class,  'plantasVinculadas'])->name('productora.plantas-vinculadas');     // Para select2 de create/edit en Solicitudes y creación Manual de Planificacion
-		Route::get('planta/{id}/productoras-vinculadas', [SucursalController::class, 'productorasVinculadas'])->name('planta.productoras-vinculadas'); // Para select2 de create/edit en Solicitudes y creación Manual de Planificacion
+		Route::get('productora/{id}/plantas-vinculadas', [EmpresaController::class,  'plantasVinculadas'])->name('productora.plantas-vinculadas');
+		Route::get('planta/{id}/productoras-vinculadas', [SucursalController::class, 'productorasVinculadas'])->name('planta.productoras-vinculadas');
 
 		Route::get('empresas/tipo/{id}'                , [EmpresaController::class,   'obtenerEmpresasPorTipo']);                                      // En create/edit de: Conductores, Camiones, Solicitudes de Retiro (SOLO rol AdminIT/Coordinador).
 		Route::get('sucursales/tipo/{id}'              , [SucursalController::class,  'obtenerSucursalesPorTipo']);                                    // En create/edit de: Solicitudes de Retiro (SOLO rol AdminIT/Coordinador).
 	});
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------
-	// PLANIFICACIÓN DE RETIROS DE MATERIA PRIMA - CREACIÓN MANUAL DE PLANIFICACIÓN DE RETIRO y CIERRE DE PLANIFICACIONES (Ingreso de TICKET)
-	// Esto es sólo para Admin-IT y Coodinadores
-	Route::middleware(['check.role:'    . config('constantes.ROL_COORDINADOR') . ',' . config('constantes.ROL_COORDINADOR_XII') . ','
-										. config('constantes.ROL_ADMINISTRADOR_IT')])->group(function () {
-
-		// AJAXs de apoyo a planificación manual
-		Route::get('ramplas',												[RamplaController::class,    'obtenerRamplas']);
-		Route::get('ramplas/estados-por-transporte/{tipoTransporteId}',		[RamplaController::class,    'estadosPorTipoTransporte']);
-		Route::get('camiones/region-operativa/{id}',						[CamionController::class,    'obtenerCamionesPorRegionOperativa']);
-		Route::get('conductores/empresa/{id}',								[ConductorController::class, 'obtenerConductoresPorEmpresa']);
-
-		Route::get('planificaciones-retiro/create-manual', [PlanificacionesRetiroController::class, 'createManual'])->name('planificaciones-retiro.create-manual');
-		Route::post('planificaciones-retiro/store-manual', [PlanificacionesRetiroController::class, 'storeManual'])->name('planificaciones-retiro.store-manual');
-
-		Route::get('planificaciones-retiro/{id}/edit', [PlanificacionesRetiroController::class, 'edit'])->name('planificaciones-retiro.edit');
-		Route::put('planificaciones-retiro/{id}',      [PlanificacionesRetiroController::class, 'update'])->name('planificaciones-retiro.update');
-		Route::delete('planificaciones-retiro/{id}',   [PlanificacionesRetiroController::class, 'destroy'])->name('planificaciones-retiro.destroy');
-
-		Route::post('planificaciones-retiro/{id}/cerrar',  [PlanificacionesRetiroController::class, 'cerrarPlanificacion'])->name('planificaciones-retiro.cerrar');
-	});
-
-	// PLANIFICACIÓN DE RETIROS DE MATERIA PRIMA - EXPLORAR: LISTADO GENERAL / SELECCION DESDE CORREO y EXAMINAR EJEMPLAR
-	// Esto es para todos los usuarios
-	Route::get('planificaciones-retiro',      [PlanificacionesRetiroController::class, 'index'])->name('planificaciones-retiro.index');
-	Route::get('/ver-planificacion/{token}',  [PlanificacionesRetiroController::class, 'verDesdeToken'])->name('planificaciones-retiro.ver-desde-token');
-	Route::get('planificaciones-retiro/{id}', [PlanificacionesRetiroController::class, 'show'])->name('planificaciones-retiro.show');
-
 });

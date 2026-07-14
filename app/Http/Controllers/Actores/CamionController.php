@@ -25,7 +25,7 @@ class CamionController extends Controller
 								'regionOperativa:id,nombre'
                             ])
                             //->where('activo', true) -- Se omite este filtro para que salgan todos.
-                            ->where('id', '!=', 0)              // Ignoramos registro id=0 porque aquel es sólo para permitir crear Planificaciones Vacias
+                            ->where('id', '!=', 0)              // El registro neutro no corresponde a un camión seleccionable
                             ->get([
                                 'activo',
                                 'id',
@@ -317,16 +317,6 @@ class CamionController extends Controller
     {
         return Camion::where('activo', true)
                     ->where('id', '!=', 0)              // Ignoramos aquel registro id=0
-                    ->orderBy("patente", "asc")
-                    ->get(['id', 'patente']);
-
-   }
-
-    public function obtenerCamionesPorRegionOperativa($regionOperativa)
-    {
-        return Camion::where('activo', true)
-                    ->where('id', '!=', 0)                              	// Ignoramos aquel registro id=0
-					->where('region_operativa_id', '=', $regionOperativa)	// Con un solo '='
                     ->orderBy("patente", "asc")
                     ->get(['id', 'patente']);
 

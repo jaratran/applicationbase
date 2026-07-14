@@ -24,14 +24,12 @@ return [
     'CATEGORIA_TIPO_MATERIA_PRIMA'    =>  41,
     'CATEGORIA_TIPO_CAMION'           =>  43,
     'CATEGORIA_GRUPO_TIPO_CAMION'     =>  53,
-    'CATEGORIA_CAMBIOS_PLANIFICACION' => 110,
 
 	'CATEGORIA_REGION_OPERATIVA'			=> 130,
 	'CATEGORIA_TIPO_TRANSPORTE'				=> 140,
 	'CATEGORIA_TIPO_RAMPLA'					=> 150,
 	'CATEGORIA_CAPACIDAD_RAMPLA'			=> 160,
 	'CATEGORIA_ESTADO_RAMPLA'				=> 170,
-	'CATEGORIA_CAMBIOS_PLANIFICACION_XII'	=> 190,
 
 
 	// Categorías que NO deben mostrarse en el mantenedor (frontend)
@@ -149,7 +147,7 @@ return [
     | Estados de Solicitudes de Retiro
     |--------------------------------------------------------------------------
     |
-    | Estos valores se usan para identificar la etapa en el flujo del proceso de un retiro desde solicitud hasta planificación.
+    | Estos valores identifican la etapa vigente dentro del flujo de un retiro.
     |
     | No se cargan desde la base de datos ni están en el catálogo.
     |

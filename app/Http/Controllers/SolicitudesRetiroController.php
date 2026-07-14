@@ -882,9 +882,6 @@ class SolicitudesRetiroController extends Controller
             $retiro->estado_id = config('constantes.ESTADO_RETIRO_ACEPTADO');
             $retiro->save();
 
-            // Crear la planificación inicial (registro vacío) asociada al retiro
-            $retiro->crearPlanificacionInicial();
-
             // Enviar correo al solicitante con la notificación de la aprobación del retiro
             CorreoHelper::enviarCorreoRetiroAprobado($retiro);
 

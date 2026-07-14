@@ -30,7 +30,6 @@
 <!-- Parámetros de contexto de ejecución de vista -->
 @php
     $esCreate        = false;       // Control para saber si estamos en creación (y no edición)
-    $esPlanificacion = false;      // Control para saber si estamos en planificación de retiros o solicitud de retiros
     $esEdit          = !$esCreate; // Estamos en edición (no creación)
 @endphp
 
@@ -252,13 +251,11 @@
     <script>
         window.contextoVista = {
             esCreate:        {{ $esCreate ? 'true' : 'false' }},
-            esPlanificacion: {{ $esPlanificacion ? 'true' : 'false' }},
             esEdit:          {{ $esEdit ? 'true' : 'false' }}
         };
 
         // console.log('📦 En el bloque JS de rescate de sicronización de constantes JS con parámetros de contexto de ejecución de vista');
         // console.log('esCreate:',        window.contextoVista.esCreate);
-        // console.log('esPlanificacion:', window.contextoVista.esPlanificacion);
         // console.log('esEdit:',          window.contextoVista.esEdit);
     </script>
 

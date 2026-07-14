@@ -23,9 +23,6 @@ return new class extends Migration
             // Indica si los usuarios pueden modificar sus datos de perfil
             $table->boolean('allow_profile_editing')->default(true);
 
-            // Indica la velocidad promedio de los camiones
-            $table->integer('average_truck_speed')->nullable();
-
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

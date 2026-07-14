@@ -6,17 +6,8 @@ function toggleTipoRetiro($retiro) {
         // - Tipo siempre BINS
         // - Reposición siempre habilitable
 
-		// Habilitamos sólo si no es EDICION de PLANIFICACION
-		if (window.contextoVista?.esEdit && window.contextoVista?.esPlanificacion) {
-			// console.log('Es Edición de Planificación -> NO habilitamos grupo reposición ni check requiere reposición.');
-		}
-		else {
-			// console.log('NO es Edición de Planificación -> SI habilitamos grupo reposición ni check requiere reposición.');
-
 			$retiro.find('.grupo-reposicion').removeClass('opacity-50');
-			$retiro.find('.requiere_reposicion').prop('disabled', false);
-		}
-
+		$retiro.find('.requiere_reposicion').prop('disabled', false);
         return;
     }
 
@@ -82,10 +73,6 @@ function toggleTipoRetiro($retiro) {
     }
     // console.log('tipoRetiro : ', tipoRetiro);
 
-    const editandoPlanificación = contextoVista.esEdit && contextoVista.esPlanificacion;
-    if ( ! editandoPlanificación ) {                                                // Si no estamos EDITANDO de PLANIFICACION ajustamos según Tipo de Retiro
-        // console.log('toggleTipoRetiro> NO ESTA EDITANDO PLANIFICACION ...');
-
         if (tipoRetiro === TIPO_RETIRO_BINS) {
             $grupo.removeClass('opacity-50');
             $requiere.prop('disabled', false);
@@ -101,10 +88,6 @@ function toggleTipoRetiro($retiro) {
 
         $requiere.trigger('change');                                                // Activamos el evento Change del elemento requiere reposición
 
-    }                                                                               // De lo contrario no hacemos nada y se queda tal como se armó el blade
-    else{
-        // console.log('toggleTipoRetiro> SI ESTA EDITANDO PLANIFICACION ...');
-    }
 }
 $(document).on('change', '.tipo_retiro', function () {
     $(this).data('modificado', true); // Marcamos como modificado el atributo
@@ -148,23 +131,14 @@ function toggleCantidadBins(context) {
     // 🔒 Región XII: reglas propias (SOLO UI)
     if (window.regionOperativa === REGION_XII) {
 
-		// Tocamos cantidad de bins SÓLO si NO es EDICION de PLANIFICACION
-		if (window.contextoVista?.esEdit && window.contextoVista?.esPlanificacion) {
-			// console.log('Es Edición de Planificación -> NO tocamos cantiad de bins a reponer.');
-		}
-		else {
 			const $checkbox = context.find('.requiere_reposicion');
 			const $cantidad = context.find('.cantidad_bins');
-
-			// console.log('NO es Edición de Planificación -> SI tocamos cantiad de bins a reponer.');
 
 			if ($checkbox.is(':checked')) {
 				$cantidad.prop('disabled', false);
 			} else {
 				$cantidad.prop('disabled', true).val('0');
-			}
 		}
-
 		return;
     }
 
@@ -224,10 +198,6 @@ function toggleCantidadBins(context) {
     // console.log('tipoRetiro : ', tipoRetiro);
     // console.log('cantidad   : ', cantidad);
 
-    const editandoPlanificación = contextoVista.esEdit && contextoVista.esPlanificacion;
-    if ( ! editandoPlanificación ) {                                            // Si no estamos EDITANDO de PLANIFICACION ajustamos según Tipo de Retiro
-        // console.log('toggleCantidadBins> NO ESTA EDITANDO PLANIFICACION ...');
-
         if (tipoRetiro === TIPO_RETIRO_BINS) {                                  // ES tipo de retiro BINs
             if (!$checkbox.prop('disabled') && $checkbox.is(':checked')) {      // Si está ENABLED y CHECKEADO
                 $cantidad.prop('disabled', false).val(cantidad);                // Activamos con la CANTIDAD que corresponde: del rebote y si no había o no estamos en rebote : CERO
@@ -239,10 +209,6 @@ function toggleCantidadBins(context) {
             $cantidad.prop('disabled', true).val('');                           // Desactivamos con un '' (vacío)
         }
 
-    }                                                                           // De lo contrario no hacemos nada y se queda tal como se armó el blade
-    else{
-        // console.log('toggleCantidadBins> SI ESTA EDITANDO PLANIFICACION ...');
-    }
 
 }
 $(document).on('change', '.requiere_reposicion', function () {					// Los eventos deben ejecutar lógica SOLO sobre el contexto donde ocurrieron.
@@ -375,7 +341,6 @@ function toggleTipoOperacion($retiro) {
 	// console.log('toggleTipoOperacion> tipoOperacion HIDDEN  :', $hiddenTipoOperacion.val());
 
 	// Cada vez que cambie el SWITCH de Tipo Operación se debe repintar la vista
-	// Para ocultar o hacer aparecer elementos de la porción de PLANIFICACION
 	aplicarRegionOperativa(window.regionOperativa);
 
 }

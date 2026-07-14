@@ -129,14 +129,12 @@ const CATEGORIA_TIPO_MATERIA_PRIMA      = {{ config('constantes.CATEGORIA_TIPO_M
 const CATEGORIA_TIPO_CAMION             = {{ config('constantes.CATEGORIA_TIPO_CAMION') }};
 const CATEGORIA_GRUPO_TIPO_CAMION       = {{ config('constantes.CATEGORIA_GRUPO_TIPO_CAMION') }};
 const CATEGORIA_ESTADOS_RETIRO          = {{ config('constantes.CATEGORIA_ESTADOS_RETIRO') }};
-const CATEGORIA_CAMBIOS_PLANIFICACION   = {{ config('constantes.CATEGORIA_CAMBIOS_PLANIFICACION') }};
 
 const CATEGORIA_REGION_OPERATIVA			= {{ config('constantes.CATEGORIA_REGION_OPERATIVA') }};
 const CATEGORIA_TIPO_TRANSPORTE				= {{ config('constantes.CATEGORIA_TIPO_TRANSPORTE') }};
 const CATEGORIA_TIPO_RAMPLA					= {{ config('constantes.CATEGORIA_TIPO_RAMPLA') }};
 const CATEGORIA_CAPACIDAD_RAMPLA			= {{ config('constantes.CATEGORIA_CAPACIDAD_RAMPLA') }};
 const CATEGORIA_ESTADO_RAMPLA 				= {{ config('constantes.CATEGORIA_ESTADO_RAMPLA') }};
-const CATEGORIA_CAMBIOS_PLANIFICACION_XII 	= {{ config('constantes.CATEGORIA_CAMBIOS_PLANIFICACION_XII') }};
 
 // Valores usados para bifurcar lógicas
 const TIPO_EMPRESA_PRODUCTORA       = {{ config('constantes.TIPO_EMPRESA_PRODUCTORA') }};
@@ -209,7 +207,7 @@ const REGION_OPERATIVA_POR_ROL      = {	{{ config('constantes.ROL_SOLICITANTE_PR
 										{{ config('constantes.ROL_COORDINADOR_XII') }}           : 'XII',
 									};
 
-// Tipo de Operación : Requerido en los SHOW/PRINT de Retiros y Planificaciones
+// Tipo de operación requerido en las vistas de Retiros
 const TIPO_OPERACION_RETIRO         = {{ config('constantes.TIPO_OPERACION_RETIRO') }};
 const TIPO_OPERACION_REPOSICION     = {{ config('constantes.TIPO_OPERACION_REPOSICION') }};
 

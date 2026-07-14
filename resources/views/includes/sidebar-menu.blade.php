@@ -110,32 +110,5 @@
             </ul>
         </li>
 
-        <!-- MANTENEDORES DE PLANIFICACIONES DE RETIROS -->
-        <li class="nav-item  {{ Route::is('planificaciones-retiro.index') || Route::is('planificaciones-retiro.list') ? 'active' : '' }}">
-            <div class="nav-link fw-bold">
-                <i class="fa fa-tasks"></i> Planificaciones de Retiro
-            </div>
-
-            <ul class="sidebar-submenu nav flex-column ms-3 ps-3 list-unstyled">
-                @if( in_array(Auth::user()->rol_id, [ config('constantes.ROL_COORDINADOR_XII'), config('constantes.ROL_COORDINADOR'), config('constantes.ROL_ADMINISTRADOR_IT') ]) )
-                    <li>
-                        <a href="{{ route('planificaciones-retiro.create-manual') }}"
-                        class="nav-link {{ Route::is('planificaciones-retiro.create-manual') ? 'active' : '' }}"
-                        {{ Route::is('planificaciones-retiro.create-manual') ? 'aria-current=page' : '' }}>
-                        <i class="fas fa-edit me-2 text-secondary"></i>Crear Planificación Manual
-                        </a>
-                    </li>
-                @endif
-
-                <li>
-                    <a href="{{ route('planificaciones-retiro.index') }}"
-                        class="nav-link {{ Route::is('planificaciones-retiro.index') ? 'active' : '' }}"
-                        {{ Route::is('planificaciones-retiro.index') ? 'aria-current=page' : '' }}>
-                        <i class="fas fa-calendar-check me-2 text-secondary"></i>Ver Planificaciones de Retiro
-                    </a>
-                </li>
-            </ul>
-        </li>
-
     </ul>
 </div>

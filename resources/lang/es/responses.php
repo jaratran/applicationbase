@@ -18,25 +18,12 @@ return [
         'retiro_aprobado'           => 'El retiro ha sido aprobado exitosamente.',
         'retiro_aprobado_error'     => 'No se pudo aprobar el retiro. Por favor, intente nuevamente o contacte al administrador.',
 
-        'store_manual_success'      => 'La creación manual de la solicitud fue exitosa.',
-        'store_manual_error'        => 'Ocurrió un error al guardar la creación manual de la solicitud. Intenta nuevamente.',
     ],
 
     'parametros' => [
         'update_success'            => 'Parámetros actualizados correctamente.',
         'no_changes_detected'       => 'No hubo cambios que guardar.',
         'update_error'              => 'Ocurrió un error al actualizar los parámetros. Por favor, inténtelo nuevamente.',
-    ],
-
-    'planificacion' => [
-        'update_success'            => 'Planificación actualizada correctamente.',
-        'update_failed'             => 'Ocurrió un error al intentar actualizar la información. Intente nuevamente.',
-
-        'cierre_success'            => 'Planificación cerrada correctamente.',
-        'cierre_error'              => 'Ocurrió un error al intentar cerrar la planificación. Intente nuevamente.',
-
-        'delete_success'            => 'La planificación ha sido anulada correctamente.',
-        'delete_error'              => 'Ocurrió un error al intentar anular la planificación.',
     ],
 
     'telegram' => [

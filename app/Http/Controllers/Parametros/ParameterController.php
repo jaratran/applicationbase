@@ -192,12 +192,6 @@ class ParameterController extends Controller
                     'notify_admins_as_coordinators' => 0,
                     'verification_expiration_time' => null, // Nuevo campo
                     'allow_profile_editing' => 1,
-                    'average_truck_speed' => 50,
-					// Agregados por adicional Solicitudes XII Región
-					'maritime_transit_duration_days'    => 3,
-					'terrestrial_transit_duration_days' => 3,
-					'combined_transit_duration_days' => 3,
-					'delay_arribo_eta_hours' => 2,
                 ]);
             }
 
@@ -217,13 +211,6 @@ class ParameterController extends Controller
                 'notify_admins_as_coordinators'     => 'nullable|boolean',
                 'verification_expiration_time'      => 'nullable|integer|min:1|max:1440', // 👍 recomendado
                 'allow_profile_editing'             => 'nullable|boolean',
-                'average_truck_speed'               => 'nullable|integer|min:0',
-
-				// Agregados por adicional Solicitudes XII Región
-				'maritime_transit_duration_days'    => 'nullable|integer|min:1|max:30',
-				'terrestrial_transit_duration_days' => 'nullable|integer|min:1|max:30',
-				'combined_transit_duration_days'    => 'nullable|integer|min:1|max:30',
-				'delay_arribo_eta_hours'            => 'nullable|integer|min:1|max:23',
 			]);
 
             // Asignar campos manualmente
@@ -234,13 +221,6 @@ class ParameterController extends Controller
             $operationalParameter->notify_admins_as_coordinators    = $request->input('notify_admins_as_coordinators');
             $operationalParameter->verification_expiration_time     = $request->input('verification_expiration_time'); // Nuevo campo
             $operationalParameter->allow_profile_editing            = $request->input('allow_profile_editing');
-            $operationalParameter->average_truck_speed              = $request->input('average_truck_speed');
-
-			// Agregados por adicional Solicitudes XII Región
-			$operationalParameter->maritime_transit_duration_days	= $request->input('maritime_transit_duration_days');
-			$operationalParameter->terrestrial_transit_duration_days= $request->input('terrestrial_transit_duration_days');
-			$operationalParameter->combined_transit_duration_days   = $request->input('combined_transit_duration_days');
-			$operationalParameter->delay_arribo_eta_hours           = $request->input('delay_arribo_eta_hours');
 
             // Verificamos si hubo cambios reales
             if ($operationalParameter->isDirty()) {

@@ -22,7 +22,6 @@
                             <p><strong>¿Qué puedes hacer en el sistema?</strong></p>
                             <ul>
 								<li>Consultar el historial y estado de todas las solicitudes existentes en el sistema.</li>
-								<li>Consultar Planificaciones en ejecución.</li>
 								<li>Visualizar programas históricos (Planificado y Real).</li>
 								<li>Visualizar Dashboard con indicadores.</li>
                             </ul>
