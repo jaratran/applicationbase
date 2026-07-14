@@ -1,6 +1,14 @@
 <div id="sidebar">
     <ul class="nav flex-column">
 
+        <li class="nav-item">
+            <a href="{{ route('panel.index') }}"
+                class="nav-link {{ Route::is('panel.index') ? 'active' : '' }}"
+                {{ Route::is('panel.index') ? 'aria-current=page' : '' }}>
+                <i class="fas fa-tachometer-alt me-2 text-secondary"></i>Panel de Control
+            </a>
+        </li>
+
         <!-- PARAMETROS GENERALES -->
         <!-- Esto es sólo para Admin-IT -->
         @if( in_array(Auth::user()->rol_id, [ config('constantes.ROL_ADMINISTRADOR_IT') ]) )

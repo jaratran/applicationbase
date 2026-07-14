@@ -21,7 +21,7 @@ class CheckRoleAccess
         $user = $request->user();
 
         if (!$user || !in_array((int) $user->rol_id, array_map('intval', $roles))) {
-            return redirect('/panel')->with('error', __('auth.access_denied'));
+            return redirect()->route('panel.index')->with('error', __('auth.access_denied'));
         }
 
         return $next($request);

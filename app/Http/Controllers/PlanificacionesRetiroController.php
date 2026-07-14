@@ -565,28 +565,28 @@ class PlanificacionesRetiroController extends Controller
 						// fecha_planificada >= fecha_retiro
 						if ($retiro && $plan && $plan->lt($retiro)) {
 							throw ValidationException::withMessages([
-								"fecha_planificada.$idx" => __('validation.secuencia.planificada_menor_retiro')
+								"fecha_planificada.$idx" => __('validation.custom.secuencia.planificada_menor_retiro')
 							]);
 						}
 
 						// fecha_embarque >= fecha_planificada
 						if ($plan && $emb && $emb->lt($plan)) {
 							throw ValidationException::withMessages([
-								"fecha_embarque.$idx" => __('validation.secuencia.embarque_menor_planificada')
+								"fecha_embarque.$idx" => __('validation.custom.secuencia.embarque_menor_planificada')
 							]);
 						}
 
 						// fecha_arribo >= fecha_embarque
 						if ($emb && $arr && $arr->lt($emb)) {
 							throw ValidationException::withMessages([
-								"fecha_arribo_puerto.$idx" => __('validation.secuencia.arribo_menor_embarque')
+								"fecha_arribo_puerto.$idx" => __('validation.custom.secuencia.arribo_menor_embarque')
 							]);
 						}
 
 						// eta >= arribo
 						if ($arr && $etaC && $etaC->lt($arr)) {
 							throw ValidationException::withMessages([
-								"eta_calculada_hidden.$idx" => __('validation.secuencia.eta_menor_arribo')
+								"eta_calculada_hidden.$idx" => __('validation.custom.secuencia.eta_menor_arribo')
 							]);
 						}
 					}
@@ -1152,25 +1152,25 @@ class PlanificacionesRetiroController extends Controller
 
 					if ($retiro && $plan && $plan->lt($retiro)) {
 						throw ValidationException::withMessages([
-							'fecha_planificada.0' => __('validation.secuencia.planificada_menor_retiro')
+							'fecha_planificada.0' => __('validation.custom.secuencia.planificada_menor_retiro')
 						]);
 					}
 
 					if ($plan && $emb && $emb->lt($plan)) {
 						throw ValidationException::withMessages([
-							'fecha_embarque.0' => __('validation.secuencia.embarque_menor_planificada')
+							'fecha_embarque.0' => __('validation.custom.secuencia.embarque_menor_planificada')
 						]);
 					}
 
 					if ($emb && $arr && $arr->lt($emb)) {
 						throw ValidationException::withMessages([
-							'fecha_arribo_puerto.0' => __('validation.secuencia.arribo_menor_embarque')
+							'fecha_arribo_puerto.0' => __('validation.custom.secuencia.arribo_menor_embarque')
 						]);
 					}
 
 					if ($arr && $etaC && $etaC->lt($arr)) {
 						throw ValidationException::withMessages([
-							'eta_calculada_hidden.0' => __('validation.secuencia.eta_menor_arribo')
+							'eta_calculada_hidden.0' => __('validation.custom.secuencia.eta_menor_arribo')
 						]);
 					}
 				}
@@ -1298,7 +1298,7 @@ class PlanificacionesRetiroController extends Controller
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', __('auth.update_failed'));
+                ->with('error', __('responses.planificacion.update_failed'));
         }
     }
 

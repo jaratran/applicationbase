@@ -18,7 +18,7 @@ class HomeController extends Controller
         if (!Auth::check()) {                     // Si NO está autenticado, redirige a ...
             return redirect('login');            //    Usuario NO autenticado -> Login para ingreso de usuario y contraseña
         } else {                                  // De lo contrario, usuario SI está autenticado
-            return redirect('panel');            //    Usuario autenticado -> Se va al Panel
+            return redirect()->route('panel.index'); //    Usuario autenticado -> Panel de Control
         }
     }
 

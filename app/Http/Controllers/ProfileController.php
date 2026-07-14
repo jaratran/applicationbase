@@ -72,7 +72,7 @@ class ProfileController extends Controller
                 $resultado = $this->procesarAvatar($request->file('avatar'), $user);
 
                 if (!$resultado['success']) {
-                    return redirect()->back()->withErrors(['avatar' => __('validation.avatar.processing_error', ['message' => $resultado['message']])]);
+                    return redirect()->back()->withErrors(['avatar' => __('validation.custom.avatar.processing_error', ['message' => $resultado['message']])]);
                 }
             }
 
@@ -130,9 +130,9 @@ class ProfileController extends Controller
             // }
 
         // Cambiamos el abort por un redirect con mensaje.
-        // Si el usuario activo no es el mismo que el usuario que se quiere editar, redirigimos a panel con un mensaje de error
+        // Si el usuario activo no es el mismo que el usuario que se quiere editar, redirigimos a su perfil con un mensaje de error
         if (Auth::id() !== $user->id) {
-            return redirect()->route('panel')->with('error', __('auth.unauthorized_profile_edit'));
+            return redirect()->route('perfil.index')->with('error', __('auth.unauthorized_profile_edit'));
         }
 
         return view('perfil.modificar', [ 'user' => $user ]);

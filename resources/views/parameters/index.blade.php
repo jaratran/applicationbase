@@ -48,7 +48,7 @@
                             <i class="fa fa-floppy-o"></i> Guardar Cambios
 						</button>
 
-                        <button type="button" class="btn btn-secondary my-2 no-guard" onclick="window.location.href='{{ url('panel') }}'">
+                        <button type="button" class="btn btn-secondary my-2 no-guard" onclick="window.location.href='{{ route('panel.index') }}'">
                             <i class="fa fa-times"></i> Cancelar
                         </button>
                     </div>

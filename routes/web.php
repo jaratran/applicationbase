@@ -67,9 +67,8 @@ Route::post('reset-password',        [ResetPasswordController::class, 'reset'])-
 Route::middleware(['auth'])->group(function () {
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------
-	// PANEL DE CONTROL - DASHBOARD
-	// Esto es para todos los usuarios
-	Route::get('panel', [PanelController::class, 'index']);
+	// PANEL DE CONTROL GENÉRICO - Esto es para todos los usuarios autenticados
+	Route::get('panel', [PanelController::class, 'index'])->name('panel.index');
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------
 	// PERFIL

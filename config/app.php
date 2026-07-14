@@ -146,7 +146,6 @@ return [
     |--------------------------------------------------------------------------
     */
     'env_debug' => [
-        'dashboard_fecha_fija' => env('DASHBOARD_FECHA_FIJA'),
     ],
 
     /*

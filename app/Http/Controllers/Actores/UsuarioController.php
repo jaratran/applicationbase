@@ -123,7 +123,7 @@ class UsuarioController extends Controller
                         'mensaje'   => $resultado['message'],
                     ]);
 
-                    return redirect()->back()->withErrors(['avatar' => __('validation.avatar.processing_error', ['message' => $resultado['message']])]);
+                    return redirect()->back()->withErrors(['avatar' => __('validation.custom.avatar.processing_error', ['message' => $resultado['message']])]);
                 }
             }
 

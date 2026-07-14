@@ -5,8 +5,8 @@
             <i class="text-dark fa fa-th fa-lg"></i>
         </button>
 
-        <!-- Logo con enlace al Panel de Control -->
-        <a href="{{ url('panel') }}" class="position-absolute top-0 start-0 mt-2 ms-5">
+        <!-- Logo con enlace al inicio autenticado -->
+        <a href="{{ route('panel.index') }}" class="position-absolute top-0 start-0 mt-2 ms-5">
             <img src="{{ url('/config/'.$designParameter['logo_design']) }}" alt="Logo" style="max-height: 30px;">
         </a>
     </div>

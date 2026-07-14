@@ -20,8 +20,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * Ruta por defecto a la cual Laravel redirige después del login exitoso.
      *
-     * En este proyecto WorkFlow, se definió que la página principal post-login
-     * sea /panel en lugar de /home.
+     * La página principal post-login es el Panel de Control genérico.
      *
      */
      public const HOME = 'panel';
