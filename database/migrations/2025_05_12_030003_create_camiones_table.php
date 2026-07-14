@@ -16,7 +16,6 @@ return new class extends Migration {
 
             $table->unsignedBigInteger('tipo_camion_id');               // ID a tabla list_parameters
             $table->string('patente', 20);
-            $table->string('patente_rampla', 20)->nullable();
             $table->boolean('arrendado')->default(false);
             $table->decimal('rendimiento_optimo', 6, 2)->nullable();
             $table->boolean('activo')->default(true);

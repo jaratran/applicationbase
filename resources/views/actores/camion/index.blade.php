@@ -119,7 +119,6 @@
                                         <th>Arrendado</th>
                                         <th>Empresa</th>
                                         <th>Conductor</th>
-                                        <th>Rampla</th>
                                         <th width="5%" class="nosort">Acciones</th>
                                     </tr>
                                 </thead>
@@ -139,7 +138,6 @@
                                             <td class="text-center">{{ $camion->arrendado ? 'Sí' : 'No' }}</td>
                                             <td>{{ $camion->empresa->razon_social ?? '-' }}</td>
                                             <td>{{ $camion->conductor->nombre ?? '-' }} {{ $camion->conductor->apellido ?? '' }}</td>
-                                            <td>{{ $camion->patente_rampla ?? 'Sin rampla' }}</td>
                                             <td>
                                                 <div class="d-grid gap-1">
                                                     <div class="d-flex justify-content-center gap-1">

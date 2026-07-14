@@ -30,10 +30,6 @@
                                     <label for="empresa_id">Empresa</label>
                                     <select class="form-control select2" id="empresa_id" name="empresa_id" required></select>
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="patente_rampla">Patente Rampla</label>
-                                    <input type="text" class="form-control" name="patente_rampla" id="patente_rampla">
-                                </div>
                             </div>
 
                             <div class="row mt-3">

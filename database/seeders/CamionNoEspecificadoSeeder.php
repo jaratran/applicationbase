@@ -15,7 +15,6 @@ class CamionNoEspecificadoSeeder extends Seeder
             'conductor_id'            => 0,
             'tipo_camion_id'          => 0,
             'patente'                 => '*NO****ESPECIFICADO*',
-            'patente_rampla'          => null,
             'arrendado'               => false,
             'rendimiento_optimo'      => null,
             'activo'                  => true,

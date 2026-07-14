@@ -151,10 +151,6 @@ return [
             'string' => 'La patente debe ser una cadena de texto.',
             'max' => 'La patente no debe exceder los :max caracteres.',
         ],
-        'patente_rampla' => [
-            'string' => 'La patente de la rampla debe ser una cadena de texto.',
-            'max' => 'La patente de la rampla no debe exceder los :max caracteres.',
-        ],
         'arrendado' => [
             'required' => 'Debe indicar si el camión es arrendado.',
             'boolean' => 'El valor del campo arrendado debe ser verdadero o falso.',
@@ -566,7 +562,6 @@ return [
         'conductor_id' => 'conductor',
         'tipo_camion_id' => 'tipo de camión',
         'patente' => 'patente',
-        'patente_rampla' => 'patente rampla',
         'arrendado' => 'arrendado',
         'rendimiento_optimo' => 'rendimiento óptimo',
         'activo' => 'activo',

@@ -23,10 +23,6 @@
                 <input type="text" class="form-control" value="{{tipo_camion.nombre}}" disabled>
             </div>
             <div class="form-group col-md-4">
-                <label>Patente Rampla</label>
-                <input type="text" class="form-control" value="{{patente_rampla}}" disabled>
-            </div>
-            <div class="form-group col-md-4">
                 <label>Rendimiento Óptimo</label>
                 <input type="text" class="form-control" value="{{rendimiento_optimo}}" disabled>
             </div>

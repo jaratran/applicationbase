@@ -132,9 +132,6 @@ const CATEGORIA_ESTADOS_RETIRO          = {{ config('constantes.CATEGORIA_ESTADO
 
 const CATEGORIA_REGION_OPERATIVA			= {{ config('constantes.CATEGORIA_REGION_OPERATIVA') }};
 const CATEGORIA_TIPO_TRANSPORTE				= {{ config('constantes.CATEGORIA_TIPO_TRANSPORTE') }};
-const CATEGORIA_TIPO_RAMPLA					= {{ config('constantes.CATEGORIA_TIPO_RAMPLA') }};
-const CATEGORIA_CAPACIDAD_RAMPLA			= {{ config('constantes.CATEGORIA_CAPACIDAD_RAMPLA') }};
-const CATEGORIA_ESTADO_RAMPLA 				= {{ config('constantes.CATEGORIA_ESTADO_RAMPLA') }};
 
 // Valores usados para bifurcar lógicas
 const TIPO_EMPRESA_PRODUCTORA       = {{ config('constantes.TIPO_EMPRESA_PRODUCTORA') }};

@@ -24,7 +24,7 @@
         <!-- MANTENEDORES DE ACTORES -->
         <!-- Esto es sólo para Admin-IT, Coodinadores y Coordinadores XII -->
         @if( in_array(Auth::user()->rol_id, [ config('constantes.ROL_COORDINADOR'), config('constantes.ROL_COORDINADOR_XII'), config('constantes.ROL_ADMINISTRADOR_IT') ]) )
-            <li class="nav-item {{ Route::is('usuario.index') || Route::is('sucursal.index') || Route::is('empresa.index') || Route::is('conductor.index') || Route::is('camion.index') || Route::is('rampla.index') ? 'active' : '' }}">
+            <li class="nav-item {{ Route::is('usuario.index') || Route::is('sucursal.index') || Route::is('empresa.index') || Route::is('conductor.index') || Route::is('camion.index') ? 'active' : '' }}">
                 <div class="nav-link fw-bold">
                     <i class="fa fa-list"></i> Gestión
                 </div>
@@ -70,13 +70,6 @@
                            <i class="fas fa-truck me-2 text-secondary"></i>Camiones
                         </a>
                     </li>
-					<li>
-						<a href="{{ route('rampla.index') }}"
-						class="nav-link {{ Route::is('rampla.index') ? 'active' : '' }}"
-						{{ Route::is('rampla.index') ? 'aria-current=page' : '' }}>
-							<i class="fas fa-trailer me-2 text-secondary"></i>Ramplas (Región XII)
-						</a>
-					</li>
                 </ul>
             </li>
         @endif

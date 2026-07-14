@@ -61,13 +61,6 @@ return [
     'truck_status_changed'          => 'El camión ha sido correctamente :status.',
     'truck_status_change_error'     => 'No se pudo cambiar el estado del camión.',
 
-    'trailer_created_successfully'  => 'Se ha creado la rampla correctamente.',
-    'trailer_creation_error'        => 'Ocurrió un error al intentar crear la rampla.',
-    'trailer_updated_successfully'  => 'Se ha modificado la rampla correctamente.',
-    'trailer_update_error'          => 'Ocurrió un error al intentar modificar la rampla.',
-    'trailer_status_changed'        => 'La rampla ha sido correctamente :status.',
-    'trailer_status_change_error'   => 'No se pudo cambiar el estado de la rampla.',
-
     // Redirecciones en controlador ConductorController.php
     'driver_created_successfully'   => 'Se ha creado el conductor correctamente.',
     'driver_creation_error'         => 'Ocurrió un error al intentar crear el conductor.',

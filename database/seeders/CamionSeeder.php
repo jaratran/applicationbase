@@ -60,7 +60,6 @@ class CamionSeeder extends Seeder
             $conductor_id = fake()->randomElement($conductoresPorEmpresa[$empresa_id]);
 
             $patente = $this->generarPatente($i);
-            $patenteRampla = rand(0, 1) ? $this->generarPatente($i + 1000) : null;
 
             $esInactivo = $inactivos->contains($i);
             $observacion = $esInactivo ? $comentarios[($i - 1) % count($comentarios)] : null;
@@ -70,7 +69,6 @@ class CamionSeeder extends Seeder
                 'conductor_id'           => $conductor_id,
                 'tipo_camion_id'         => fake()->randomElement($tiposCamion),
                 'patente'                => $patente,
-                'patente_rampla'         => $patenteRampla,
                 'arrendado'              => rand(1, 100) <= 20,
                 'rendimiento_optimo'     => fake()->randomFloat(2, 2.5, 4.5),
                 'activo'                 => !$esInactivo,

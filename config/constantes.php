@@ -27,9 +27,6 @@ return [
 
 	'CATEGORIA_REGION_OPERATIVA'			=> 130,
 	'CATEGORIA_TIPO_TRANSPORTE'				=> 140,
-	'CATEGORIA_TIPO_RAMPLA'					=> 150,
-	'CATEGORIA_CAPACIDAD_RAMPLA'			=> 160,
-	'CATEGORIA_ESTADO_RAMPLA'				=> 170,
 
 
 	// Categorías que NO deben mostrarse en el mantenedor (frontend)

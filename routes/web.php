@@ -17,7 +17,6 @@ use App\Http\Controllers\Actores\EmpresaController;
 use App\Http\Controllers\Actores\SucursalController;
 use App\Http\Controllers\Actores\CamionController;
 use App\Http\Controllers\Actores\ConductorController;
-use App\Http\Controllers\Actores\RamplaController;
 use App\Http\Controllers\SolicitudesRetiroController;
 
 /*
@@ -164,16 +163,6 @@ Route::middleware(['auth'])->group(function () {
 			'destroy' => 'camion.destroy',
 		]);
 
-		//----------------------------------------------------------------------------------------------------------------------------------------------
-		Route::resource('actores/rampla', RamplaController::class)->names([
-			'index'   => 'rampla.index',
-			'create'  => 'rampla.create',
-			'store'   => 'rampla.store',
-			'show'    => 'rampla.show',
-			'edit'    => 'rampla.edit',
-			'update'  => 'rampla.update',
-			'destroy' => 'rampla.destroy',
-		]);
 	});
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------

@@ -30,7 +30,6 @@ class Camion extends Model
         'tipo_camion_id',
 		'region_operativa_id',   // 👈 NUEVO
         'patente',
-        'patente_rampla',
         'arrendado',
         'rendimiento_optimo',
         'activo',

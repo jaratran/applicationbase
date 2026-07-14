@@ -34,7 +34,6 @@ class CamionController extends Controller
                                 'tipo_camion_id',
 								'region_operativa_id',
                                 'patente',
-                                'patente_rampla',
                                 'arrendado',
                                 'rendimiento_optimo'
                             ]);
@@ -61,7 +60,6 @@ class CamionController extends Controller
 	        //     'conductor_id'            => 'required|integer|exists:conductores,id',
 	        //     'tipo_camion_id'          => 'required|integer|exists:catalogos,id',
 	        //     'patente'                 => 'required|string|max:20',
-	        //     'patente_rampla'          => 'nullable|string|max:20',
 	        //     'arrendado'               => 'required|boolean',
 	        //     'rendimiento_optimo'      => 'nullable|numeric|min:0|max:9999.99',
 	        //     'observacion_inactividad' => 'nullable|string'
@@ -95,16 +93,6 @@ class CamionController extends Controller
 					Rule::unique('camiones')->where(function ($query) use ($request) {
 						return $query->where('region_operativa_id', $request->region_operativa_id);
 					}),
-				],
-				'patente_rampla' 		=> [
-					'nullable',
-					'string',
-					'max:20',
-				],
-				'patente_rampla' 		=> [
-					'nullable',
-					'string',
-					'max:20',
 				],
 				'arrendado' 		=> [
 					'required',
@@ -158,7 +146,6 @@ class CamionController extends Controller
                             'tipo_camion_id',
 							'region_operativa_id',
                             'patente',
-                            'patente_rampla',
                             'arrendado',
                             'rendimiento_optimo',
                             'observacion_inactividad'
@@ -190,7 +177,6 @@ class CamionController extends Controller
 	        //     'conductor_id'            => 'required|integer|exists:conductores,id',
 	        //     'tipo_camion_id'          => 'required|integer|exists:catalogos,id',
 	        //     'patente'                 => 'required|string|max:20',
-	        //     'patente_rampla'          => 'nullable|string|max:20',
 	        //     'arrendado'               => 'required|boolean',
 	        //     'rendimiento_optimo'      => 'nullable|numeric|min:0|max:9999.99',
 	        //     'observacion_inactividad' => 'nullable|string'
@@ -220,11 +206,6 @@ class CamionController extends Controller
 				],
 				'patente' 				=> [
 					'required',
-					'string',
-					'max:20',
-				],
-				'patente_rampla' 		=> [
-					'nullable',
 					'string',
 					'max:20',
 				],
