@@ -67,17 +67,6 @@ class EmpresaConfigurationTest extends TestCase
     }
 
     #[Test]
-    public function plant_linking_is_limited_to_producer_companies(): void
-    {
-        $configuration = new EmpresaConfiguration();
-        $producer = new Empresa(['tipo_empresa_id' => config('constantes.TIPO_EMPRESA_PRODUCTORA')]);
-        $carrier = new Empresa(['tipo_empresa_id' => config('constantes.TIPO_EMPRESA_TRANSPORTISTA')]);
-
-        $this->assertTrue($configuration->canLinkPlants($producer));
-        $this->assertFalse($configuration->canLinkPlants($carrier));
-    }
-
-    #[Test]
     public function company_status_is_normalized_as_a_boolean(): void
     {
         $empresa = new Empresa(['activo' => 1]);

@@ -12,6 +12,7 @@ use App\Models\Empresa;
 use App\Models\Sucursal;
 use App\Models\User;
 use App\Services\EmpresaConfiguration;
+use App\Services\MaquilaConfiguration;
 
 class EmpresaController extends Controller
 {
@@ -174,7 +175,7 @@ class EmpresaController extends Controller
     /**
      * Entrega las plantas vinculadas y disponibles para una empresa productora.
      */
-    public function plantas($id, EmpresaConfiguration $configuration)
+    public function plantas($id, MaquilaConfiguration $configuration)
     {
         // 1. Obtener la empresa con sus plantas asociadas (relación belongsToMany)
         $empresa = Empresa::with('plantasProcesadoras:id,nombre_sucursal')
@@ -182,7 +183,7 @@ class EmpresaController extends Controller
                         ->findOrFail($id);
 
         // La misma restricción se vuelve a comprobar al guardar para proteger el endpoint directo.
-        if (!$configuration->canLinkPlants($empresa)) {
+        if (!$configuration->canAssociateBranches($empresa)) {
             return redirect()->route('empresa.index')->with('error', __('auth.only_producer_companies_can_link_plants'));
         }
 
@@ -202,13 +203,25 @@ class EmpresaController extends Controller
     /**
      * Almacenar vínculos con plantas de proceso.
      */
-    public function guardarPlantas(Request $request, Empresa $empresa, EmpresaConfiguration $configuration)
+    public function guardarPlantas(Request $request, Empresa $empresa, MaquilaConfiguration $configuration)
     {
-        abort_unless($configuration->canLinkPlants($empresa), 403);
-        $data = $request->validate($configuration->plantRules());
+        abort_unless($configuration->canAssociateBranches($empresa), 403);
+        $data = $request->validate($configuration->branchRules());
 
         try {
-		    $empresa->plantasProcesadoras()->sync($data['sucursales'] ?? []);
+		    // Las asociaciones inactivas no aparecen en el formulario, pero deben conservarse al guardar.
+		    $inactiveBranchIds = $empresa->sucursalesVinculadas()
+		        ->where(function ($query) {
+		            $query->where('sucursales.activo', false)
+		                ->orWhere('maquilas.activo', false);
+		        })
+		        ->pluck('sucursales.id')
+		        ->all();
+		    $branchIds = $configuration->preserveInactiveAssociations(
+		        $data['sucursales'] ?? [],
+		        $inactiveBranchIds
+		    );
+		    $empresa->sucursalesVinculadas()->sync($branchIds);
 
 		    return redirect()->route('empresa.index')->with('status', __('auth.company_plants_linked_successfully'));
 

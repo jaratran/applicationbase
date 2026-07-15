@@ -75,32 +75,6 @@ class SucursalConfigurationTest extends TestCase
     }
 
     #[Test]
-    public function company_links_accept_only_active_producers(): void
-    {
-        $this->prepareValidationTables();
-        $configuration = new SucursalConfiguration();
-
-        $valid = Validator::make(['empresas' => [100]], $configuration->companyRules());
-        $carrier = Validator::make(['empresas' => [101]], $configuration->companyRules());
-        $inactive = Validator::make(['empresas' => [102]], $configuration->companyRules());
-
-        $this->assertFalse($valid->fails());
-        $this->assertTrue($carrier->fails());
-        $this->assertTrue($inactive->fails());
-    }
-
-    #[Test]
-    public function company_linking_is_limited_to_plant_branches(): void
-    {
-        $configuration = new SucursalConfiguration();
-        $plant = new Sucursal(['tipo_sucursal_id' => config('constantes.TIPO_SUCURSAL_PLANTA')]);
-        $other = new Sucursal(['tipo_sucursal_id' => 999]);
-
-        $this->assertTrue($configuration->canLinkCompanies($plant));
-        $this->assertFalse($configuration->canLinkCompanies($other));
-    }
-
-    #[Test]
     public function branch_status_and_numeric_fields_are_normalized(): void
     {
         $sucursal = new Sucursal([
@@ -144,11 +118,6 @@ class SucursalConfigurationTest extends TestCase
             $table->unsignedBigInteger('region_id');
             $table->string('nombre');
         });
-        Schema::create('empresas', function (Blueprint $table): void {
-            $table->id();
-            $table->unsignedBigInteger('tipo_empresa_id');
-            $table->boolean('activo')->default(true);
-        });
 
         DB::table('catalogos')->insert([
             ['id' => 27, 'catalogo_id' => config('constantes.CATEGORIA_ZONA_SUCURSAL'), 'nombre' => 'Puerto Montt'],
@@ -160,10 +129,5 @@ class SucursalConfigurationTest extends TestCase
             ['id' => 2, 'nombre' => 'Región dos', 'operativa' => true],
         ]);
         DB::table('comunas')->insert(['id' => 10, 'region_id' => 1, 'nombre' => 'Comuna uno']);
-        DB::table('empresas')->insert([
-            ['id' => 100, 'tipo_empresa_id' => config('constantes.TIPO_EMPRESA_PRODUCTORA'), 'activo' => true],
-            ['id' => 101, 'tipo_empresa_id' => config('constantes.TIPO_EMPRESA_TRANSPORTISTA'), 'activo' => true],
-            ['id' => 102, 'tipo_empresa_id' => config('constantes.TIPO_EMPRESA_PRODUCTORA'), 'activo' => false],
-        ]);
     }
 }

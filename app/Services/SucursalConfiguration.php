@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Catalogo;
-use App\Models\Sucursal;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -52,26 +51,6 @@ class SucursalConfiguration
             'km' => ['nullable', 'integer', 'min:0'],
             'tiempo_estimado_viaje' => ['nullable', 'numeric', 'min:0', 'max:999.99'],
         ];
-    }
-
-    public function companyRules(): array
-    {
-        return [
-            'empresas' => ['array'],
-            'empresas.*' => [
-                'integer',
-                Rule::exists('empresas', 'id')->where(
-                    fn (Builder $query) => $query
-                        ->where('tipo_empresa_id', config('constantes.TIPO_EMPRESA_PRODUCTORA'))
-                        ->where('activo', true)
-                ),
-            ],
-        ];
-    }
-
-    public function canLinkCompanies(Sucursal $sucursal): bool
-    {
-        return (int) $sucursal->tipo_sucursal_id === (int) config('constantes.TIPO_SUCURSAL_PLANTA');
     }
 
     public function isBranchTypeId(int $catalogoId): bool

@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Catalogo;
-use App\Models\Empresa;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 
@@ -30,26 +29,6 @@ class EmpresaConfiguration
             'email_contacto' => ['nullable', 'email', 'max:255'],
             'telefono_contacto' => ['nullable', 'string', 'max:30'],
         ];
-    }
-
-    public function plantRules(): array
-    {
-        return [
-            'sucursales' => ['array'],
-            'sucursales.*' => [
-                'integer',
-                Rule::exists('sucursales', 'id')->where(
-                    fn (Builder $query) => $query
-                        ->where('tipo_sucursal_id', config('constantes.TIPO_SUCURSAL_PLANTA'))
-                        ->where('activo', true)
-                ),
-            ],
-        ];
-    }
-
-    public function canLinkPlants(Empresa $empresa): bool
-    {
-        return (int) $empresa->tipo_empresa_id === (int) config('constantes.TIPO_EMPRESA_PRODUCTORA');
     }
 
     public function isCompanyTypeId(int $catalogoId): bool

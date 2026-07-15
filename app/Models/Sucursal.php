@@ -93,7 +93,8 @@ class Sucursal extends Model
 	public function empresasAtendidas()
 	{
 		return $this->empresasVinculadas()
-					->where('empresas.activo', true);
+					->where('empresas.activo', true)
+					->wherePivot('activo', true);
 	}
 
 	/**

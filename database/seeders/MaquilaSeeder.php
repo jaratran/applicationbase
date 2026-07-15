@@ -17,14 +17,11 @@ class MaquilaSeeder extends Seeder
             throw new RuntimeException('Faltan la empresa o sucursal base requeridas para crear la maquila.');
         }
 
-        DB::table('maquilas')->updateOrInsert(
-            ['empresa_id' => $empresaId, 'sucursal_id' => $sucursalId],
-            [
-                'fecha_inicio' => now()->toDateString(),
-                'activo' => true,
-                'observaciones' => null,
-                'updated_at' => now(),
-            ]
-        );
+        DB::table('maquilas')->insertOrIgnore([
+            'empresa_id' => $empresaId,
+            'sucursal_id' => $sucursalId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

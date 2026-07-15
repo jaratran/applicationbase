@@ -12,6 +12,7 @@ use App\Models\Sucursal;
 use App\Models\Empresa;
 use App\Models\User;
 use App\Services\SucursalConfiguration;
+use App\Services\MaquilaConfiguration;
 
 class SucursalController extends Controller
 {
@@ -179,7 +180,7 @@ class SucursalController extends Controller
     /**
      * Entrega las empresas productoras vinculadas y disponibles para una planta.
      */
-    public function productoras($id, SucursalConfiguration $configuration)
+    public function productoras($id, MaquilaConfiguration $configuration)
     {
         // 1. Obtener la sucursal con sus productoras asociadas (relación belongsToMany)
         $sucursal = Sucursal::with('empresasAtendidas:id,razon_social')
@@ -187,7 +188,7 @@ class SucursalController extends Controller
                         ->findOrFail($id);
 
         // La misma restricción se vuelve a comprobar al guardar para proteger el endpoint directo.
-        if (!$configuration->canLinkCompanies($sucursal)) {
+        if (!$configuration->canAssociateCompanies($sucursal)) {
             return redirect()->route('sucursal.index')->with('error', __('auth.only_plant_branches_can_link_producers'));
         }
 
@@ -208,18 +209,24 @@ class SucursalController extends Controller
     /**
      * Almacenar vínculos con empresas productoras.
      */
-    public function guardarProductoras(Request $request, Sucursal $sucursal, SucursalConfiguration $configuration)
+    public function guardarProductoras(Request $request, Sucursal $sucursal, MaquilaConfiguration $configuration)
     {
-		abort_unless($configuration->canLinkCompanies($sucursal), 403);
+		abort_unless($configuration->canAssociateCompanies($sucursal), 403);
 		$data = $request->validate($configuration->companyRules());
 
 		try {
 		    // Las asociaciones inactivas no aparecen en el formulario, pero tampoco deben perderse al guardar.
 		    $inactiveCompanyIds = $sucursal->empresasVinculadas()
-		        ->where('empresas.activo', false)
+		        ->where(function ($query) {
+		            $query->where('empresas.activo', false)
+		                ->orWhere('maquilas.activo', false);
+		        })
 		        ->pluck('empresas.id')
 		        ->all();
-		    $companyIds = array_unique(array_merge($data['empresas'] ?? [], $inactiveCompanyIds));
+		    $companyIds = $configuration->preserveInactiveAssociations(
+		        $data['empresas'] ?? [],
+		        $inactiveCompanyIds
+		    );
 		    $sucursal->empresasVinculadas()->sync($companyIds);
 
 		    return redirect()->route('sucursal.index')->with('status', __('auth.branch_producers_linked_successfully'));

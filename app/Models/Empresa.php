@@ -46,8 +46,17 @@ class Empresa extends Model
      */
     public function plantasProcesadoras()
     {
-        return $this->belongsToMany(Sucursal::class, 'maquilas', 'empresa_id', 'sucursal_id')
+        return $this->sucursalesVinculadas()
 					->where('sucursales.activo', true)
+					->wherePivot('activo', true);
+    }
+
+    /**
+     * Todas las sucursales vinculadas, incluso las inactivas.
+     */
+    public function sucursalesVinculadas()
+    {
+        return $this->belongsToMany(Sucursal::class, 'maquilas', 'empresa_id', 'sucursal_id')
                     ->withTimestamps();
     }
 
