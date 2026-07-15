@@ -10,6 +10,10 @@ use Illuminate\Validation\Rule;
 
 class SucursalConfiguration
 {
+    public function __construct(private readonly LocationConfiguration $locations)
+    {
+    }
+
     public function persistableData(array $validated): array
     {
         return Arr::only($validated, [
@@ -32,20 +36,8 @@ class SucursalConfiguration
             'nombre_sucursal' => ['required', 'string', 'max:255'],
             'codigo_siep' => ['nullable', 'integer'],
             'tipo_sucursal_id' => $this->catalogRule(config('constantes.CATEGORIA_TIPO_SUCURSAL')),
-            'region_id' => [
-                'required',
-                'integer',
-                Rule::exists('regiones', 'id')->where(
-                    fn (Builder $query) => $query->where('operativa', true)
-                ),
-            ],
-            'comuna_id' => [
-                'required',
-                'integer',
-                Rule::exists('comunas', 'id')->where(
-                    fn (Builder $query) => $query->where('region_id', $request->integer('region_id'))
-                ),
-            ],
+            'region_id' => $this->locations->regionRule(operationalOnly: true),
+            'comuna_id' => $this->locations->communeRule($request->integer('region_id')),
             'telefono' => ['nullable', 'string', 'max:30'],
             'email' => ['nullable', 'email', 'max:255'],
             'km' => ['nullable', 'integer', 'min:0'],

@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Sucursal;
 use App\Services\SucursalConfiguration;
+use App\Services\LocationConfiguration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +34,7 @@ class SucursalConfigurationTest extends TestCase
     public function type_and_zone_must_belong_to_their_catalog_families(): void
     {
         $this->prepareValidationTables();
-        $configuration = new SucursalConfiguration();
+        $configuration = new SucursalConfiguration(new LocationConfiguration());
         $validData = $this->validData();
         $valid = Validator::make($validData, $configuration->rules(Request::create('/', 'POST', $validData)));
         $foreignData = $validData + [];
@@ -53,7 +54,7 @@ class SucursalConfigurationTest extends TestCase
         $this->prepareValidationTables();
         $data = $this->validData();
         $data['region_id'] = 2;
-        $configuration = new SucursalConfiguration();
+        $configuration = new SucursalConfiguration(new LocationConfiguration());
         $validator = Validator::make($data, $configuration->rules(Request::create('/', 'POST', $data)));
 
         $this->assertTrue($validator->fails());
@@ -63,7 +64,7 @@ class SucursalConfigurationTest extends TestCase
     #[Test]
     public function only_expected_branch_attributes_are_persisted(): void
     {
-        $configuration = new SucursalConfiguration();
+        $configuration = new SucursalConfiguration(new LocationConfiguration());
         $data = $configuration->persistableData($this->validData() + [
             'activo' => false,
             'observacion_inactividad' => 'Manipulada',

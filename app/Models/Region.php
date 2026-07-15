@@ -9,20 +9,18 @@ class Region extends Model
     protected $table = 'regiones';
 
     protected $fillable = [
-        'id',
         'nombre',
-        'orden'
+        'orden',
+        'operativa',
     ];
 
-	// Indica si la región participa en los ámbitos operativos configurables.
     protected $casts = [
+        'orden' => 'integer',
         'operativa' => 'boolean',
     ];
 
     /**
-     * Relaciones Eloquent de Regiones con otras tablas
-     *
-     * @var array
+     * Comunas pertenecientes a la región.
      */
     public function comunas()
     {

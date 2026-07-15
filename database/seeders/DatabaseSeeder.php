@@ -20,15 +20,10 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call(CatalogoSeeder::class);
-
-        DB::table('regiones')->updateOrInsert(
-            ['id' => 0],
-            ['nombre' => 'No especificado', 'orden' => 0, 'operativa' => false, 'updated_at' => now()]
-        );
-        DB::table('comunas')->updateOrInsert(
-            ['id' => 0],
-            ['nombre' => 'No especificado', 'region_id' => 0, 'updated_at' => now()]
-        );
+        $this->call([
+            RegionSeeder::class,
+            ComunaSeeder::class,
+        ]);
 
         DB::table('design_parameters')->updateOrInsert(
             ['id' => 1],

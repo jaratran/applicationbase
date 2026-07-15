@@ -11,20 +11,19 @@ class Comuna extends Model
     protected $table = 'comunas';
 
     protected $fillable = [
-        'id',
         'nombre',
         'region_id',
-        'created_at',
-        'updated_at'
+    ];
+
+    protected $casts = [
+        'region_id' => 'integer',
     ];
 
     /**
-     * Relaciones Eloquent de Usuario con otras tablas
-     *
-     * @var array
+     * Región a la que pertenece la comuna.
      */
     public function region()
     {
-        return $this->belongsTo(Region::class); // Una comuna pertenece a una region a través del campo region_id = region.id
+        return $this->belongsTo(Region::class);
     }
 }
