@@ -12,6 +12,7 @@ class EmpresaSeeder extends Seeder
     {
         $comunaId = DB::table('comunas')->where('nombre', 'No especificado')->value('id');
         $tipos = DB::table('catalogos')
+            ->where('catalogo_id', config('constantes.CATEGORIA_TIPO_EMPRESA'))
             ->whereIn('nombre', ['Productor', 'Transportista'])
             ->pluck('id', 'nombre');
 

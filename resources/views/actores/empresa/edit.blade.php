@@ -28,11 +28,11 @@
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="rut_empresa">RUT</label>
-                                    <input type="text" class="form-control" name="rut_empresa" id="rut_empresa" value="{{ $empresa->rut_empresa }}" required>
+                                    <input type="text" class="form-control" name="rut_empresa" id="rut_empresa" value="{{ old('rut_empresa', $empresa->rut_empresa) }}" required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="razon_social">Razón Social</label>
-                                    <input type="text" class="form-control" name="razon_social" id="razon_social" value="{{ $empresa->razon_social }}" required>
+                                    <input type="text" class="form-control" name="razon_social" id="razon_social" value="{{ old('razon_social', $empresa->razon_social) }}" required>
                                 </div>
                             </div>
                         </div>
@@ -42,15 +42,15 @@
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="telefono">Teléfono</label>
-                                    <input type="text" class="form-control" name="telefono" id="telefono" value="{{ $empresa->telefono }}">
+                                    <input type="text" class="form-control" name="telefono" id="telefono" value="{{ old('telefono', $empresa->telefono) }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="email_contacto">Correo de Contacto</label>
-                                    <input type="email" class="form-control" name="email_contacto" id="email_contacto" value="{{ $empresa->email_contacto }}">
+                                    <input type="email" class="form-control" name="email_contacto" id="email_contacto" value="{{ old('email_contacto', $empresa->email_contacto) }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="telefono_contacto">Teléfono de Contacto</label>
-                                    <input type="text" class="form-control" name="telefono_contacto" id="telefono_contacto" value="{{ $empresa->telefono_contacto }}">
+                                    <input type="text" class="form-control" name="telefono_contacto" id="telefono_contacto" value="{{ old('telefono_contacto', $empresa->telefono_contacto) }}">
                                 </div>
                             </div>
 
@@ -67,11 +67,11 @@
                                     <select class="form-control select2" id="comuna_empresa" name="comuna_id" required>
                                         <option value="">{{ $empresa->comuna->nombre ?? '-' }}</option>
                                     </select>
-                                    <input type="hidden" id="comuna_seleccionada" value="{{ $empresa->comuna_id }}">
+                                    <input type="hidden" id="comuna_seleccionada" value="{{ old('comuna_id', $empresa->comuna_id) }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="direccion">Dirección</label>
-                                    <input type="text" class="form-control" name="direccion" id="direccion" value="{{ $empresa->direccion }}" required>
+                                    <input type="text" class="form-control" name="direccion" id="direccion" value="{{ old('direccion', $empresa->direccion) }}" required>
                                 </div>
                             </div>
                         </div>
@@ -83,9 +83,9 @@
                                 <div class="form-group col-md-4">
                                     <label for="tipo_empresa_id">Tipo de Empresa</label>
                                     <select class="form-control select2" id="tipo_empresa_id" name="tipo_empresa_id" required>
-                                        <option value="">{{ $empresa->tipoEmpresa->Nombre ?? '-' }}</option>
+                                        <option value="">{{ $empresa->tipoEmpresa->nombre ?? '-' }}</option>
                                     </select>
-                                    <input type="hidden" id="tipo_actual" value="{{ $empresa->tipo_empresa_id }}">
+                                    <input type="hidden" id="tipo_actual" value="{{ old('tipo_empresa_id', $empresa->tipo_empresa_id) }}">
                                 </div>
                             </div> 
                         </div>
@@ -145,7 +145,7 @@
                 });
             }
 
-        	catalogo2select2(CATEGORIA_TIPO_EMPRESA, "tipo_empresa_id", "Seleccione Tipo de Empresa", "tipo_actual");		// Edit si considera valor pre-cargado
+         catalogo2select2(CATEGORIA_TIPO_EMPRESA, "tipo_empresa_id", "Seleccione Tipo de Empresa", "tipo_actual");
             cargarRegiones();
         });
     </script>

@@ -35,10 +35,15 @@ class Empresa extends Model
         'observacion_inactividad',
     ];
 
+    protected $casts = [
+        'tipo_empresa_id' => 'integer',
+        'comuna_id' => 'integer',
+        'activo' => 'boolean',
+    ];
+
     /**
-     * Relaciones Eloquent de Empresa con otras tablas
+     * Plantas de proceso vinculadas mediante maquilas.
      */
-    // Plantas de Proceso vinculadas (maquilas)
     public function plantasProcesadoras()
     {
         return $this->belongsToMany(Sucursal::class, 'maquilas', 'empresa_id', 'sucursal_id')
@@ -46,16 +51,20 @@ class Empresa extends Model
                     ->withTimestamps();
     }
 
-    // Tipo de empresa (Catalogo)
+    /**
+     * Clasificación organizacional de la empresa.
+     */
     public function tipoEmpresa()
     {
-        return $this->belongsTo(Catalogo::class, 'tipo_empresa_id', 'id');     // Una empresa pertenece a un tipo de empresa
+        return $this->belongsTo(Catalogo::class, 'tipo_empresa_id', 'id');
     }
 
-    // Comuna
+    /**
+     * Comuna de la dirección principal.
+     */
     public function comuna()
     {
-        return $this->belongsTo(Comuna::class);                  // Una empresa pertenece a una comuna
+        return $this->belongsTo(Comuna::class);
     }
 
 }

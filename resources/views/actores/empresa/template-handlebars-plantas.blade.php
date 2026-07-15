@@ -16,7 +16,6 @@
 
     <div class="bg-light border rounded p-3 mb-4">
         <h5>Asociación con Plantas de Proceso</h5>
-        <!-- Bloque condicional para Transportista -->
         <div id="asociacion-plantas-wrapper" class="mt-3">
             <label>Asociar Plantas de Proceso (Sucursales)</label>
             <div class="d-flex gap-2 mb-2">
@@ -27,11 +26,11 @@
             </div>
 
             <ul id="plantaProceso-asociadas" class="list-group mb-3">
-                <!-- plantaProcesos agregadas dinámicamente -->
+                <!-- Las plantas seleccionadas se agregan dinámicamente. -->
             </ul>
         </div>
 
-        <!-- Campo oculto que se va llenando con los IDs seleccionados -->
+        <!-- Mantiene los IDs seleccionados para el envío del formulario. -->
         <div id="contenedor-hidden" style="display: none;"></div>
     </div>
 @endverbatim

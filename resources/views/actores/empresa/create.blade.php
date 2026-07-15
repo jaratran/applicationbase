@@ -24,11 +24,11 @@
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="rut_empresa">RUT</label>
-                                    <input type="text" class="form-control" name="rut_empresa" id="rut_empresa" required>
+                                    <input type="text" class="form-control" name="rut_empresa" id="rut_empresa" value="{{ old('rut_empresa') }}" required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="razon_social">Razón Social</label>
-                                    <input type="text" class="form-control" name="razon_social" id="razon_social" required>
+                                    <input type="text" class="form-control" name="razon_social" id="razon_social" value="{{ old('razon_social') }}" required>
                                 </div>
                             </div>
                         </div>
@@ -38,15 +38,15 @@
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="telefono">Teléfono</label>
-                                    <input type="text" class="form-control" name="telefono" id="telefono">
+                                    <input type="text" class="form-control" name="telefono" id="telefono" value="{{ old('telefono') }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="email_contacto">Correo de Contacto</label>
-                                    <input type="email" class="form-control" name="email_contacto" id="email_contacto">
+                                    <input type="email" class="form-control" name="email_contacto" id="email_contacto" value="{{ old('email_contacto') }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="telefono_contacto">Teléfono de Contacto</label>
-                                    <input type="text" class="form-control" name="telefono_contacto" id="telefono_contacto">
+                                    <input type="text" class="form-control" name="telefono_contacto" id="telefono_contacto" value="{{ old('telefono_contacto') }}">
                                 </div>
                             </div>
 
@@ -63,7 +63,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="direccion">Dirección</label>
-                                    <input type="text" class="form-control" name="direccion" id="direccion" required>
+                                    <input type="text" class="form-control" name="direccion" id="direccion" value="{{ old('direccion') }}" required>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +132,7 @@
             }
 
             cargarRegiones();
-        	catalogo2select2(CATEGORIA_TIPO_EMPRESA, "tipo_empresa_id", "Seleccione Tipo de Empresa");				// Create no considera valor pre-cargado
+         catalogo2select2(CATEGORIA_TIPO_EMPRESA, "tipo_empresa_id", "Seleccione Tipo de Empresa");
         });
     </script>
 

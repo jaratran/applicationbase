@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Empresa;
 use App\Models\Sucursal;
 use App\Models\User;
+use App\Services\EmpresaConfiguration;
 
 class EmpresaController extends Controller
 {
@@ -24,7 +25,7 @@ class EmpresaController extends Controller
                                     'comuna:id,nombre,region_id',
                                     'comuna.region:id,nombre'
                                 ])
-                                // ->where('activo', true) -- Se omite este filtro para que salgan todos.
+                                // El estado se muestra y administra desde el mismo listado.
                                 ->get([
                                     'activo',
                                     'id',
@@ -50,21 +51,12 @@ class EmpresaController extends Controller
     /**
      * Almacenar nueva empresa.
      */
-    public function store(Request $request)
+    public function store(Request $request, EmpresaConfiguration $configuration)
     {
-        try {
-		    $request->validate([
-		        'tipo_empresa_id'   => 'required|integer|exists:catalogos,id',
-		        'rut_empresa'       => 'required|string|max:20',
-		        'razon_social'      => 'required|string|max:255',
-		        'direccion'         => 'required|string|max:255',
-		        'comuna_id'         => 'required|integer|exists:comunas,id',
-		        'telefono'          => 'nullable|string|max:30',
-		        'email_contacto'    => 'nullable|email|max:255',
-		        'telefono_contacto' => 'nullable|string|max:30'
-		    ]);
+        $data = $request->validate($configuration->rules());
 
-		    Empresa::create($request->all());
+        try {
+		    Empresa::create($data);
 
 		    return redirect()->route('empresa.index')->with('status', __('auth.company_created_successfully'));
 
@@ -93,7 +85,6 @@ class EmpresaController extends Controller
                                     'plantasProcesadoras.comuna:id,nombre,region_id',
                                     'plantasProcesadoras.comuna.region:id,nombre'
                                 ])
-                                // ->where('activo', true) -- Se omite este filtro para que salgan todos.
                                 ->findOrFail($id, [
                                     'id',
                                     'activo',
@@ -125,22 +116,13 @@ class EmpresaController extends Controller
     /**
      * Actualiza la información de una empresa.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, EmpresaConfiguration $configuration)
     {
-        try {
-		    $request->validate([
-		        'tipo_empresa_id'   => 'required|integer|exists:catalogos,id',
-		        'rut_empresa'       => 'required|string|max:20',
-		        'razon_social'      => 'required|string|max:255',
-		        'direccion'         => 'required|string|max:255',
-		        'comuna_id'         => 'required|integer|exists:comunas,id',
-		        'telefono'          => 'nullable|string|max:30',
-		        'email_contacto'    => 'nullable|email|max:255',
-		        'telefono_contacto' => 'nullable|string|max:30'
-		    ]);
+        $data = $request->validate($configuration->rules());
 
+        try {
 		    $empresa = Empresa::findOrFail($id);
-		    $empresa->update($request->all());
+		    $empresa->update($data);
 
 		    return redirect()->route('empresa.index')->with('status', __('auth.company_updated_successfully'));
 
@@ -189,30 +171,18 @@ class EmpresaController extends Controller
 		}
     }
 
-    public function preview(Request $request) {
-        //
-    }
-
-    public function print($id) {
-        //
-    }
-
     /**
-     * Entrega las Plantas de Proceso (sucursales) vinculadas a una empresa y cuales está disponibles.
+     * Entrega las plantas vinculadas y disponibles para una empresa productora.
      */
-    public function plantas($id)
+    public function plantas($id, EmpresaConfiguration $configuration)
     {
         // 1. Obtener la empresa con sus plantas asociadas (relación belongsToMany)
         $empresa = Empresa::with('plantasProcesadoras:id,nombre_sucursal')
                         ->select('id', 'rut_empresa', 'razon_social', 'tipo_empresa_id')
                         ->findOrFail($id);
 
-        // 2. Verificar que sea una empresa del tipo Productora de Materias Primas
-            // if ($empresa->tipo_empresa_id != config('constantes.TIPO_EMPRESA_PRODUCTORA')) {
-            //     abort(403, 'Solo las empresas productoras pueden gestionar vinculación con plantas.');
-            // }
-        // Cambiamos el abort(403) por un redirect con mensaje de error
-        if ($empresa->tipo_empresa_id != config('constantes.TIPO_EMPRESA_PRODUCTORA')) {
+        // La misma restricción se vuelve a comprobar al guardar para proteger el endpoint directo.
+        if (!$configuration->canLinkPlants($empresa)) {
             return redirect()->route('empresa.index')->with('error', __('auth.only_producer_companies_can_link_plants'));
         }
 
@@ -230,17 +200,15 @@ class EmpresaController extends Controller
     }
 
     /**
-     * Almacenar vinculos con Plantas de Proceso (sucursales).
+     * Almacenar vínculos con plantas de proceso.
      */
-    public function guardarPlantas(Request $request, Empresa $empresa)
+    public function guardarPlantas(Request $request, Empresa $empresa, EmpresaConfiguration $configuration)
     {
-        try {
-		    $request->validate([
-		        'sucursales'   => 'array',
-		        'sucursales.*' => 'integer|exists:sucursales,id'
-		    ]);
+        abort_unless($configuration->canLinkPlants($empresa), 403);
+        $data = $request->validate($configuration->plantRules());
 
-		    $empresa->plantasProcesadoras()->sync($request->input('sucursales', []));
+        try {
+		    $empresa->plantasProcesadoras()->sync($data['sucursales'] ?? []);
 
 		    return redirect()->route('empresa.index')->with('status', __('auth.company_plants_linked_successfully'));
 
@@ -257,12 +225,12 @@ class EmpresaController extends Controller
     }
 
     /**
-     * Empresas del tipo PRODUCTORAS.
-	 * Compatibles con región operativa del rol del usuario que se Mantiene  (Create/Edit).
-	 * Para el tema de la región operativa nos apoyamos con un usuario temporal que preste su accesor.
+     * Empresas activas del tipo solicitado compatibles con las regiones del rol.
      */
-	public function obtenerEmpresasPorTipoYRol(Request $request, $id)
+	public function obtenerEmpresasPorTipoYRol(Request $request, $id, EmpresaConfiguration $configuration)
 	{
+		abort_unless($configuration->isCompanyTypeId((int) $id), 404);
+
 		$request->validate([
 			'rol_id' => 'required|integer',
 		]);
