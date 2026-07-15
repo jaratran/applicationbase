@@ -4,78 +4,27 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
-use App\Models\Sucursal;
-use App\Models\Empresa;
+use RuntimeException;
 
 class MaquilaSeeder extends Seeder
 {
     public function run(): void
     {
-        $now = Carbon::now();
+        $empresaId = DB::table('empresas')->where('razon_social', 'Empresa Productora Base')->value('id');
+        $sucursalId = DB::table('sucursales')->where('nombre_sucursal', 'Sucursal Principal')->value('id');
 
-        $empresas = Empresa::pluck('id')->toArray(); // Lista total de empresas disponibles
-        $sucursales = Sucursal::pluck('id')->toArray(); // Lista total de sucursales
-
-        $insertados = [];
-
-        /**
-         * 🏭 Fase 1 — Recorrer todas las sucursales y asignarles entre 1 y 10 maquilas
-         */
-        foreach ($sucursales as $sucursalId) {
-            $cantidad = rand(1, 10);
-
-            // Elegir empresas aleatorias para esta sucursal (sin repetir)
-            $empresasAsignadas = collect($empresas)->random($cantidad);
-
-            foreach ($empresasAsignadas as $empresaId) {
-                // Evitar duplicados (por si se repiten combinaciones en otras fases)
-                $clave = $empresaId . '-' . $sucursalId;
-                if (!isset($insertados[$clave])) {
-                    DB::table('maquilas')->insert([
-                        'empresa_id'   => $empresaId,
-                        'sucursal_id'  => $sucursalId,
-                        'fecha_inicio' => now()->subDays(rand(0, 365)),
-                        'activo'       => true,
-                        'observaciones'=> null,
-                        'created_at'   => $now,
-                        'updated_at'   => $now,
-                    ]);
-                    $insertados[$clave] = true;
-                }
-            }
+        if ($empresaId === null || $sucursalId === null) {
+            throw new RuntimeException('Faltan la empresa o sucursal base requeridas para crear la maquila.');
         }
 
-        /**
-         * 🧪 Fase 2 — Revisar empresas que aún no están en ninguna maquila
-         */
-        $empresasConMaquilas = DB::table('maquilas')->pluck('empresa_id')->unique()->toArray();
-        $empresasSinMaquilas = array_diff($empresas, $empresasConMaquilas);
-
-        foreach ($empresasSinMaquilas as $empresaId) {
-            $cantidad = rand(1, 5);
-
-            // Elegir sucursales aleatorias para esta empresa
-            $sucursalesAsignadas = collect($sucursales)->random($cantidad);
-
-            foreach ($sucursalesAsignadas as $sucursalId) {
-                $clave = $empresaId . '-' . $sucursalId;
-                if (!isset($insertados[$clave])) {
-                    DB::table('maquilas')->insert([
-                        'empresa_id'   => $empresaId,
-                        'sucursal_id'  => $sucursalId,
-                        'fecha_inicio' => now()->subDays(rand(0, 365)),
-                        'activo'       => true,
-                        'observaciones'=> null,
-                        'created_at'   => $now,
-                        'updated_at'   => $now,
-                    ]);
-                    $insertados[$clave] = true;
-                }
-            }
-        }
-
-        $total = count($insertados);
-        echo "\n✅ Se insertaron $total maquilas únicas (empresa-sucursal).\n";
+        DB::table('maquilas')->updateOrInsert(
+            ['empresa_id' => $empresaId, 'sucursal_id' => $sucursalId],
+            [
+                'fecha_inicio' => now()->toDateString(),
+                'activo' => true,
+                'observaciones' => null,
+                'updated_at' => now(),
+            ]
+        );
     }
 }
