@@ -189,7 +189,6 @@ class ParameterController extends Controller
                     'support_telefono' => null, // Nuevo campo
                     'audit_email' => null,
                     'audit_email_enabled' => 0,
-                    'notify_admins_as_coordinators' => 0,
                     'verification_expiration_time' => null, // Nuevo campo
                     'allow_profile_editing' => 1,
                 ]);
@@ -198,7 +197,6 @@ class ParameterController extends Controller
             // Aseguramos que los checkboxes no enviados se interpreten como 'false'
             $request->merge([
                 'audit_email_enabled'           => $request->has('audit_email_enabled') ? 1 : 0,
-                'notify_admins_as_coordinators' => $request->has('notify_admins_as_coordinators') ? 1 : 0,
                 'allow_profile_editing'         => $request->has('allow_profile_editing') ? 1 : 0,
             ]);
 
@@ -208,7 +206,6 @@ class ParameterController extends Controller
                 'support_telefono'                  => 'nullable|string|max:20', // Nuevo campo
                 'audit_email'                       => 'nullable|email|max:255',
                 'audit_email_enabled'               => 'nullable|boolean',
-                'notify_admins_as_coordinators'     => 'nullable|boolean',
                 'verification_expiration_time'      => 'nullable|integer|min:1|max:1440', // 👍 recomendado
                 'allow_profile_editing'             => 'nullable|boolean',
 			]);
@@ -218,7 +215,6 @@ class ParameterController extends Controller
             $operationalParameter->support_telefono                 = $request->input('support_telefono'); // Nuevo campo
             $operationalParameter->audit_email                      = $request->input('audit_email');
             $operationalParameter->audit_email_enabled              = $request->input('audit_email_enabled');
-            $operationalParameter->notify_admins_as_coordinators    = $request->input('notify_admins_as_coordinators');
             $operationalParameter->verification_expiration_time     = $request->input('verification_expiration_time'); // Nuevo campo
             $operationalParameter->allow_profile_editing            = $request->input('allow_profile_editing');
 

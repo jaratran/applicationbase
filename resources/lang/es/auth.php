@@ -79,7 +79,7 @@ return [
     'password_reset_subject' => 'Restablecer contraseña en LaPortada',
 
     // Subject de correo en notificador CustomVerifyWelcomeEmail.php
-    'welcome_email_subject' => '¡Bienvenid@ a EcoRuta el Sistema de Planificación de Retiro de Subproductos de La Portada!',
+    'welcome_email_subject' => 'Bienvenido a ApplicationBase',
 
     // Redirecciones en middleware CheckRoleAccess.php
     'access_denied' => 'No tienes permisos para acceder a esta sección del sistema.',

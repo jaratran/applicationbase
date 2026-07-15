@@ -15,7 +15,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Actores\UsuarioController;
 use App\Http\Controllers\Actores\EmpresaController;
 use App\Http\Controllers\Actores\SucursalController;
-use App\Http\Controllers\SolicitudesRetiroController;
 
 /*
 |--------------------------------------------------------------------------
@@ -130,60 +129,6 @@ Route::middleware(['auth'])->group(function () {
 			]);
 		});
 
-	});
-
-	//----------------------------------------------------------------------------------------------------------------------------------------------
-	// SOLICITUDES DE RETIRO DE MATERIA PRIMA - CREAR, EDITAR-ACTUALIZAR y ELIMINAR (desactivar) SOLICITUD DE RETIRO
-	// La CREACION es sólo para Admin-IT y Solicitantes (planta y productor) - 15-07-25: Se excluye Cordinador para CREAR solicitudes (Para eso tienen la Manual).
-	Route::middleware(['check.role:'    . config('constantes.ROL_ADMINISTRADOR_IT') . ','
-										. config('constantes.ROL_SOLICITANTE_PLANTA') . ','
-										. config('constantes.ROL_SOLICITANTE_PLANTA_XII') . ','
-										. config('constantes.ROL_SOLICITANTE_PRODUCTOR')])->group(function () {
-
-		Route::get('solicitudes-retiro/create',    [SolicitudesRetiroController::class, 'create'])->name('solicitudes-retiro.create');
-		Route::post('solicitudes-retiro',          [SolicitudesRetiroController::class, 'store'])->name('solicitudes-retiro.store');
-	});
-
-	// EDITAR, ANULAR es para Admin-IT, Coodinadores y Solicitantes (planta y productor)
-	Route::middleware(['check.role:'    . config('constantes.ROL_COORDINADOR') . ','
-										. config('constantes.ROL_ADMINISTRADOR_IT') . ','
-										. config('constantes.ROL_SOLICITANTE_PLANTA') . ','
-										. config('constantes.ROL_SOLICITANTE_PLANTA_XII') . ','
-										. config('constantes.ROL_SOLICITANTE_PRODUCTOR')])->group(function () {
-
-		Route::get('solicitudes-retiro/{id}/edit', [SolicitudesRetiroController::class, 'edit'])->name('solicitudes-retiro.edit');
-		Route::put('solicitudes-retiro/{id}',      [SolicitudesRetiroController::class, 'update'])->name('solicitudes-retiro.update');
-		Route::delete('solicitudes-retiro/{id}',   [SolicitudesRetiroController::class, 'destroy'])->name('solicitudes-retiro.destroy');
-	});
-
-	// SOLICITUDES DE RETIRO DE MATERIA PRIMA - APROBAR y COMENTAR SOLICITUD DE RETIRO
-	// Esto es sólo para Admin-IT y Coodinadores
-	Route::middleware(['check.role:'	. config('constantes.ROL_COORDINADOR') . ','
-										. config('constantes.ROL_COORDINADOR_XII') . ','
-										. config('constantes.ROL_ADMINISTRADOR_IT')])->group(function () {
-
-		Route::post('solicitudes-retiro/{id}/aprobar',  [SolicitudesRetiroController::class, 'aprobarRetiro'])->name('solicitudes-retiro.aprobar');
-		Route::post('solicitudes-retiro/{id}/comentar', [SolicitudesRetiroController::class, 'comentarRetiro'])->name('solicitudes-retiro.comentar');
-	});
-
-	// SOLICITUDES DE RETIRO DE MATERIA PRIMA - EXPLORAR: LISTADO GENERAL / SELECCION DESDE CORREO y EXAMINAR EJEMPLAR
-	// Esto es para todos los usuarios
-	Route::get('solicitudes-retiro',      [SolicitudesRetiroController::class, 'index'])->name('solicitudes-retiro.index');
-	Route::get('/ver-solicitud/{token}',  [SolicitudesRetiroController::class, 'verDesdeToken'])->name('solicitudes-retiro.ver-desde-token');
-	Route::get('solicitudes-retiro/{id}', [SolicitudesRetiroController::class, 'show'])->name('solicitudes-retiro.show');
-
-	//----------------------------------------------------------------------------------------------------------------------------------------------
-	// LISTADOS DE PLANTAS y/o EMPRESAS VINCULADAS EN MAQUILAS
-	Route::middleware(['check.role:'	. config('constantes.ROL_SOLICITANTE_PLANTA')    . ',' . config('constantes.ROL_SOLICITANTE_PLANTA_XII') . ','
-										. config('constantes.ROL_SOLICITANTE_PRODUCTOR') . ','
-										. config('constantes.ROL_COORDINADOR')           . ',' . config('constantes.ROL_COORDINADOR_XII') . ','
-										. config('constantes.ROL_ADMINISTRADOR_IT') ])->group(function () {
-
-		Route::get('productora/{id}/plantas-vinculadas', [EmpresaController::class,  'plantasVinculadas'])->name('productora.plantas-vinculadas');
-		Route::get('planta/{id}/productoras-vinculadas', [SucursalController::class, 'productorasVinculadas'])->name('planta.productoras-vinculadas');
-
-		Route::get('empresas/tipo/{id}'                , [EmpresaController::class,   'obtenerEmpresasPorTipo']);                                      // En create/edit de Solicitudes de Retiro (SOLO rol AdminIT/Coordinador).
-		Route::get('sucursales/tipo/{id}'              , [SucursalController::class,  'obtenerSucursalesPorTipo']);                                    // En create/edit de: Solicitudes de Retiro (SOLO rol AdminIT/Coordinador).
 	});
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------

@@ -19,12 +19,8 @@ return [
     'CATEGORIA_ZONA_SUCURSAL'         =>  21,
     'CATEGORIA_TIPO_SUCURSAL'         =>  29,
     'CATEGORIA_TIPO_EMPRESA'          =>  31,
-    'CATEGORIA_TIPO_RETIRO'           =>  34,
-    'CATEGORIA_TIPO_ESPECIE'          =>  37,
-    'CATEGORIA_TIPO_MATERIA_PRIMA'    =>  41,
 
 	'CATEGORIA_REGION_OPERATIVA'			=> 130,
-	'CATEGORIA_TIPO_TRANSPORTE'				=> 140,
 
 
 	// Categorías que NO deben mostrarse en el mantenedor (frontend)
@@ -37,10 +33,7 @@ return [
 								 29,   // Tipo de Sucursal
 								 31,   // Tipo Empresa
 
-								 90,   // Estados de Retiro
-
 								130,   // Región Operativa
-								140,   // Tipo Transporte
 							],
 
 
@@ -76,19 +69,6 @@ return [
 
     'TIPO_SUCURSAL_PLANTA'          => 30,
 
-    'TIPO_RETIRO_TOLVA'             => 35,
-    'TIPO_RETIRO_BINS'              => 36,
-
-    'TIPO_TRANSPORTE_TIERRA'        => 193,
-    'TIPO_TRANSPORTE_BARCAZA'       => 194,
-    'TIPO_TRANSPORTE_COMBINADO'     => 195,
-
-    'EN_PLANTA_ORIGEN'              => 200,
-    'EN_PUERTO'                     => 201,
-    'EN_TRANSITO_MARITIMO'          => 202,
-    'EN_TRANSITO_TERRESTRE'         => 203,
-    'ARRIBADA_PUERTO_MONTT'         => 204,
-    'ENTREGADA_LA_PORTADA'          => 206,
 
 	/*
     |--------------------------------------------------------------------------
@@ -114,44 +94,6 @@ return [
 	'REGION_RM'                      => 13,
 	'REGION_XIV'                     => 14,
 	'REGION_XV'                      => 15,
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Tipo de Operacion de la Solicitud : Retiro o Reposición (Región XII)
-    |--------------------------------------------------------------------------
-    |
-    | Estos valores se usan para identificar la calidad de la operación.
-    |
-    | En el caso del a Región X sólo serán Retiros.
-    | En el caso del a Región XII pueden ser Retiro o Reposición de Bines.
-    |
-    | No se cargan desde la base de datos ni están en el catálogo.
-    |
-    */
-	'TIPO_OPERACION_RETIRO'          => 0,
-	'TIPO_OPERACION_REPOSICION'      => 1,
-
-
-	/*
-    |--------------------------------------------------------------------------
-    | Estados de Solicitudes de Retiro
-    |--------------------------------------------------------------------------
-    |
-    | Estos valores identifican la etapa vigente dentro del flujo de un retiro.
-    |
-    | No se cargan desde la base de datos ni están en el catálogo.
-    |
-    */
-	'CATEGORIA_ESTADOS_RETIRO'      => 90,
-
-    'ESTADO_RETIRO_ESPERANDO'       => 91,
-    'ESTADO_RETIRO_COMENTADO'       => 92,
-    'ESTADO_RETIRO_ACEPTADO'        => 93,
-    'ESTADO_RETIRO_PLANIFICADO'     => 94,
-    'ESTADO_RETIRO_PROGRAMADO'      => 95,
-    'ESTADO_RETIRO_TERMINADO'       => 96,
-    'ESTADO_RETIRO_CANCELADO'       => 97,
 
 
 ];

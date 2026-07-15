@@ -20,7 +20,7 @@
                             -->
 
                             <h2 style="color: {{ $designParameter->custom_primary }};">
-                                Restablecimiento de Contraseña <strong>La Portada</strong>
+                                Restablecimiento de Contraseña <strong>ApplicationBase</strong>
                             </h2>
                             <p>Estimado/a <strong>{{ $user->nombre_usuario }} {{ $user->apellidos_usuario }}</strong>,</p>
 
@@ -37,10 +37,10 @@
 
                             <p>Si tienes alguna duda o necesitas asistencia, no dudes en comunicarte con nuestro equipo de soporte al correo <strong>{{ $operationalParameter->support_email }}</strong> o al teléfono <strong>{{ $operationalParameter->support_telefono }}</strong>.
 
-                            <p style="margin-top: 40px;">Saludos cordiales,<br><strong>Equipo de La Portada</strong></p>
+                            <p style="margin-top: 40px;">Saludos cordiales,<br><strong>Equipo de ApplicationBase</strong></p>
 
                             <hr>
-                            <p class="mb-0"><small>Este correo fue generado automáticamente por el Sistema de Planificación EcoRuta.</small></p>
+                            <p class="mb-0"><small>Este correo fue generado automáticamente por ApplicationBase.</small></p>
                         </td>
                     </tr>
                 </table>

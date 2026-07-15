@@ -28,18 +28,6 @@
                 </label>
             </div>
         </div>
-        <div class="form-group col-md-4">
-            <label for="notify_admins" class="form-label">Correos de Notificación</label>
-            <div class="form-check mt-2">
-                <input class="form-check-input" type="checkbox" style="transform: scale(1.4); transform-origin: center;"
-                        id="notify_admins_as_coordinators" name="notify_admins_as_coordinators"
-                        value="1" {{ old('notify_admins_as_coordinators', $operationalParameter->notify_admins_as_coordinators ?? false) ? 'checked' : '' }}>
-
-                <label class="form-check-label" for="notify_admins_as_coordinators">
-                    Incluir a los administradores IT (útil para validaciones).
-                </label>
-            </div>
-        </div>
     </div>
 </div>
 

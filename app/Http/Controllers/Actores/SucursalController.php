@@ -300,49 +300,4 @@ class SucursalController extends Controller
 			});
 	}
 
-    /**
-     * Entrega sucursales por Tipo ahora usado en:
-     * Create/Edit de Solicitudes de Retiro, al perfil del usuario de la sesión.
-	 * - AdminIT/Coordinador X           : Ambas regiones operativas (X y XII)
-	 * - Solicitantes (planta/productor) : Sólo región X.
-	 * - Coordinar XII                   : Sólo región XII.
-	 *
-	*/
-    public function obtenerSucursalesPorTipo($id)
-    {
-		$regionesPermitidas = auth()->user()->regiones_operativas_ids;
-
-		return Sucursal::with('comuna:id,region_id')
-			->where('activo', true)
-			->where('tipo_sucursal_id', $id)
-			->whereHas('comuna', function ($q) use ($regionesPermitidas) {			// Sólo sucursales cuya comuna sea de una región operativa
-				$q->whereIn('region_id', $regionesPermitidas);
-			})
-			->orderBy('nombre_sucursal')
-
-			->get()
-
-			->map(function ($sucursal) {
-				return [
-					'id'                   => $sucursal->id,
-					'nombre_sucursal'      => $sucursal->nombre_sucursal,
-					'region_operativa_id'  => $sucursal->region_operativa_id,		// Retornamos la región operativa de la sucursal (que es su región)
-				];
-			});
-	}
-
-    /**
-     * Entrega productoras vinculadas en maquila con una planta especifica.
-     * Esto permite rellenar los select2 en Create/Edit de Solicitudes de Retiro.
-     */
-    public function productorasVinculadas($id)
-    {
-        $productoras = Sucursal::findOrFail($id)
-                        ->empresasAtendidas()
-                        ->select('empresas.id', 'empresas.razon_social as data')
-                        ->orderBy('razon_social')
-                        ->get();
-
-        return response()->json($productoras);
-    }
 }

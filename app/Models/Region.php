@@ -14,7 +14,7 @@ class Region extends Model
         'orden'
     ];
 
-	// Se refiere a las regiones operativas para cursar retiros.
+	// Indica si la región participa en los ámbitos operativos configurables.
     protected $casts = [
         'operativa' => 'boolean',
     ];

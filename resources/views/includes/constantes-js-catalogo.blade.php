@@ -16,7 +16,7 @@
 
 /**
  * Carga una lista de parámetros desde catalogo list_params en un <select> (apto para create/edit).
- * NO Apto para vistas de create y create manual de solicitud de retiro donde se tienen multiples retiros con doble contexto Región X y Región XII
+ * Recibe el id de un único select existente en el DOM.
  *
  * @param {string}		catalogo_id - Categoría de parámetro a cargar dentro de la tabla de Catalogos.
  * @param {string}		idSelect	- ID del <select> destino.
@@ -55,7 +55,7 @@ function catalogo2select2(catalogo_id, idSelect, placeholder = 'Seleccione una o
 
 /**
  * Carga una lista de parámetros desde catalogo list_params en un <objeto jQuery select>
- * Apto para vistas de create y create manual de solicitud de retiro donde se tienen multiples retiros con doble contexto Región X y Región XII
+ * Recibe directamente un elemento jQuery, por lo que también sirve para campos repetidos dinámicamente.
  *
  * @param {string}				catalogo_id - Categoría de parámetro a cargar dentro de la tabla de Catalogos.
  * @param {objeto jQuery}		idSelect	- objeto jQuery destino.
@@ -123,13 +123,8 @@ const CATEGORIA_TIPO_RELACION           = {{ config('constantes.CATEGORIA_TIPO_R
 const CATEGORIA_ZONA_SUCURSAL           = {{ config('constantes.CATEGORIA_ZONA_SUCURSAL') }};
 const CATEGORIA_TIPO_SUCURSAL           = {{ config('constantes.CATEGORIA_TIPO_SUCURSAL') }};
 const CATEGORIA_TIPO_EMPRESA            = {{ config('constantes.CATEGORIA_TIPO_EMPRESA') }};
-const CATEGORIA_TIPO_RETIRO             = {{ config('constantes.CATEGORIA_TIPO_RETIRO') }};
-const CATEGORIA_TIPO_ESPECIE            = {{ config('constantes.CATEGORIA_TIPO_ESPECIE') }};
-const CATEGORIA_TIPO_MATERIA_PRIMA      = {{ config('constantes.CATEGORIA_TIPO_MATERIA_PRIMA') }};
-const CATEGORIA_ESTADOS_RETIRO          = {{ config('constantes.CATEGORIA_ESTADOS_RETIRO') }};
 
 const CATEGORIA_REGION_OPERATIVA			= {{ config('constantes.CATEGORIA_REGION_OPERATIVA') }};
-const CATEGORIA_TIPO_TRANSPORTE				= {{ config('constantes.CATEGORIA_TIPO_TRANSPORTE') }};
 
 // Valores usados para bifurcar lógicas
 const TIPO_EMPRESA_PRODUCTORA       = {{ config('constantes.TIPO_EMPRESA_PRODUCTORA') }};
@@ -143,24 +138,6 @@ const ROL_SOLICITANTE_PRODUCTOR     = {{ config('constantes.ROL_SOLICITANTE_PROD
 const ROL_COORDINADOR               = {{ config('constantes.ROL_COORDINADOR') }};
 const ROL_COORDINADOR_XII           = {{ config('constantes.ROL_COORDINADOR_XII') }};
 const ROL_ADMINISTRADOR_IT          = {{ config('constantes.ROL_ADMINISTRADOR_IT') }};
-
-// Valores de Tipo de Retiro
-const TIPO_RETIRO_TOLVA             = {{ config('constantes.TIPO_RETIRO_TOLVA') }};
-const TIPO_RETIRO_BINS              = {{ config('constantes.TIPO_RETIRO_BINS') }};
-
-// Valores de Tipo de Transporte - Retiros de la Región XII
-const TIPO_TRANSPORTE_TIERRA        = {{ config('constantes.TIPO_TRANSPORTE_TIERRA') }};
-const TIPO_TRANSPORTE_BARCAZA       = {{ config('constantes.TIPO_TRANSPORTE_BARCAZA') }};
-const TIPO_TRANSPORTE_COMBINADO     = {{ config('constantes.TIPO_TRANSPORTE_COMBINADO') }};
-
-// Estados de Solicitudes de Retiro
-const ESTADO_RETIRO_ESPERANDO       = {{ config('constantes.ESTADO_RETIRO_ESPERANDO') }};
-const ESTADO_RETIRO_COMENTADO       = {{ config('constantes.ESTADO_RETIRO_COMENTADO') }};
-const ESTADO_RETIRO_ACEPTADO        = {{ config('constantes.ESTADO_RETIRO_ACEPTADO') }};
-const ESTADO_RETIRO_PLANIFICADO     = {{ config('constantes.ESTADO_RETIRO_PLANIFICADO') }};
-const ESTADO_RETIRO_PROGRAMADO      = {{ config('constantes.ESTADO_RETIRO_PROGRAMADO') }};
-const ESTADO_RETIRO_TERMINADO       = {{ config('constantes.ESTADO_RETIRO_TERMINADO') }};
-const ESTADO_RETIRO_CANCELADO       = {{ config('constantes.ESTADO_RETIRO_CANCELADO') }};
 
 // Regiones
 const REGION_NI                     = {{ config('constantes.REGION_NI') }};
@@ -201,9 +178,5 @@ const REGION_OPERATIVA_POR_ROL      = {	{{ config('constantes.ROL_SOLICITANTE_PR
 										{{ config('constantes.ROL_SOLICITANTE_PLANTA_XII') }}    : 'XII',
 										{{ config('constantes.ROL_COORDINADOR_XII') }}           : 'XII',
 									};
-
-// Tipo de operación requerido en las vistas de Retiros
-const TIPO_OPERACION_RETIRO         = {{ config('constantes.TIPO_OPERACION_RETIRO') }};
-const TIPO_OPERACION_REPOSICION     = {{ config('constantes.TIPO_OPERACION_REPOSICION') }};
 
 </script>

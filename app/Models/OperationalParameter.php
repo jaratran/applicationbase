@@ -15,7 +15,6 @@ class OperationalParameter extends Model
 
     protected $casts = [
         'audit_email_enabled'           => 'boolean',
-        'notify_admins_as_coordinators' => 'boolean',
         'allow_profile_editing'         => 'boolean',
     ];
 
@@ -29,7 +28,6 @@ class OperationalParameter extends Model
         'support_telefono',                   // 📌 Nuevo campo
         'audit_email',
         'audit_email_enabled',
-        'notify_admins_as_coordinators',      // 📌 Nuevo campo
         'verification_expiration_time',       // 📌 Nuevo campo
         'allow_profile_editing',
     ];

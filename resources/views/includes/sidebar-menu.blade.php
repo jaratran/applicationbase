@@ -58,34 +58,5 @@
             </li>
         @endif
 
-        <!-- MANTENEDORES DE SOLICITUDES DE RETIROS -->
-        <li class="nav-item {{ Route::is('solicitudes-retiro.index') || Route::is('solicitudes-retiro.list') ? 'active' : '' }}">
-            <div class="nav-link fw-bold">
-                <i class="fa fa-cube"></i> Solicitudes de Retiro
-            </div>
-
-            <ul class="sidebar-submenu nav flex-column ms-3 ps-3 list-unstyled">
-                @if( in_array(Auth::user()->rol_id, [   config('constantes.ROL_SOLICITANTE_PLANTA'),
-				                                        config('constantes.ROL_SOLICITANTE_PLANTA_XII'),
-				                                        config('constantes.ROL_SOLICITANTE_PRODUCTOR'),
-                                                        // config('constantes.ROL_COORDINADOR'), // 15-07-25: Fue eliminado el permiso de los coordinadores para crea solicitudes. Para eso tienen la Manual.
-                                                        config('constantes.ROL_ADMINISTRADOR_IT') ]) )
-                    <li>
-                        <a href="{{ route('solicitudes-retiro.create') }}"
-                        class="nav-link {{ Route::is('solicitudes-retiro.create') ? 'active' : '' }}" {{ Route::is('solicitudes-retiro.create') ? 'aria-current=page' : '' }}>
-                        <i class="fas fa-plus-square me-2 text-secondary"></i>Crear Solicitud de Retiro
-                        </a>
-                    </li>
-                @endif
-
-                <li>
-                    <a href="{{ route('solicitudes-retiro.index') }}"
-                    class="nav-link {{ Route::is('solicitudes-retiro.index') ? 'active' : '' }}" {{ Route::is('solicitudes-retiro.index') ? 'aria-current=page' : '' }}>
-                    <i class="fas fa-box me-2 text-secondary"></i>Ver Solicitudes de Retiro
-                    </a>
-                </li>
-            </ul>
-        </li>
-
     </ul>
 </div>

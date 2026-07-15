@@ -330,9 +330,6 @@ return [
         'audit_email_enabled' => [
             'boolean' => 'El valor de habilitación de auditoría debe ser verdadero o falso.',
         ],
-        'notify_admins_as_coordinators' => [
-            'boolean' => 'El valor de enviar notificaciones también a administradores IT debe ser verdadero o falso.',
-        ],
         'verification_expiration_time' => [
             'integer' => 'El tiempo de expiración debe ser un número entero.',
             'min' => 'Debe ingresar un valor mínimo de 1 minuto.',
@@ -436,38 +433,6 @@ return [
         ],
         'password_confirmation' => [
             'required' => 'Debe confirmar la nueva contraseña.',
-        ],
-
-        // Validaciones personalizadas - SolicitudesRetiroController
-        'empresa_retiro' => [
-            'required' => 'Debes seleccionar una productora de materia prima.',
-            'exists'   => 'La productora seleccionada no es válida.',
-        ],
-
-        'sucursal_retiro' => [
-            'required' => 'Debes seleccionar una planta de proceso.',
-            'exists'   => 'La planta seleccionada no es válida.',
-        ],
-
-        'fecha_retiro.*' => [
-            'required' => 'Debes ingresar la fecha y hora del retiro.',
-            'date'     => 'El valor ingresado en la fecha de retiro no tiene un formato válido.',
-        ],
-
-        'tipo_retiro.*' => [
-            'required' => 'Debes seleccionar el tipo de retiro.',
-            'exists'   => 'El tipo de retiro seleccionado no es válido.',
-        ],
-
-        'kilogramos_estimados.*' => [
-            'required' => 'Debes ingresar los kilogramos estimados.',
-            'numeric'  => 'Los kilogramos estimados deben ser un número.',
-            'min'      => 'Los kilogramos estimados deben ser al menos 0.',
-        ],
-
-        'cantidad_bins.*' => [
-            'integer' => 'La cantidad de Bins debe ser un número entero.',
-            'min'     => 'La cantidad de Bins no puede ser negativa.',
         ],
 
     ],
@@ -578,7 +543,6 @@ return [
         'support_telefono' => 'teléfono de soporte',
         'audit_email' => 'correo de auditoría',
         'audit_email_enabled' => 'habilitación de auditoría de correos',
-        'notify_admins_as_coordinators' => 'enviar notificaciones también a administradores IT',
         'verification_expiration_time' => 'tiempo de expiración de verificación',
         'allow_profile_editing' => 'permiso de edición de perfil',
 
@@ -636,23 +600,6 @@ return [
 
         // Mensajes de validación para confirmación de contraseña ProfileController
         'confirmPassword' => 'confirmación de contraseña',
-
-        // Mensajes de validación para Solicitudes de Retiro
-        'empresa_retiro'                   => 'empresa que solicita el retiro',
-        'sucursal_retiro'                  => 'sucursal de retiro',
-        'fecha_retiro'                     => 'fecha y hora del retiro',
-        'fecha_retiro.*'                   => 'fecha y hora del retiro',
-        'tipo_retiro'                      => 'tipo de retiro',
-        'tipo_retiro.*'                    => 'tipo de retiro',
-        'kilogramos_estimados'             => 'kilogramos estimados',
-        'kilogramos_estimados.*'           => 'kilogramos estimados',
-        'requiere_reposicion_hidden'       => 'requiere reposición de bins',
-        'requiere_reposicion_hidden.*'     => 'requiere reposición de bins',
-        'cantidad_bins_hidden'             => 'cantidad de bins',
-        'cantidad_bins_hidden.*'           => 'cantidad de bins',
-
-        // Mensajes para comentarios al la Solicitud de Retiro
-        'comentario'                       => 'comentario de observación',
 
     ],
 ];

@@ -219,19 +219,4 @@ class User extends Authenticatable
         return $this->belongsTo(Comuna::class); // Una usuario posee dirección en una comuna a través del campo comuna_id = id
     }
 
-    /**
-     * Solicitudes creadas por el usuario
-     */
-    public function solicitudes()
-    {
-        return $this->hasMany(Solicitud::class, 'usuario_id');
-    }
-
-    /**
-     * Comentarios de retiro realizados por el usuario.
-     */
-    public function comentariosRetiros()
-    {
-        return $this->hasMany(RetiroComentario::class, 'usuario_id');
-    }
 }

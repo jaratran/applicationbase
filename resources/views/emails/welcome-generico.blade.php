@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Bienvenido al Sistema de Planificación</title>
+    <title>Bienvenido a ApplicationBase</title>
 </head>
 <body style="font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px; color: #333;">
     <table width="100%" cellpadding="0" cellspacing="0">
@@ -14,7 +14,7 @@
                             <p>Estimado/a <strong>{{ $user->nombre_usuario }} {{ $user->apellidos_usuario }}</strong>,</p>
 
                             <h2 style="color: {{ $designParameter->custom_primary }};">
-                                ¡Bienvenido/a a <strong>EcoRuta</strong> el Sistema de Planificación de Retiro de Subproductos de <strong>La Portada</strong>!
+                                ¡Bienvenido/a a <strong>ApplicationBase</strong>!
                             </h2>
 
                             <p>Nos complace informarte que tu acceso ha sido habilitado exitosamente.<br>A partir de ahora, podrás interactuar con el sistema según los permisos asignados a tu perfil.</p>
@@ -28,12 +28,12 @@
 
                             <p><strong>Tu usuario es tu correo: </strong>{{ $user->email }}</p>
 
-                            <p>Si tienes alguna duda o necesitas asistencia, no dudes en comunicarte con el coordinador de la plataforma al correo <strong>{{ $operationalParameter->support_email }}</strong> o al teléfono <strong>{{ $operationalParameter->support_telefono }}</strong>.
+                            <p>Si tienes alguna duda o necesitas asistencia, comunícate con el equipo de soporte al correo <strong>{{ $operationalParameter->support_email }}</strong> o al teléfono <strong>{{ $operationalParameter->support_telefono }}</strong>.
                             
-                            <p style="margin-top: 40px;">Saludos cordiales,<br><strong>Equipo de Logística de La Portada</strong></p>
+                            <p style="margin-top: 40px;">Saludos cordiales,<br><strong>Equipo de ApplicationBase</strong></p>
 
                             <hr>
-                            <p class="mb-0"><small>Este correo fue generado automáticamente por el Sistema de Planificación EcoRuta.</small></p>
+                            <p class="mb-0"><small>Este correo fue generado automáticamente por ApplicationBase.</small></p>
                         </td>
                     </tr>
                 </table>

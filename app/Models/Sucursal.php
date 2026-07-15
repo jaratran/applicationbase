@@ -66,8 +66,7 @@ class Sucursal extends Model
     /**
      * Accesor “región operativa” de una Sucursal.
 	 *
-	 * La tabla de solicitudes no tiene región propia.
-	 * Pero se puede derivar de forma determinística desde:
+	 * Se deriva de forma determinística desde:
 	 *
    	 * 			Sucursal
 	 * 				→ Comuna

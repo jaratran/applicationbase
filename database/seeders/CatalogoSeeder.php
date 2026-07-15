@@ -27,18 +27,6 @@ class CatalogoSeeder extends Seeder
                 'Productor',
                 'Transportista',
             ],
-            'Tipo Retiro' => [
-                'Tolva',
-                'Bins',
-            ],
-            'Tipo Especie' => [
-                'Coho',
-                'Salar',
-                'Trucha',
-            ],
-            'Tipo Materia Prima' => [
-                'Subproductos',
-            ],
         ];
 
         foreach ($listas as $categoriaNombre => $valores) {
