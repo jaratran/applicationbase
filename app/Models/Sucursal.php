@@ -82,7 +82,7 @@ class Sucursal extends Model
 	 * 				→ Comuna
 	 * 					→ region_id
      */
-	public function getRegionOperativaIdAttribute(): int
+	public function getRegionOperativaIdAttribute(): ?int
 	{
 		return $this->comuna?->region_id;
 	}

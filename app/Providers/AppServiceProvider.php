@@ -25,10 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Cargar los parámetros de diseño en todas las vistas
-        // $designParameter = DesignParameter::first();             // Este bloquecito se llevo al nuevo serviceProvider ViewServiceProvider
-        // View::share('designParameter', $designParameter);        // Esto por el nuevo diseño de flujo que posee Laravel 12
-
         // Si la variable de entorno LOG_SQL_QUERIES = true registra las consultas SQL en el log definido en .ENV 
         // Pero la leemos desde el config para evitar hacer consultas a env() en tiempo de ejecución
         // Y mantener coherencia con el sistema de cache de configuración de Laravel.
@@ -42,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
                     }, $query->bindings)
                 );
     
-                // Enviar al log con retornos de carro antes y después. Busca en 'workflow\storage\logs'
+                // Enviar la consulta interpolada al canal de log configurado por la aplicación.
                 Log::info("\n\nSQL ejecutada:\n" . $sqlWithBindings . "\n\n\n");
             });
         }

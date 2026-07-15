@@ -25,18 +25,16 @@ class ResetPasswordMailable extends Mailable
 
     public function build()
     {
+        $params = OperationalParameter::first();
         $email = $this->subject(__('auth.password_reset_subject'))
                       ->view($this->vista)
                       ->with([
                                 'user'     => $this->user,
                                 'resetUrl' => $this->resetUrl,
-                                'operationalParameter' => OperationalParameter::first(),
+                                'operationalParameter' => $params,
                             ]);
 
-        // Parámetros operacionales desde base de datos
-        $params = OperationalParameter::first();
-
-        if ($params->audit_email_enabled === true && !empty($params->audit_email)) {
+        if ($params?->audit_email_enabled === true && !empty($params->audit_email)) {
             $email->bcc($params->audit_email);
         }
 

@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\Crypt;
 use App\Traits\ProcesaAvatarTrait;
 use App\Notifications\CustomVerifyWelcomeEmail;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -150,9 +147,7 @@ class UsuarioController extends Controller
                 }
             }
 
-            // Disparo directo de la notificación personalizada.
-            // Se evita el uso de MustVerifyEmail y del evento Registered para tener control completo.
-            // event(new Registered($usuario)); // Laravel lanzará el proceso de verificación - Evitamos esta forma hasta que corrigamos el doble envío de correos
+            // La notificación personalizada mantiene en un solo flujo el correo de bienvenida y activación.
             $usuario->notify(new CustomVerifyWelcomeEmail($usuario)); // Envía el correo personalizado de bienvenida y activación.
 
             // El siguiente mensaje interpola el email del usuario recién creado. Revisar el archivo resources/lang/es/auth.php para ver cómo se define.
@@ -382,14 +377,6 @@ class UsuarioController extends Controller
         }
     }
 
-    public function preview(Request $request) {
-        //
-    }
-
-    public function print($id){
-        //
-    }
-
     public function resendWelcomeEmail($id, UserRoleAssignment $roleAssignment)
     {
         $user = User::findOrFail($id);
@@ -405,10 +392,8 @@ class UsuarioController extends Controller
 
         abort_unless($roleAssignment->canResendWelcome(Auth::user(), $user), 403);
 
-        // Disparo directo de la notificación personalizada.
-        // Se evita el uso de MustVerifyEmail y del evento Registered para tener control completo.
-        // event(new Registered($user)); // Laravel lanzará el proceso de verificación - Evitamos esta forma hasta que corrigamos el doble envío de correos
-        $user->notify(new \App\Notifications\CustomVerifyWelcomeEmail($user)); // Vuelve a enviar el correo personalizado de bienvenida y activación.
+        // Se reutiliza la notificación del alta para conservar el mismo flujo de activación.
+        $user->notify(new CustomVerifyWelcomeEmail($user));
 
         return response()->json(['message' => __('auth.welcome_successfully_sent')]); // Mensaje definido en resources/lang/es/auth.php
     }

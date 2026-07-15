@@ -87,6 +87,7 @@ class SucursalConfigurationTest extends TestCase
         $this->assertTrue($sucursal->activo);
         $this->assertSame(12, $sucursal->km);
         $this->assertSame('15.50', $sucursal->tiempo_estimado_viaje);
+        $this->assertNull($sucursal->region_operativa_id);
     }
 
     private function validData(): array

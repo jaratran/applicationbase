@@ -154,12 +154,16 @@ class UserRoleAssignmentTest extends TestCase
     }
 
     #[Test]
-    public function admin_flag_cannot_be_mass_assigned(): void
+    public function legacy_authority_attributes_cannot_be_mass_assigned(): void
     {
         $user = new User();
-        $user->fill(['es_admin' => 1]);
+        $user->fill([
+            'es_admin' => 1,
+            'activated' => true,
+        ]);
 
         $this->assertNull($user->getAttribute('es_admin'));
+        $this->assertNull($user->getAttribute('activated'));
     }
 
     private function user(int $roleId, ?int $id = null): User

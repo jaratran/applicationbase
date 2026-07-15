@@ -25,17 +25,16 @@ class VerifyEmailMailable extends Mailable
 
     public function build()
     {
+        $params = OperationalParameter::first();
         $email = $this->subject(__('auth.welcome_email_subject'))
                       ->view($this->vista)
                       ->with([
                           'user' => $this->user,
                           'verificationUrl' => $this->verificationUrl,
+                          'operationalParameter' => $params,
                       ]);
 
-        // Parámetros operacionales desde base de datos
-        $params = OperationalParameter::first();
-
-        if ($params->audit_email_enabled === true && !empty($params->audit_email)) {
+        if ($params?->audit_email_enabled === true && !empty($params->audit_email)) {
             $email->bcc($params->audit_email);
         }
 

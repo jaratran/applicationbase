@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\User;
+use App\Notifications\CustomVerifyWelcomeEmail;
 
 class VerificationController extends Controller
 {
@@ -82,5 +83,28 @@ class VerificationController extends Controller
 
             return redirect()->route('login')->with('error', __('auth.verification_error'));
         }
+    }
+
+    public function resend(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->hasVerifiedEmail()) {
+            return $request->wantsJson()
+                ? response()->noContent()
+                : redirect($this->redirectPath());
+        }
+
+        if (!$user->activo) {
+            return $request->wantsJson()
+                ? response()->json(['message' => __('auth.activation_email_unavailable')], 422)
+                : back()->with('error', __('auth.activation_email_unavailable'));
+        }
+
+        $user->notify(new CustomVerifyWelcomeEmail($user));
+
+        return $request->wantsJson()
+            ? response()->json([], 202)
+            : back()->with('resent', true);
     }
 }

@@ -31,7 +31,6 @@ class User extends Authenticatable
         'comuna_id',
         'direccion',
         'avatar',
-        'activated',
         'fecha_login',
         'remember_token',
         'password',

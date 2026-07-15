@@ -78,7 +78,7 @@ return [
     'only_plant_branches_can_link_producers' => 'Solo las sucursales tipo Planta de Proceso pueden gestionar vinculación con empresas productoras.',
 
     // Subject de correo en notificador CustomResetPassword.php
-    'password_reset_subject' => 'Restablecer contraseña en LaPortada',
+    'password_reset_subject' => 'Restablecer contraseña en ApplicationBase',
 
     // Subject de correo en notificador CustomVerifyWelcomeEmail.php
     'welcome_email_subject' => 'Bienvenido a ApplicationBase',
