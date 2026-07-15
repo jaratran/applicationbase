@@ -26,7 +26,6 @@ use App\Http\Controllers\Actores\SucursalController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//Route::get('/', 'HomeController@index'); // Muestra página inicial según autenticación, pero serializable para que route:cache no falle
 Route::get('/', [HomeController::class, 'index']);
 
 // === AUTENTICACIÓN Y VERIFICACIÓN DE CUENTA ===================================
