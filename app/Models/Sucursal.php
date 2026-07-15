@@ -36,8 +36,18 @@ class Sucursal extends Model
         'observacion_inactividad',
     ];
 
+    protected $casts = [
+        'zona_id' => 'integer',
+        'codigo_siep' => 'integer',
+        'tipo_sucursal_id' => 'integer',
+        'comuna_id' => 'integer',
+        'km' => 'integer',
+        'tiempo_estimado_viaje' => 'decimal:2',
+        'activo' => 'boolean',
+    ];
+
 	/**
-	 * Método getRegionOperativaCodigoAttribute (->region_operativa_codigo) en Sucursal.
+	 * Código territorial derivado de la región de la sucursal.
 	 */
 	public function getRegionOperativaCodigoAttribute(): string
 	{
@@ -77,33 +87,45 @@ class Sucursal extends Model
 		return $this->comuna?->region_id;
 	}
 
-    /**
-     * Relaciones Eloquent de Sucursal con otras tablas
-     */
-
-    // Productoras de Materia Prima vinculadas (maquilas)
+	/**
+	 * Empresas productoras vinculadas mediante maquilas.
+	 */
 	public function empresasAtendidas()
 	{
+		return $this->empresasVinculadas()
+					->where('empresas.activo', true);
+	}
+
+	/**
+	 * Todas las empresas vinculadas, incluso las inactivas.
+	 */
+	public function empresasVinculadas()
+	{
 		return $this->belongsToMany(Empresa::class, 'maquilas', 'sucursal_id', 'empresa_id')
-					->where('empresas.activo', 1)
 					->withTimestamps();
 	}
 
-    // Zona (Catalogo)
+    /**
+     * Clasificación territorial de la sucursal.
+     */
     public function zona()
     {
-        return $this->belongsTo(Catalogo::class, 'zona_id', 'id');             // Una sucursal pertenece a una zona
+        return $this->belongsTo(Catalogo::class, 'zona_id', 'id');
     }
 
-    // Tipo de sucursal (Catalogo)
+    /**
+     * Clasificación funcional de la sucursal.
+     */
     public function tipoSucursal()
     {
-        return $this->belongsTo(Catalogo::class, 'tipo_sucursal_id', 'id');    // Una sucursal pertenece a un tipo de sucursal
+        return $this->belongsTo(Catalogo::class, 'tipo_sucursal_id', 'id');
     }
 
-    // Comuna
+    /**
+     * Comuna donde se ubica la sucursal.
+     */
     public function comuna()
     {
-        return $this->belongsTo(Comuna::class);                  // Una sucursal pertenece a una comuna
+        return $this->belongsTo(Comuna::class);
     }
 }

@@ -12,7 +12,10 @@ class SucursalSeeder extends Seeder
     {
         $zonaId = $this->catalogoId('Zona de Sucursal', 'Puerto Montt');
         $tipoId = $this->catalogoId('Tipo de Sucursal', 'Planta');
-        $comunaId = DB::table('comunas')->where('nombre', 'No especificado')->value('id');
+        $comunaId = DB::table('comunas')
+            ->where('nombre', 'No especificado')
+            ->where('region_id', 0)
+            ->value('id');
 
         if ($comunaId === null) {
             throw new RuntimeException('No existe la comuna base requerida para crear sucursales.');

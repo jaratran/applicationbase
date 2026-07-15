@@ -26,29 +26,29 @@
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="nombre_sucursal">Nombre</label>
-                                    <input type="text" class="form-control" name="nombre_sucursal" id="nombre_sucursal" value="{{ $sucursal->nombre_sucursal }}" required>
+                                    <input type="text" class="form-control" name="nombre_sucursal" id="nombre_sucursal" value="{{ old('nombre_sucursal', $sucursal->nombre_sucursal) }}" required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="codigo_siep">Código Siep</label>
-                                    <input type="number" class="form-control" name="codigo_siep" id="codigo_siep" value="{{ $sucursal->codigo_siep }}">
+                                    <input type="number" class="form-control" name="codigo_siep" id="codigo_siep" value="{{ old('codigo_siep', $sucursal->codigo_siep) }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="tipo_sucursal_id">Tipo de Sucursal</label>
                                     <select class="form-control select2" id="tipo_sucursal_id" name="tipo_sucursal_id" required>
-                                        <option value="">{{ $sucursal->tipoSucursal->Nombre ?? '-' }}</option>
+                                        <option value="">{{ $sucursal->tipoSucursal->nombre ?? '-' }}</option>
                                     </select>
-                                    <input type="hidden" id="tipo_actual" value="{{ $sucursal->tipo_sucursal_id }}">
+                                    <input type="hidden" id="tipo_actual" value="{{ old('tipo_sucursal_id', $sucursal->tipo_sucursal_id) }}">
                                 </div>
                             </div>
 
                             <div class="row mt-3">
                                 <div class="form-group col-md-4">
                                     <label for="email">Correo Electrónico</label>
-                                    <input type="email" class="form-control" name="email" id="email" value="{{ $sucursal->email }}">
+                                    <input type="email" class="form-control" name="email" id="email" value="{{ old('email', $sucursal->email) }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="telefono">Teléfono</label>
-                                    <input type="text" class="form-control" name="telefono" id="telefono" value="{{ $sucursal->telefono }}">
+                                    <input type="text" class="form-control" name="telefono" id="telefono" value="{{ old('telefono', $sucursal->telefono) }}">
                                 </div>
                             </div>
                         </div>
@@ -58,35 +58,35 @@
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label>Región</label>
-                                    <select class="form-control select2" id="region_sucursal" required>
+                                    <select class="form-control select2" id="region_sucursal" name="region_id" required>
                                         <option value="">{{ $sucursal->comuna->region->nombre ?? '-' }}</option>
                                     </select>
-                                    <input type="hidden" id="region_actual" value="{{ $sucursal->comuna->region_id }}">
+                                    <input type="hidden" id="region_actual" value="{{ old('region_id', $sucursal->comuna->region_id) }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Comuna</label>
                                     <select class="form-control select2" id="comuna_sucursal" name="comuna_id" required>
                                         <option value="">{{ $sucursal->comuna->nombre ?? '-' }}</option>
                                     </select>
-                                    <input type="hidden" id="comuna_seleccionada" value="{{ $sucursal->comuna_id }}">
+                                    <input type="hidden" id="comuna_seleccionada" value="{{ old('comuna_id', $sucursal->comuna_id) }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="zona_id">Zona</label>
                                     <select class="form-control select2" id="zona_id" name="zona_id" required>
-                                        <option value="">{{ $sucursal->zona->Nombre ?? '-' }}</option>
+                                        <option value="">{{ $sucursal->zona->nombre ?? '-' }}</option>
                                     </select>
-                                    <input type="hidden" id="zona_actual" value="{{ $sucursal->zona_id }}">
+                                    <input type="hidden" id="zona_actual" value="{{ old('zona_id', $sucursal->zona_id) }}">
                                 </div>
                             </div>
 
                             <div class="row mt-3">
                                 <div class="form-group col-md-4">
                                     <label for="km">Kilómetros</label>
-                                    <input type="number" class="form-control" name="km" id="km" value="{{ $sucursal->km }}">
+                                    <input type="number" class="form-control" name="km" id="km" value="{{ old('km', $sucursal->km) }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="tiempo_estimado_viaje">Tiempo Estimado</label>
-                                    <input type="number" step="0.01" class="form-control" name="tiempo_estimado_viaje" id="tiempo_estimado_viaje" value="{{ $sucursal->tiempo_estimado_viaje }}">
+                                    <input type="number" step="0.01" class="form-control" name="tiempo_estimado_viaje" id="tiempo_estimado_viaje" value="{{ old('tiempo_estimado_viaje', $sucursal->tiempo_estimado_viaje) }}">
                                 </div>
                             </div>
                         </div>
@@ -149,8 +149,8 @@
 
             cargarRegionesOperativas();
 
-			catalogo2select2(CATEGORIA_ZONA_SUCURSAL, "zona_id",         "Seleccione Zona de Sucursal", "zona_actual");		// Edit si considera valor pre-cargado
-        	catalogo2select2(CATEGORIA_TIPO_SUCURSAL, "tipo_sucursal_id","Seleccione Tipo de Sucursal", "tipo_actual");		// Edit si considera valor pre-cargado
+			catalogo2select2(CATEGORIA_ZONA_SUCURSAL, "zona_id", "Seleccione Zona de Sucursal", "zona_actual");
+			catalogo2select2(CATEGORIA_TIPO_SUCURSAL, "tipo_sucursal_id", "Seleccione Tipo de Sucursal", "tipo_actual");
         });
     </script>
 

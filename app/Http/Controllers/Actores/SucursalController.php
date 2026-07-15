@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Sucursal;
 use App\Models\Empresa;
 use App\Models\User;
+use App\Services\SucursalConfiguration;
 
 class SucursalController extends Controller
 {
@@ -25,7 +26,7 @@ class SucursalController extends Controller
                                 'comuna:id,nombre,region_id',
                                 'comuna.region:id,nombre'
                             ])
-                            // ->where('activo', true) -- Se omite este filtro para que salgan todos.
+                            // El estado se muestra y administra desde el mismo listado.
                             ->get([
                                 'activo',
                                 'id',
@@ -52,22 +53,12 @@ class SucursalController extends Controller
     /**
      * Almacenar nueva sucursal.
      */
-    public function store(Request $request)
+    public function store(Request $request, SucursalConfiguration $configuration)
     {
-        try {
-            $request->validate([
-                'zona_id'              => 'required|integer|exists:catalogos,id',
-                'nombre_sucursal'      => 'required|string|max:255',
-                'codigo_siep'          => 'nullable|integer',
-                'tipo_sucursal_id'     => 'required|integer|exists:catalogos,id',
-                'comuna_id'            => 'required|integer|exists:comunas,id',
-                'telefono'             => 'nullable|string|max:30',
-                'email'                => 'nullable|email|max:255',
-                'km'                   => 'nullable|integer',
-                'tiempo_estimado_viaje'=> 'nullable|numeric|min:0|max:999.99'
-            ]);
+        $data = $configuration->persistableData($request->validate($configuration->rules($request)));
 
-            Sucursal::create($request->all());
+        try {
+            Sucursal::create($data);
 
             return redirect()->route('sucursal.index')->with('status', __('auth.branch_created_successfully'));
 
@@ -88,7 +79,7 @@ class SucursalController extends Controller
      */
     public function show($id)
     {
-        // Obtener la sucursal y es que tiene sus productoras asociadas (relación belongsToMany)
+        // Carga también sus empresas asociadas para construir el detalle completo.
         $sucursal = Sucursal::with([    'zona:id,nombre',
                                         'tipoSucursal:id,nombre',
                                         'comuna:id,nombre,region_id',
@@ -97,7 +88,6 @@ class SucursalController extends Controller
                                         'empresasAtendidas.comuna:id,nombre,region_id',
                                         'empresasAtendidas.comuna.region:id,nombre'
                                     ])
-                                    // ->where('activo', true) -- Se omite este filtro para que salgan todos.
                                     ->findOrFail($id, [
                                         'id',
                                         'activo',
@@ -131,23 +121,13 @@ class SucursalController extends Controller
     /**
      * Actualiza la información de una sucursal.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, SucursalConfiguration $configuration)
     {
-        try {
-            $request->validate([
-                'zona_id'              => 'required|integer|exists:catalogos,id',
-                'nombre_sucursal'      => 'required|string|max:255',
-                'codigo_siep'          => 'nullable|integer',
-                'tipo_sucursal_id'     => 'required|integer|exists:catalogos,id',
-                'comuna_id'            => 'required|integer|exists:comunas,id',
-                'telefono'             => 'nullable|string|max:30',
-                'email'                => 'nullable|email|max:255',
-                'km'                   => 'nullable|integer',
-                'tiempo_estimado_viaje'=> 'nullable|numeric|min:0|max:999.99'
-            ]);
+        $data = $configuration->persistableData($request->validate($configuration->rules($request)));
 
+        try {
             $sucursal = Sucursal::findOrFail($id);
-            $sucursal->update($request->all());
+            $sucursal->update($data);
 
             return redirect()->route('sucursal.index')->with('status', __('auth.branch_updated_successfully'));
 
@@ -168,18 +148,18 @@ class SucursalController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $sucursal = Sucursal::findOrFail($id);
+
+        if ($sucursal->activo) {
+            $request->validate([
+                'observacion_inactividad' => 'required|string|max:500',
+            ]);
+
+            $sucursal->observacion_inactividad = $request->input('observacion_inactividad');
+        }
+
         try {
-		    $sucursal = Sucursal::findOrFail($id);
-
-		    if($sucursal->activo){ // Si sucursal está activa quiere decir que estamos desactivando y requerimos observación_inactividad
-		        $request->validate([
-		            'observacion_inactividad' => 'required|string|max:500',
-		        ]);
-
-		        $sucursal->observacion_inactividad = $request->input('observacion_inactividad');
-		    }
-
-		    $sucursal->activo = !($sucursal->activo);
+		    $sucursal->activo = !$sucursal->activo;
 		    $sucursal->save();
 
 		    return redirect()->route('sucursal.index')->with('status', __('auth.branch_status_changed', ['status' => $sucursal->activo ? 'activada' : 'desactivada']));
@@ -196,36 +176,25 @@ class SucursalController extends Controller
 		}
     }
 
-    public function preview(Request $request) {
-        //
-    }
-
-    public function print($id) {
-        //
-    }
-
     /**
-     * Entrega las Productoras de Materia Prima (empresas) vinculadas a una sucursal y cuales está disponibles.
+     * Entrega las empresas productoras vinculadas y disponibles para una planta.
      */
-    public function productoras($id)
+    public function productoras($id, SucursalConfiguration $configuration)
     {
         // 1. Obtener la sucursal con sus productoras asociadas (relación belongsToMany)
         $sucursal = Sucursal::with('empresasAtendidas:id,razon_social')
                         ->select('id', 'codigo_siep', 'nombre_sucursal', 'tipo_sucursal_id')
                         ->findOrFail($id);
 
-        // 2. Verificar que sea una sucursal del tipo Planta de Proceso
-            // if ($sucursal->tipo_sucursal_id != config('constantes.TIPO_SUCURSAL_PLANTA')) {
-            //     abort(403, 'Solo las sucursales plantas de poceso pueden gestionar vinculación con plantas.');
-            // }
-        // Cambiamos el abort(403) por un redirect con mensaje de error
-        if ($sucursal->tipo_sucursal_id != config('constantes.TIPO_SUCURSAL_PLANTA')) {
+        // La misma restricción se vuelve a comprobar al guardar para proteger el endpoint directo.
+        if (!$configuration->canLinkCompanies($sucursal)) {
             return redirect()->route('sucursal.index')->with('error', __('auth.only_plant_branches_can_link_producers'));
         }
 
         // 3. Obtener todas las empresas disponibles pero del tipo Productoras de Materias Primas
         $empresas = Empresa::select('id', 'razon_social')
-                                ->where('tipo_empresa_id', config('constantes.TIPO_EMPRESA_PRODUCTORA')) // Sólo empresas Productoras de Materias Primas
+                                ->where('tipo_empresa_id', config('constantes.TIPO_EMPRESA_PRODUCTORA'))
+                                ->where('activo', true)
                                 ->orderBy('razon_social')->get();
 
         // 4. Devolver la data para ser usada en el template Handlebars
@@ -237,17 +206,21 @@ class SucursalController extends Controller
     }
 
     /**
-     * Almacenar vinculos con Productoras de Materia Prima (empresas).
+     * Almacenar vínculos con empresas productoras.
      */
-    public function guardarProductoras(Request $request, Sucursal $sucursal)
+    public function guardarProductoras(Request $request, Sucursal $sucursal, SucursalConfiguration $configuration)
     {
-		try {
-		    $request->validate([
-		        'empresas'   => 'array',
-		        'sucursal.*' => 'integer|exists:empresas,id'
-		    ]);
+		abort_unless($configuration->canLinkCompanies($sucursal), 403);
+		$data = $request->validate($configuration->companyRules());
 
-		    $sucursal->empresasAtendidas()->sync($request->input('empresas', []));
+		try {
+		    // Las asociaciones inactivas no aparecen en el formulario, pero tampoco deben perderse al guardar.
+		    $inactiveCompanyIds = $sucursal->empresasVinculadas()
+		        ->where('empresas.activo', false)
+		        ->pluck('empresas.id')
+		        ->all();
+		    $companyIds = array_unique(array_merge($data['empresas'] ?? [], $inactiveCompanyIds));
+		    $sucursal->empresasVinculadas()->sync($companyIds);
 
 		    return redirect()->route('sucursal.index')->with('status', __('auth.branch_producers_linked_successfully'));
 
@@ -264,15 +237,12 @@ class SucursalController extends Controller
     }
 
     /**
-     * Sucursales del tipo PLANTA.
-	 *
-	 * Compatibles con región operativa del rol del usuario que se Mantiene  (Create/Edit).
-     * Admin-IT y Coordinador (tradicional) definen usuarios para ambas regiones operativas.
-	 *
-	 * Para el tema de la región operativa nos apoyamos con un usuario temporal que preste su accesor.
+     * Sucursales activas del tipo solicitado compatibles con las regiones del rol.
      */
-	public function obtenerSucursalesPorTipoYRol(Request $request, $id)
+	public function obtenerSucursalesPorTipoYRol(Request $request, $id, SucursalConfiguration $configuration)
 	{
+		abort_unless($configuration->isBranchTypeId((int) $id), 404);
+
 		$request->validate([
 			'rol_id' => 'required|integer',
 		]);

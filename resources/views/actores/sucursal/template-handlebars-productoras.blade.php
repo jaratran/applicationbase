@@ -16,7 +16,6 @@
 
     <div class="bg-light border rounded p-3 mb-4">
         <h5>Asociación con Productoras de Materia Prima</h5>
-        <!-- Bloque condicional para Planta de Proceso -->
         <div id="asociacion-productoras-wrapper" class="mt-3">
             <label>Asociar Productoras de Materia Prima (Empresas)</label>
             <div class="d-flex gap-2 mb-2">
@@ -27,11 +26,11 @@
             </div>
 
             <ul id="productoraMMPP-asociadas" class="list-group mb-3">
-                <!-- productoraMMPPs agregadas dinámicamente -->
+                <!-- Las empresas seleccionadas se agregan dinámicamente. -->
             </ul>
         </div>
 
-        <!-- Campo oculto que se va llenando con los IDs seleccionados -->
+        <!-- Mantiene los IDs seleccionados para el envío del formulario. -->
         <div id="contenedor-hidden" style="display: none;"></div>
     </div>
 @endverbatim
