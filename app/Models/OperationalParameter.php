@@ -25,10 +25,10 @@ class OperationalParameter extends Model
      */
     protected $fillable = [
         'support_email',
-        'support_telefono',                   // 📌 Nuevo campo
+        'support_telefono',
         'audit_email',
         'audit_email_enabled',
-        'verification_expiration_time',       // 📌 Nuevo campo
+        'verification_expiration_time',
         'allow_profile_editing',
     ];
 }

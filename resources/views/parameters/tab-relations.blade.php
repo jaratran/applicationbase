@@ -5,16 +5,12 @@
     <div class="col-md-3">
         <h6>Tipos de Relación</h6>
         <div class="list-group" id="lista-tipos-relacion">
-            @foreach($categorias as $categoria)
-                @if($categoria->nombre === 'Tipo de Relación')
-                    @foreach($valoresCatalogo->where('catalogo_id', $categoria->id) as $tipo)
-                        <button type="button"
-                                class="list-group-item list-group-item-action no-guard"
-                                data-id="{{ $tipo->id }}">
-                            {{ $tipo->nombre }}
-                        </button>
-                    @endforeach
-                @endif
+            @foreach($tiposRelacion as $tipo)
+                <button type="button"
+                        class="list-group-item list-group-item-action no-guard"
+                        data-id="{{ $tipo->id }}">
+                    {{ $tipo->nombre }}
+                </button>
             @endforeach
         </div>
     </div>

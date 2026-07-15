@@ -267,52 +267,46 @@ return [
         ],
         'custom_primary' => [
             'required' => 'Debe definir el color primario.',
-            'string' => 'El color primario debe ser una cadena de texto.',
-            'max' => 'El color primario no debe exceder los :max caracteres.',
+            'regex' => 'El color primario debe usar el formato hexadecimal #RRGGBB.',
         ],
         'custom_secondary' => [
             'required' => 'Debe definir el color secundario.',
-            'string' => 'El color secundario debe ser una cadena de texto.',
-            'max' => 'El color secundario no debe exceder los :max caracteres.',
+            'regex' => 'El color secundario debe usar el formato hexadecimal #RRGGBB.',
         ],
         'custom_success' => [
             'required' => 'Debe definir el color de éxito.',
-            'string' => 'El color de éxito debe ser una cadena de texto.',
-            'max' => 'El color de éxito no debe exceder los :max caracteres.',
+            'regex' => 'El color de éxito debe usar el formato hexadecimal #RRGGBB.',
         ],
         'custom_warning' => [
             'required' => 'Debe definir el color de advertencia.',
-            'string' => 'El color de advertencia debe ser una cadena de texto.',
-            'max' => 'El color de advertencia no debe exceder los :max caracteres.',
+            'regex' => 'El color de advertencia debe usar el formato hexadecimal #RRGGBB.',
         ],
         'custom_danger' => [
             'required' => 'Debe definir el color de peligro.',
-            'string' => 'El color de peligro debe ser una cadena de texto.',
-            'max' => 'El color de peligro no debe exceder los :max caracteres.',
+            'regex' => 'El color de peligro debe usar el formato hexadecimal #RRGGBB.',
         ],
         'custom_info' => [
             'required' => 'Debe definir el color de información.',
-            'string' => 'El color de información debe ser una cadena de texto.',
-            'max' => 'El color de información no debe exceder los :max caracteres.',
+            'regex' => 'El color de información debe usar el formato hexadecimal #RRGGBB.',
         ],
         'fondo_pantalla_design' => [
             'image' => 'El fondo debe ser una imagen válida.',
-            'mimes' => 'Formato no permitido. Use jpeg, png, jpg, gif, svg o webp.',
+            'mimes' => 'Formato no permitido. Use jpeg, png, jpg, gif o webp.',
             'max' => 'El fondo no debe superar los 2MB.',
         ],
         'logo_design' => [
             'image' => 'El logo debe ser una imagen válida.',
-            'mimes' => 'Formato no permitido. Use jpeg, png, jpg, gif, svg o webp.',
+            'mimes' => 'Formato no permitido. Use jpeg, png, jpg, gif o webp.',
             'max' => 'El logo no debe superar los 2MB.',
         ],
         'emblema_design' => [
             'image' => 'El emblema debe ser una imagen válida.',
-            'mimes' => 'Formato no permitido. Use jpeg, png, jpg, gif, svg o webp.',
+            'mimes' => 'Formato no permitido. Use jpeg, png, jpg, gif o webp.',
             'max' => 'El emblema no debe superar los 2MB.',
         ],
         'favicon_design' => [
             'image' => 'El favicon debe ser una imagen válida.',
-            'mimes' => 'Formato no permitido. Use jpeg, png, jpg, ico, svg o webp.',
+            'mimes' => 'Formato no permitido. Use jpeg, png, jpg, ico o webp.',
             'max' => 'El favicon no debe superar 1MB.',
         ],
         'support_email' => [
@@ -337,6 +331,12 @@ return [
         ],
         'allow_profile_editing' => [
             'boolean' => 'El permiso de edición de perfil debe ser verdadero o falso.',
+        ],
+        'catalogos' => [
+            'invalid_payload' => 'Los catálogos enviados contienen valores no permitidos.',
+        ],
+        'relaciones' => [
+            'invalid_payload' => 'Las relaciones enviadas contienen valores no permitidos.',
         ],
 
         // Validaciones personalizadas - ProfileController

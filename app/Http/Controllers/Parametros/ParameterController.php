@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 use App\Models\DesignParameter;
 use App\Models\OperationalParameter;
@@ -14,6 +17,13 @@ use App\Models\CatalogoRelacion;
 
 class ParameterController extends Controller
 {
+    private const DEFAULT_DESIGN_FILES = [
+        'default_logo.png',
+        'default_emblema.png',
+        'default_favicon.ico',
+        'default_fondo.png',
+    ];
+
     /**
      * Muestra la vista de parámetros operacionales.
      *
@@ -39,14 +49,23 @@ class ParameterController extends Controller
                                     ->orderBy('orden')
                                     ->get();
 
-        // Relaciones entre Valores de Categorías del Catalogo
-        $relaciones = CatalogoRelacion::with(['origen', 'destino', 'tipo'])->get();
+        $tiposRelacion = Catalogo::where('catalogo_id', config('constantes.CATEGORIA_TIPO_RELACION'))
+            ->activos()
+            ->get();
+
+        // Solo se administran relaciones entre valores visibles en esta capacidad.
+        $relaciones = CatalogoRelacion::with(['origen', 'destino', 'tipo'])
+            ->whereIn('valor_origen_id', $valoresCatalogo->pluck('id'))
+            ->whereIn('valor_destino_id', $valoresCatalogo->pluck('id'))
+            ->whereIn('tipo_relacion_id', $tiposRelacion->pluck('id'))
+            ->get();
 
         return view('parameters.index', compact(
             'designParameter',
             'operationalParameter',
             'categorias',
             'valoresCatalogo',
+            'tiposRelacion',
             'relaciones'
         ));
     }
@@ -59,7 +78,33 @@ class ParameterController extends Controller
      */
     public function update(Request $request)
     {
+        $request->validate([
+            'titulo_design'    => 'required|string|max:255',
+            'custom_primary'   => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'custom_secondary' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'custom_success'   => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'custom_warning'   => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'custom_danger'    => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'custom_info'      => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'fondo_pantalla_design' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'logo_design'           => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'emblema_design'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'favicon_design'        => 'nullable|file|mimes:jpeg,png,jpg,ico,webp|max:1024',
+            'support_email'                => 'nullable|email|max:255',
+            'support_telefono'             => 'nullable|string|max:20',
+            'audit_email'                  => 'nullable|email|max:255',
+            'audit_email_enabled'          => 'nullable|boolean',
+            'verification_expiration_time' => 'nullable|integer|min:1|max:1440',
+            'allow_profile_editing'        => 'nullable|boolean',
+        ]);
+
         try {
+            $catalogos = $request->filled('catalogos')
+                ? $this->validatedCatalogPayload($request->input('catalogos'))
+                : null;
+            $relationPayload = $request->filled('relaciones')
+                ? $this->validatedRelationPayload($request->input('relaciones'))
+                : null;
             $huboCambios = false; // Variable para verificar si hubo cambios
 
             // -----------------------------------------------------------------
@@ -67,11 +112,11 @@ class ParameterController extends Controller
             $designParameter = DesignParameter::first();
             if (!$designParameter) {
                 $designParameter = DesignParameter::create([
-                    'titulo_design' => null,
-                    'logo_design' => 'default_logo.png', // o NULL si prefieres
-                    'emblema_design' => 'default_emblema.png', // o NULL
-                    'favicon_design' => 'default_favicon.ico', // o NULL
-                    'fondo_pantalla_design' => 'default_fondo.png', // o NULL
+                    'titulo_design' => 'ApplicationBase',
+                    'logo_design' => 'default_logo.png',
+                    'emblema_design' => 'default_emblema.png',
+                    'favicon_design' => 'default_favicon.ico',
+                    'fondo_pantalla_design' => 'default_fondo.png',
                     'custom_primary' => '#0d6efd',
                     'custom_secondary' => '#6c757d',
                     'custom_success' => '#198754',
@@ -81,23 +126,6 @@ class ParameterController extends Controller
                 ]);
             }
 
-            // Validar y actualizar campos de color personalizados
-            $request->validate([
-                'titulo_design'    => 'required|string|max:255',
-                'custom_primary'   => 'required|string|max:255',
-                'custom_secondary' => 'required|string|max:255',
-                'custom_success'   => 'required|string|max:255',
-                'custom_warning'   => 'required|string|max:255',
-                'custom_danger'    => 'required|string|max:255',
-                'custom_info'      => 'required|string|max:255',
-
-                // Validaciones para archivos (opcional, solo si vienen)
-                'fondo_pantalla_design' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-                'logo_design'           => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-                'emblema_design'        => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-                'favicon_design'        => 'nullable|image|mimes:jpeg,png,jpg,ico,svg,webp|max:1024', // favicon más chico
-            ]);
-
             $designParameter->titulo_design = $request->titulo_design;
             $designParameter->custom_primary = $request->custom_primary;
             $designParameter->custom_secondary = $request->custom_secondary;
@@ -105,78 +133,48 @@ class ParameterController extends Controller
             $designParameter->custom_warning = $request->custom_warning;
             $designParameter->custom_danger = $request->custom_danger;
             $designParameter->custom_info = $request->custom_info;
+            $previousImages = [];
 
-            // Forma más elegante y portable de recalcular el verdadero DOCUMENT_ROOT en entornos locales o personalizados (tipo CPanel).
-            $basePublic = realpath(base_path('public')) ?: $_SERVER['DOCUMENT_ROOT'];
-            $pathDestino = $basePublic . '/config';
-
-            // FONDO
             if ($request->hasFile('fondo_pantalla_design')) {
-                $extension = $request->file('fondo_pantalla_design')->getClientOriginalExtension();
-                $fileNameToStore = 'fondo_' . time() . '.' . $extension;
-
-                if ($designParameter->fondo_pantalla_design !== $fileNameToStore) {
-                    $request->file('fondo_pantalla_design')->move($pathDestino, $fileNameToStore);
-
-                    if (!empty($designParameter->fondo_pantalla_design) && file_exists($pathDestino . '/' . $designParameter->fondo_pantalla_design)) {
-                        unlink($pathDestino . '/' . $designParameter->fondo_pantalla_design);
-                    }
-
-                    $designParameter->fondo_pantalla_design = $fileNameToStore;
-                }
+                $previousImages[] = $designParameter->getRawOriginal('fondo_pantalla_design');
+                $designParameter->fondo_pantalla_design = $this->storeDesignImage(
+                    $request->file('fondo_pantalla_design'),
+                    'fondo'
+                );
             }
 
-            // LOGO
             if ($request->hasFile('logo_design')) {
-                $extension = $request->file('logo_design')->getClientOriginalExtension();
-                $fileNameToStore = 'logo_' . time() . '.' . $extension;
-
-                if ($designParameter->logo_design !== $fileNameToStore) {
-                    $request->file('logo_design')->move($pathDestino, $fileNameToStore);
-
-                    if (!empty($designParameter->logo_design) && file_exists($pathDestino . '/' . $designParameter->logo_design)) {
-                        unlink($pathDestino . '/' . $designParameter->logo_design);
-                    }
-
-                    $designParameter->logo_design = $fileNameToStore;
-                }
+                $previousImages[] = $designParameter->getRawOriginal('logo_design');
+                $designParameter->logo_design = $this->storeDesignImage(
+                    $request->file('logo_design'),
+                    'logo'
+                );
             }
 
-            // EMBLEMA
             if ($request->hasFile('emblema_design')) {
-                $extension = $request->file('emblema_design')->getClientOriginalExtension();
-                $fileNameToStore = 'emblema_' . time() . '.' . $extension;
-
-                if ($designParameter->emblema_design !== $fileNameToStore) {
-                    $request->file('emblema_design')->move($pathDestino, $fileNameToStore);
-
-                    if (!empty($designParameter->emblema_design) && file_exists($pathDestino . '/' . $designParameter->emblema_design)) {
-                        unlink($pathDestino . '/' . $designParameter->emblema_design);
-                    }
-
-                    $designParameter->emblema_design = $fileNameToStore;
-                }
+                $previousImages[] = $designParameter->getRawOriginal('emblema_design');
+                $designParameter->emblema_design = $this->storeDesignImage(
+                    $request->file('emblema_design'),
+                    'emblema'
+                );
             }
 
-            // FAVICON
             if ($request->hasFile('favicon_design')) {
-                $extension = $request->file('favicon_design')->getClientOriginalExtension();
-                $fileNameToStore = 'favicon_' . time() . '.' . $extension;
-
-                if ($designParameter->favicon_design !== $fileNameToStore) {
-                    $request->file('favicon_design')->move($pathDestino, $fileNameToStore);
-
-                    if (!empty($designParameter->favicon_design) && file_exists($pathDestino . '/' . $designParameter->favicon_design)) {
-                        unlink($pathDestino . '/' . $designParameter->favicon_design);
-                    }
-
-                    $designParameter->favicon_design = $fileNameToStore;
-                }
+                $previousImages[] = $designParameter->getRawOriginal('favicon_design');
+                $designParameter->favicon_design = $this->storeDesignImage(
+                    $request->file('favicon_design'),
+                    'favicon'
+                );
             }
 
             // Se verifica si hubo cambios en los parámetros de diseño o en los archivos de imagenes para guardar y anotar que hubo cambios
             if ($designParameter->isDirty()) {
                 $designParameter->save();
+
+                foreach ($previousImages as $previousImage) {
+                    $this->deletePreviousDesignImage($previousImage);
+                }
+
                 $huboCambios = true;
             }
 
@@ -186,37 +184,21 @@ class ParameterController extends Controller
             if (!$operationalParameter) {
                 $operationalParameter = OperationalParameter::create([
                     'support_email' => null,
-                    'support_telefono' => null, // Nuevo campo
+                    'support_telefono' => null,
                     'audit_email' => null,
                     'audit_email_enabled' => 0,
-                    'verification_expiration_time' => null, // Nuevo campo
+                    'verification_expiration_time' => 60,
                     'allow_profile_editing' => 1,
                 ]);
             }
 
-            // Aseguramos que los checkboxes no enviados se interpreten como 'false'
-            $request->merge([
-                'audit_email_enabled'           => $request->has('audit_email_enabled') ? 1 : 0,
-                'allow_profile_editing'         => $request->has('allow_profile_editing') ? 1 : 0,
-            ]);
-
-            // Validar los datos sin mensajes inline
-            $request->validate([
-                'support_email'                     => 'nullable|email|max:255',
-                'support_telefono'                  => 'nullable|string|max:20', // Nuevo campo
-                'audit_email'                       => 'nullable|email|max:255',
-                'audit_email_enabled'               => 'nullable|boolean',
-                'verification_expiration_time'      => 'nullable|integer|min:1|max:1440', // 👍 recomendado
-                'allow_profile_editing'             => 'nullable|boolean',
-			]);
-
             // Asignar campos manualmente
             $operationalParameter->support_email                    = $request->input('support_email');
-            $operationalParameter->support_telefono                 = $request->input('support_telefono'); // Nuevo campo
+            $operationalParameter->support_telefono                 = $request->input('support_telefono');
             $operationalParameter->audit_email                      = $request->input('audit_email');
-            $operationalParameter->audit_email_enabled              = $request->input('audit_email_enabled');
-            $operationalParameter->verification_expiration_time     = $request->input('verification_expiration_time'); // Nuevo campo
-            $operationalParameter->allow_profile_editing            = $request->input('allow_profile_editing');
+            $operationalParameter->audit_email_enabled              = $request->boolean('audit_email_enabled');
+            $operationalParameter->verification_expiration_time     = $request->input('verification_expiration_time');
+            $operationalParameter->allow_profile_editing            = $request->boolean('allow_profile_editing');
 
             // Verificamos si hubo cambios reales
             if ($operationalParameter->isDirty()) {
@@ -226,18 +208,12 @@ class ParameterController extends Controller
 
             // ------------------------------------------------------------------------------------------
             // **** *** *** C A T A L O G O   D E   L I S T A S   C A T E G O R I Z A D A S   *** *** ***
-            if ($request->filled('catalogos')) {
-                $catalogos = json_decode($request->input('catalogos'), true);
-
+            if ($catalogos !== null) {
                 foreach ($catalogos as $item) {
-                    if (!isset($item['nombre']) || !isset($item['catalogo_id'])) {
-                        continue; // omitir entradas incompletas
-                    }
-
                     if (isset($item['id']) && $item['id']) {
                         $modelo = Catalogo::find($item['id']);
 
-                        if ($modelo &&
+                        if (
                             ($modelo->nombre !== $item['nombre'] ||
                             (int)$modelo->orden !== (int)$item['orden'] ||
                             (bool)$modelo->activo !== (bool)$item['activo'])) {
@@ -267,17 +243,15 @@ class ParameterController extends Controller
 
             // ----------------------------------------------------------------------------------------------------
             // **** *** *** R E L A C I O N E S   E N T R E   V A L O R E S   D E L   C A T A L O G O   *** *** ***
-            if ($request->filled('relaciones')) {
-                $relacionesRecibidas = json_decode($request->input('relaciones'), true);
+            if ($relationPayload !== null) {
+                $relacionesRecibidas = $relationPayload['relations'];
+                $editableValueIds = $relationPayload['editable_value_ids'];
+                $relationTypeIds = $relationPayload['relation_type_ids'];
 
                 // Clave para detectar qué relaciones mantener
                 $relacionesClave = [];
 
                 foreach ($relacionesRecibidas as $rel) {
-                    if ( !isset($rel['valor_origen_id'], $rel['valor_destino_id'], $rel['tipo_relacion_id']) ) {
-                        continue;
-                    }
-
                     $clave = $rel['valor_origen_id'] . '-' . $rel['valor_destino_id'] . '-' . $rel['tipo_relacion_id'];
                     $relacionesClave[] = $clave;
 
@@ -303,7 +277,11 @@ class ParameterController extends Controller
                 }
 
                 // Marcar como eliminadas las que no llegaron en la petición
-                $todasRelacionesActuales = CatalogoRelacion::withoutTrashed()->get();
+                $todasRelacionesActuales = CatalogoRelacion::withoutTrashed()
+                    ->whereIn('valor_origen_id', $editableValueIds)
+                    ->whereIn('valor_destino_id', $editableValueIds)
+                    ->whereIn('tipo_relacion_id', $relationTypeIds)
+                    ->get();
 
                 foreach ($todasRelacionesActuales as $relacion) {
                     $clave = $relacion->valor_origen_id . '-' . $relacion->valor_destino_id . '-' . $relacion->tipo_relacion_id;
@@ -319,6 +297,9 @@ class ParameterController extends Controller
             } else {
                 return redirect()->back()->with('status', __('responses.parametros.no_changes_detected'));
             }
+        }
+        catch (ValidationException $e) {
+            throw $e;
         }
         catch (\Throwable $e) {
             Log::error('❌ Error al actualizar parámetros generales', [
@@ -343,5 +324,110 @@ class ParameterController extends Controller
             ->get(['id', 'nombre']);
 
         return response()->json($valores);
+    }
+
+    private function storeDesignImage(UploadedFile $file, string $prefix): string
+    {
+        $destination = public_path('config');
+        $fileName = $prefix . '_' . Str::uuid() . '.' . $file->extension();
+
+        $file->move($destination, $fileName);
+
+        return $fileName;
+    }
+
+    private function deletePreviousDesignImage(?string $fileName): void
+    {
+        if ($fileName
+            && basename($fileName) === $fileName
+            && !in_array($fileName, self::DEFAULT_DESIGN_FILES, true)) {
+            $previousPath = public_path('config/' . $fileName);
+
+            if (is_file($previousPath)) {
+                unlink($previousPath);
+            }
+        }
+    }
+
+    private function editableCategoryIds(): array
+    {
+        return Catalogo::whereNull('catalogo_id')
+            ->whereNotIn('id', config('constantes.CATALOGOS_NO_FRONT'))
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+    }
+
+    private function decodeArrayPayload(string $payload, string $field): array
+    {
+        $decoded = json_decode($payload, true);
+
+        if (!is_array($decoded) || json_last_error() !== JSON_ERROR_NONE) {
+            throw ValidationException::withMessages([
+                $field => __('validation.custom.' . $field . '.invalid_payload'),
+            ]);
+        }
+
+        return $decoded;
+    }
+
+    private function validatedCatalogPayload(string $payload): array
+    {
+        $catalogs = $this->decodeArrayPayload($payload, 'catalogos');
+        $editableCategoryIds = $this->editableCategoryIds();
+
+        foreach ($catalogs as $item) {
+            $valid = isset($item['nombre'], $item['catalogo_id'], $item['orden'], $item['activo'])
+                && is_string($item['nombre'])
+                && trim($item['nombre']) !== ''
+                && mb_strlen($item['nombre']) <= 255
+                && filter_var($item['orden'], FILTER_VALIDATE_INT) !== false
+                && in_array($item['activo'], [true, false, 0, 1], true)
+                && in_array((int) $item['catalogo_id'], $editableCategoryIds, true);
+
+            if ($valid && isset($item['id']) && $item['id']) {
+                $catalog = Catalogo::find($item['id']);
+                $valid = $catalog && (int) $catalog->catalogo_id === (int) $item['catalogo_id'];
+            }
+
+            if (!$valid) {
+                throw ValidationException::withMessages([
+                    'catalogos' => __('validation.custom.catalogos.invalid_payload'),
+                ]);
+            }
+        }
+
+        return $catalogs;
+    }
+
+    private function validatedRelationPayload(string $payload): array
+    {
+        $relations = $this->decodeArrayPayload($payload, 'relaciones');
+        $editableValueIds = Catalogo::whereIn('catalogo_id', $this->editableCategoryIds())
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+        $relationTypeIds = Catalogo::where('catalogo_id', config('constantes.CATEGORIA_TIPO_RELACION'))
+            ->activos()
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+
+        foreach ($relations as $relation) {
+            if (!isset($relation['valor_origen_id'], $relation['valor_destino_id'], $relation['tipo_relacion_id'])
+                || !in_array((int) $relation['valor_origen_id'], $editableValueIds, true)
+                || !in_array((int) $relation['valor_destino_id'], $editableValueIds, true)
+                || !in_array((int) $relation['tipo_relacion_id'], $relationTypeIds, true)) {
+                throw ValidationException::withMessages([
+                    'relaciones' => __('validation.custom.relaciones.invalid_payload'),
+                ]);
+            }
+        }
+
+        return [
+            'relations' => $relations,
+            'editable_value_ids' => $editableValueIds,
+            'relation_type_ids' => $relationTypeIds,
+        ];
     }
 }

@@ -3,7 +3,7 @@
 
     $design = DB::table('design_parameters')->first();
 
-    $logo = $design->logo_design ?? 'logo-default.png';
+    $logo = $design->logo_design ?? 'default_logo.png';
 
     $colorPrincipal   = $design->custom_primary ?? '#0d6efd';
     $colorSecundario  = $design->custom_secondary ?? '#6c757d';
