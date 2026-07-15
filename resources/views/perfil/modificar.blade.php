@@ -55,7 +55,6 @@
                             <div class="form-group col-md-4">
                                 <label for="rol_id">Rol de Usuario</label>
                                 <input type="text" class="form-control" value="{{ $user->rol->nombre }}" disabled>
-                                <input type="hidden" name="rol_id" value="{{ old('rol_id', $user->rol_id) }}">
                             </div>
 
                             @switch($user->rol_id)
@@ -169,7 +168,6 @@
             }
 
             direccionRegion();
-            sucursalUsuario();
         });
     </script>
 @endsection

@@ -31,7 +31,6 @@
                 <ul class="sidebar-submenu nav flex-column ms-3 ps-3 list-unstyled">
 
 					<!-- Usuarios, Empresas y Sucursales comparten esta restricción de roles. -->
-					@if( in_array(Auth::user()->rol_id, [ config('constantes.ROL_COORDINADOR'), config('constantes.ROL_ADMINISTRADOR_IT') ]) )
 						<li>
 							<a href="{{ route('usuario.index') }}"
 							class="nav-link {{ Route::is('usuario.index') ? 'active' : '' }}"
@@ -53,7 +52,6 @@
 							<i class="fas fa-building me-2 text-secondary"></i>Sucursales
 							</a>
 						</li>
-					@endif
                 </ul>
             </li>
         @endif

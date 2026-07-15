@@ -69,7 +69,7 @@ Route::middleware(['auth'])->group(function () {
 	// Esto es para todos los usuarios
 	Route::get('perfil/password/{id}', [ProfileController::class, 'password'])->name('perfil.password');
 	Route::post('perfil/password',     [ProfileController::class, 'updatePassword'])->name('perfil.password.update');
-	Route::resource('perfil', ProfileController::class);
+	Route::resource('perfil', ProfileController::class)->only(['index', 'store', 'edit', 'update']);
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------
 	// PARÁMETROS GENERALES - LISTAS Y SELECCION DE CATÁLOGOS, REGIONES y COMUNAS
@@ -94,41 +94,36 @@ Route::middleware(['auth'])->group(function () {
 
 
 		// Usuarios, Empresas y Sucursales comparten esta restricción de roles.
-		Route::middleware(['check.role:'   . config('constantes.ROL_COORDINADOR') . ','
-											. config('constantes.ROL_ADMINISTRADOR_IT')])->group(function () {
+		Route::post('usuario/{id}/resend-welcome', [UsuarioController::class, 'resendWelcomeEmail'])->name('usuarios.resend-welcome');
+		Route::resource('actores/usuario', UsuarioController::class);
 
-			Route::post('usuario/{id}/resend-welcome', [UsuarioController::class, 'resendWelcomeEmail'])->name('usuarios.resend-welcome');
-			Route::resource('actores/usuario', UsuarioController::class);
+		//----------------------------------------------------------------------------------------------------------------------------------------------
+		Route::get('empresa/{id}/plantas',       [EmpresaController::class, 'plantas'])->name('empresa.plantas');                // En vinculación con Plantas de Proceso
+		Route::post('empresa/{empresa}/plantas', [EmpresaController::class, 'guardarPlantas'])->name('empresa.plantas.guardar'); // En vinculación con Plantas de Proceso
+		Route::get('empresas/tipo/{id}/por-rol', [EmpresaController::class, 'obtenerEmpresasPorTipoYRol']);                      // Uso exclusivo mantenedor de usuarios
+		Route::resource('actores/empresa', EmpresaController::class)->names([
+			'index'   => 'empresa.index',
+			'create'  => 'empresa.create',
+			'store'   => 'empresa.store',
+			'show'    => 'empresa.show',
+			'edit'    => 'empresa.edit',
+			'update'  => 'empresa.update',
+			'destroy' => 'empresa.destroy',
+		]);
 
-			//----------------------------------------------------------------------------------------------------------------------------------------------
-			Route::get('empresa/{id}/plantas',       [EmpresaController::class, 'plantas'])->name('empresa.plantas');                // En vinculación con Plantas de Proceso
-			Route::post('empresa/{empresa}/plantas', [EmpresaController::class, 'guardarPlantas'])->name('empresa.plantas.guardar'); // En vinculación con Plantas de Proceso
-			Route::get('empresas/tipo/{id}/por-rol', [EmpresaController::class, 'obtenerEmpresasPorTipoYRol']);                      // Uso exclusivo mantenedor de usuarios
-			Route::resource('actores/empresa', EmpresaController::class)->names([
-				'index'   => 'empresa.index',
-				'create'  => 'empresa.create',
-				'store'   => 'empresa.store',
-				'show'    => 'empresa.show',
-				'edit'    => 'empresa.edit',
-				'update'  => 'empresa.update',
-				'destroy' => 'empresa.destroy',
-			]);
-
-			//----------------------------------------------------------------------------------------------------------------------------------------------
-			Route::get('sucursal/{id}/productoras',        [SucursalController::class, 'productoras'])->name('sucursal.productoras');                // En vinculación con Productoras de Materia Prima
-			Route::post('sucursal/{sucursal}/productoras', [SucursalController::class, 'guardarProductoras'])->name('sucursal.productoras.guardar'); // En vinculación con Productoras de Materia Prima
-			Route::get('sucursales/tipo/{id}/por-rol',     [SucursalController::class, 'obtenerSucursalesPorTipoYRol']);                             // Uso exclusivo mantenedor de usuarios
-			Route::resource('actores/sucursal', SucursalController::class)->names([
-				'index'   => 'sucursal.index',
-				'create'  => 'sucursal.create',
-				'store'   => 'sucursal.store',
-				'show'    => 'sucursal.show',
-				'edit'    => 'sucursal.edit',
-				'update'  => 'sucursal.update',
-				'destroy' => 'sucursal.destroy',
-			]);
-		});
-
+		//----------------------------------------------------------------------------------------------------------------------------------------------
+		Route::get('sucursal/{id}/productoras',        [SucursalController::class, 'productoras'])->name('sucursal.productoras');                // En vinculación con Productoras de Materia Prima
+		Route::post('sucursal/{sucursal}/productoras', [SucursalController::class, 'guardarProductoras'])->name('sucursal.productoras.guardar'); // En vinculación con Productoras de Materia Prima
+		Route::get('sucursales/tipo/{id}/por-rol',     [SucursalController::class, 'obtenerSucursalesPorTipoYRol']);                             // Uso exclusivo mantenedor de usuarios
+		Route::resource('actores/sucursal', SucursalController::class)->names([
+			'index'   => 'sucursal.index',
+			'create'  => 'sucursal.create',
+			'store'   => 'sucursal.store',
+			'show'    => 'sucursal.show',
+			'edit'    => 'sucursal.edit',
+			'update'  => 'sucursal.update',
+			'destroy' => 'sucursal.destroy',
+		]);
 	});
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------

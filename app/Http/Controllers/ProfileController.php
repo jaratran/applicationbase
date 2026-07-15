@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Traits\ProcesaAvatarTrait;
 
 use App\Models\User;
+use App\Models\OperationalParameter;
 
 class ProfileController extends Controller
 {
@@ -94,6 +95,14 @@ class ProfileController extends Controller
     {
         $ide = Crypt::decrypt($id);
 
+        if (Auth::id() !== $ide) {
+            return redirect()->route('perfil.index')->with('error', __('auth.unauthorized_profile_edit'));
+        }
+
+        if (!$this->canEditProfile()) {
+            return redirect()->route('perfil.index')->with('error', __('auth.access_denied'));
+        }
+
         $user = User::with([
                                 'rol:id,nombre',
                                 'empresa:id,razon_social',
@@ -118,32 +127,17 @@ class ProfileController extends Controller
                                     'comuna_id'
                         ]);
 
-        // El el imposible caso de que el usuario activo fuera a modificar otro perfil ¿!?
-            // Cambiamos el uso de Gate por una comprobación directa de ID
-            // if (Gate::denies('verificar-usuario', $user)) {
-            //     abort(404);
-            // }
-
-            // Si el usuario activo no es el mismo que el usuario que se quiere editar -> ERROR 404 (feo)
-            // if (Auth::id() !== $user->id) {
-            //     abort(404);
-            // }
-
-        // Cambiamos el abort por un redirect con mensaje.
-        // Si el usuario activo no es el mismo que el usuario que se quiere editar, redirigimos a su perfil con un mensaje de error
-        if (Auth::id() !== $user->id) {
-            return redirect()->route('perfil.index')->with('error', __('auth.unauthorized_profile_edit'));
-        }
-
         return view('perfil.modificar', [ 'user' => $user ]);
     }
 
-    // $idx fue puesto solo por compatibilidad y activar mecanismos estándar RESTful de Laravel.
-    // $idx es el ID del usuario que está modificando su perfil -> El usuario activo.
-    // Por eso el método obtiene el id del usuario desde Auth. 
+    // El parámetro conserva la firma RESTful; la identidad autorizada siempre proviene de Auth.
     public function update(Request $request, $idx )
     {
         try {
+            if (!$this->canEditProfile()) {
+                return redirect()->route('perfil.index')->with('error', __('auth.access_denied'));
+            }
+
             /** @var \App\User $user */
             $user = Auth::user();
             $id = $user->id;
@@ -158,24 +152,9 @@ class ProfileController extends Controller
                 'direccion'          => 'required|string|max:255',
             ]);
 
-            $rol = intval($request->input('rol_id'));
-
-            if ($rol === config('constantes.ROL_SOLICITANTE_PLANTA')  ) {
-                $request->validate([
-                    'sucursal_id' => 'required|integer|exists:sucursales,id',
-                ]);
-            }
-            if ($rol === config('constantes.ROL_SOLICITANTE_PRODUCTOR') ) {
-                $request->validate([
-                    'empresa_id' => 'required|integer|exists:empresas,id',
-                ]);
-            }
-
             $user->rut_usuario = $request->rut_usuario;
             $user->nombre_usuario = $request->nombre_usuario;
             $user->apellidos_usuario = $request->apellidos_usuario;
-            $user->sucursal_id = $request->sucursal_id;
-            $user->rol_id = $request->rol_id;
             $user->email = $request->email;
             $user->telefono = $request->telefono;
             $user->comuna_id = $request->comuna_id;
@@ -202,8 +181,12 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\View\View
      */
-    public function password($id) {
-    	return view('perfil.password',['id' => $id]);
+	public function password($id) {
+		if (Auth::id() !== Crypt::decrypt($id)) {
+			return redirect()->route('perfil.index')->with('error', __('auth.unauthorized_profile_edit'));
+		}
+
+		return view('perfil.password',['id' => $id]);
     }
 
     public function updatePassword(Request $request)
@@ -213,7 +196,7 @@ class ProfileController extends Controller
                 'password' => [
                     'required',
                     'string',
-                    'min:8',             // must be at least 10 characters in length
+                    'min:8',             // must be at least 8 characters in length
                     'regex:/[a-z]/',      // must contain at least one lowercase letter
                     'regex:/[A-Z]/',      // must contain at least one uppercase letter
                     'regex:/[0-9]/',      // must contain at least one digit
@@ -230,6 +213,11 @@ class ProfileController extends Controller
             }
 
             $usuario = Crypt::decrypt($request->user);
+
+            if (Auth::id() !== $usuario) {
+                return redirect()->route('perfil.index')->with('error', __('auth.unauthorized_profile_edit'));
+            }
+
             $user = User::find($usuario);
             $user->password = bcrypt($request->password);
             $user->save();
@@ -246,5 +234,17 @@ class ProfileController extends Controller
 
             return back()->with('error', __('auth.password_update_error'));
         }
+    }
+
+    private function canEditProfile(): bool
+    {
+        if (OperationalParameter::query()->value('allow_profile_editing')) {
+            return true;
+        }
+
+        return in_array(Auth::user()->rol_id, [
+            config('constantes.ROL_COORDINADOR'),
+            config('constantes.ROL_ADMINISTRADOR_IT'),
+        ], true);
     }
 }
