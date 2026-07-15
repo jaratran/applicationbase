@@ -38,6 +38,19 @@ class UserRoleAssignment
             && !$this->isCoordinator($target);
     }
 
+    public function canChangeStatus(User $actor, User $target): bool
+    {
+        return $actor->getKey() !== $target->getKey()
+            && $this->canManageUser($actor, $target);
+    }
+
+    public function canResendWelcome(User $actor, User $target): bool
+    {
+        return $this->canManageUser($actor, $target)
+            && $target->activo
+            && !$target->hasVerifiedEmail();
+    }
+
     public function canAssignRole(User $actor, Catalogo $role, ?User $target = null): bool
     {
         if (!$role->activo || $role->catalogo_id !== config('constantes.CATEGORIA_ROL_USUARIO')) {

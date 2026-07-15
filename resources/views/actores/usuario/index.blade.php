@@ -170,17 +170,17 @@
                                                         @endif
                                                     </div>
                                                     <div class="d-flex justify-content-center gap-1">
-                                                        @if (! $user->hasVerifiedEmail())
+                                                        @if ($welcomeManageableUserIds->contains($user->id))
                                                             <button type="button" class="btn btn-secondary btn-xs btnReSendWelcomeEmail" data-id="{{ $user->id }}" title="Reenviar correo de bienvenida">
                                                                 <i class="fas fa-envelope"></i> {{-- Reenviar el Correo de Verificación y Bienvenida --}}
                                                             </button>
                                                         @endif
 
-                                                        @if ($user->activo)
+                                                        @if ($user->activo && $statusManageableUserIds->contains($user->id))
                                                             <button type="button" class="btn btn-danger btn-xs btnDeleteTrabajador" data-id="{{ $user->id }}" data-activo="{{ $user->activo ? '1' : '0' }}">
                                                                 <i class="fas fa-minus-circle"></i> {{-- desactivar --}}
                                                             </button>
-                                                        @else
+                                                        @elseif(!$user->activo && $statusManageableUserIds->contains($user->id))
                                                             <button type="button" class="btn btn-danger btn-xs btnDeleteTrabajador" data-id="{{ $user->id }}" data-activo="{{ $user->activo ? '1' : '0' }}">
                                                                 <i class="fas fa-check-circle"></i> {{-- reactivar --}}
                                                             </button>
@@ -278,6 +278,7 @@
             <form id="deleteForm" method="POST">
                 @csrf
                 @method('DELETE')
+                <input type="hidden" name="status_action" id="status_action">
 
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title" id="confirmDeleteLabel"></h5>
@@ -540,6 +541,7 @@
 
             // Para asignaciones subordinadas a si está Activo o Desactivo
             const activo = this.dataset.activo === '1';
+            document.getElementById('status_action').value = activo ? 'deactivate' : 'activate';
 
             // Título y pregunta
             const titulo = document.getElementById('confirmDeleteLabel');

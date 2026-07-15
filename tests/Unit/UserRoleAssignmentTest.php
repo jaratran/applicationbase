@@ -84,9 +84,68 @@ class UserRoleAssignmentTest extends TestCase
         ));
     }
 
-    private function user(int $roleId): User
+    #[Test]
+    public function administrator_can_change_another_users_status(): void
+    {
+        $administrator = $this->user(config('constantes.ROL_ADMINISTRADOR_IT'), 1);
+        $target = $this->user(config('constantes.ROL_PERSONAL_PRODUCCION'), 2);
+
+        $this->assertTrue($this->assignment->canChangeStatus($administrator, $target));
+    }
+
+    #[Test]
+    public function coordinator_can_administer_a_lower_authority_user_but_not_an_administrator(): void
+    {
+        $coordinator = $this->user(config('constantes.ROL_COORDINADOR'), 1);
+
+        $this->assertTrue($this->assignment->canChangeStatus(
+            $coordinator,
+            $this->user(config('constantes.ROL_PERSONAL_PRODUCCION'), 2),
+        ));
+        $this->assertFalse($this->assignment->canChangeStatus(
+            $coordinator,
+            $this->user(config('constantes.ROL_ADMINISTRADOR_IT'), 3),
+        ));
+    }
+
+    #[Test]
+    public function coordinator_can_change_another_coordinators_status(): void
+    {
+        $this->assertTrue($this->assignment->canChangeStatus(
+            $this->user(config('constantes.ROL_COORDINADOR'), 1),
+            $this->user(config('constantes.ROL_COORDINADOR'), 2),
+        ));
+    }
+
+    #[Test]
+    public function an_administrator_cannot_deactivate_itself(): void
+    {
+        $administrator = $this->user(config('constantes.ROL_ADMINISTRADOR_IT'), 1);
+
+        $this->assertFalse($this->assignment->canChangeStatus($administrator, $administrator));
+    }
+
+    #[Test]
+    public function welcome_can_only_be_resent_to_an_active_unverified_manageable_user(): void
+    {
+        $administrator = $this->user(config('constantes.ROL_ADMINISTRADOR_IT'), 1);
+        $target = $this->user(config('constantes.ROL_PERSONAL_PRODUCCION'), 2);
+        $target->activo = true;
+
+        $this->assertTrue($this->assignment->canResendWelcome($administrator, $target));
+
+        $target->email_verified_at = now();
+        $this->assertFalse($this->assignment->canResendWelcome($administrator, $target));
+
+        $target->email_verified_at = null;
+        $target->activo = false;
+        $this->assertFalse($this->assignment->canResendWelcome($administrator, $target));
+    }
+
+    private function user(int $roleId, ?int $id = null): User
     {
         $user = new User();
+        $user->id = $id;
         $user->rol_id = $roleId;
 
         return $user;

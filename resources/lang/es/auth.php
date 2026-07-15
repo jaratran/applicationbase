@@ -43,7 +43,9 @@ return [
     'user_update_error'                => 'Ocurrió un error al actualizar los datos del usuario.',
     'user_status_changed'              => 'El usuario ha sido correctamente :status.',
     'user_status_change_error'         => 'No se pudo cambiar el estado del usuario. Intenta nuevamente.',
+    'user_status_already_set'           => 'El usuario ya se encuentra en el estado solicitado.',
     'email_already_verified'           => 'Este usuario ya verificó su correo.',
+    'activation_email_unavailable'     => 'No se puede reenviar la activación a un usuario inactivo.',
     'welcome_successfully_sent'        => 'Correo de bienvenida reenviado correctamente.',
 
     // Redirecciones en controlador ProfileController.php

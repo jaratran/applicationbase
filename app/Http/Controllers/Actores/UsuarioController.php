@@ -53,10 +53,18 @@ class UsuarioController extends Controller
         $manageableUserIds = $usuario
             ->filter(fn (User $user) => $roleAssignment->canManageUser(Auth::user(), $user))
             ->pluck('id');
+        $statusManageableUserIds = $usuario
+            ->filter(fn (User $user) => $roleAssignment->canChangeStatus(Auth::user(), $user))
+            ->pluck('id');
+        $welcomeManageableUserIds = $usuario
+            ->filter(fn (User $user) => $roleAssignment->canResendWelcome(Auth::user(), $user))
+            ->pluck('id');
 
         return view('actores.usuario.index', [
             'usuario' => $usuario,
             'manageableUserIds' => $manageableUserIds,
+            'statusManageableUserIds' => $statusManageableUserIds,
+            'welcomeManageableUserIds' => $welcomeManageableUserIds,
         ]);
     } 
 
@@ -331,20 +339,33 @@ class UsuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $id, UserRoleAssignment $roleAssignment)
     {
+        $usuario = User::findOrFail($id);
+        abort_unless($roleAssignment->canChangeStatus(Auth::user(), $usuario), 403);
+
+        $request->validate([
+            'status_action' => ['required', Rule::in(['activate', 'deactivate'])],
+        ]);
+
+        $shouldActivate = $request->input('status_action') === 'activate';
+
+        if ($usuario->activo === $shouldActivate) {
+            return back()->with('error', __('auth.user_status_already_set'));
+        }
+
+        if (!$shouldActivate) {
+            $request->validate([
+                'observacion_inactividad' => 'required|string|max:500',
+            ]);
+        }
+
         try {
-            $usuario = User::findOrFail($id);
-    
-            if($usuario->activo){ // Si usuario está activo quiere decir que estamos desactivando y requerimos observación_inactividad
-                $request->validate([
-                    'observacion_inactividad' => 'required|string|max:500',
-                ]);
-    
+            if (!$shouldActivate) {
                 $usuario->observacion_inactividad = $request->input('observacion_inactividad');
             }
-    
-            $usuario->activo = !($usuario->activo);
+
+            $usuario->activo = $shouldActivate;
             $usuario->save();
     
             return redirect()->route('usuario.index')->with('status', __('auth.user_status_changed', ['status' => $usuario->activo ? 'activado' : 'desactivado',]));
@@ -369,13 +390,20 @@ class UsuarioController extends Controller
         //
     }
 
-    public function resendWelcomeEmail($id)
+    public function resendWelcomeEmail($id, UserRoleAssignment $roleAssignment)
     {
         $user = User::findOrFail($id);
+        abort_unless($roleAssignment->canManageUser(Auth::user(), $user), 403);
 
         if ($user->hasVerifiedEmail()) {
             return response()->json(['message' => __('auth.email_already_verified')], 422); // Mensaje definido en resources/lang/es/auth.php
         }
+
+        if (!$user->activo) {
+            return response()->json(['message' => __('auth.activation_email_unavailable')], 422);
+        }
+
+        abort_unless($roleAssignment->canResendWelcome(Auth::user(), $user), 403);
 
         // Disparo directo de la notificación personalizada.
         // Se evita el uso de MustVerifyEmail y del evento Registered para tener control completo.
