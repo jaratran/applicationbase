@@ -14,9 +14,9 @@ class CreateCatalogoRelacionesTable extends Migration
         Schema::create('catalogo_relaciones', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->unsignedBigInteger('valor_origen_id');   // ej: BIN
-            $table->unsignedBigInteger('valor_destino_id');  // ej: Camión Simple
-            $table->unsignedBigInteger('tipo_relacion_id');  // ej: Agrupamiento
+            $table->unsignedBigInteger('valor_origen_id');
+            $table->unsignedBigInteger('valor_destino_id');
+            $table->unsignedBigInteger('tipo_relacion_id');
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

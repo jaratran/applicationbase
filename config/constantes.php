@@ -22,8 +22,6 @@ return [
     'CATEGORIA_TIPO_RETIRO'           =>  34,
     'CATEGORIA_TIPO_ESPECIE'          =>  37,
     'CATEGORIA_TIPO_MATERIA_PRIMA'    =>  41,
-    'CATEGORIA_TIPO_CAMION'           =>  43,
-    'CATEGORIA_GRUPO_TIPO_CAMION'     =>  53,
 
 	'CATEGORIA_REGION_OPERATIVA'			=> 130,
 	'CATEGORIA_TIPO_TRANSPORTE'				=> 140,
@@ -39,7 +37,6 @@ return [
 								 29,   // Tipo de Sucursal
 								 31,   // Tipo Empresa
 
-								 53,   // Grupo Tipo Camión
 								 90,   // Estados de Retiro
 
 								130,   // Región Operativa
@@ -91,7 +88,6 @@ return [
     'EN_TRANSITO_MARITIMO'          => 202,
     'EN_TRANSITO_TERRESTRE'         => 203,
     'ARRIBADA_PUERTO_MONTT'         => 204,
-    'ASIGNADA_A_CAMIÓN'             => 205,
     'ENTREGADA_LA_PORTADA'          => 206,
 
 	/*

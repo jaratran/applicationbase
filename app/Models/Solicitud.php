@@ -23,7 +23,7 @@ class Solicitud extends Model
 	];
 
 	/**
-	 * Método getRegionOperativaCodigoAttribute (->region_operativa_codigo) en Camión para obtener el código de la región operativa fácilmente.
+	 * Permite obtener directamente el código de la región operativa de la solicitud.
 	 *
 	 */
 	public function getRegionOperativaCodigoAttribute(): string

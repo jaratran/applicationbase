@@ -15,7 +15,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Actores\UsuarioController;
 use App\Http\Controllers\Actores\EmpresaController;
 use App\Http\Controllers\Actores\SucursalController;
-use App\Http\Controllers\Actores\CamionController;
 use App\Http\Controllers\Actores\ConductorController;
 use App\Http\Controllers\SolicitudesRetiroController;
 
@@ -137,7 +136,6 @@ Route::middleware(['auth'])->group(function () {
 		//----------------------------------------------------------------------------------------------------------------------------------------------
 		Route::post('conductores/{conductor}/telegram/generar-pin', [ConductorController::class, 'generarPinTelegram'])->name('conductores.telegram.generar-pin');
 		Route::post('conductores/{conductor}/telegram/desvincular', [ConductorController::class, 'desvincularTelegram'])->name('conductores.telegram.desvincular');
-		Route::get('conductores/empresa/{id}', [ConductorController::class, 'obtenerConductoresPorEmpresa']);
 		Route::resource('actores/conductor', ConductorController::class)->names([
 			'index'   => 'conductor.index',
 			'create'  => 'conductor.create',
@@ -146,21 +144,6 @@ Route::middleware(['auth'])->group(function () {
 			'edit'    => 'conductor.edit',
 			'update'  => 'conductor.update',
 			'destroy' => 'conductor.destroy',
-		]);
-
-		//----------------------------------------------------------------------------------------------------------------------------------------------
-		Route::get('camiones/detalle/{id}', [CamionController::class, 'detalleCamion'])->name('camiones.detalle');
-		Route::get('camiones',              [CamionController::class, 'obtenerCamiones']);
-		Route::get('camiones/empresa/{id}', [CamionController::class, 'obtenerCamionesPorEmpresa']);
-		Route::get('camiones/tipo/{id}',    [CamionController::class, 'obtenerCamionesPorTipo'])->name('camiones.por-tipo');
-		Route::resource('actores/camion', CamionController::class)->names([
-			'index'   => 'camion.index',
-			'create'  => 'camion.create',
-			'store'   => 'camion.store',
-			'show'    => 'camion.show',
-			'edit'    => 'camion.edit',
-			'update'  => 'camion.update',
-			'destroy' => 'camion.destroy',
 		]);
 
 	});
@@ -215,7 +198,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('productora/{id}/plantas-vinculadas', [EmpresaController::class,  'plantasVinculadas'])->name('productora.plantas-vinculadas');
 		Route::get('planta/{id}/productoras-vinculadas', [SucursalController::class, 'productorasVinculadas'])->name('planta.productoras-vinculadas');
 
-		Route::get('empresas/tipo/{id}'                , [EmpresaController::class,   'obtenerEmpresasPorTipo']);                                      // En create/edit de: Conductores, Camiones, Solicitudes de Retiro (SOLO rol AdminIT/Coordinador).
+		Route::get('empresas/tipo/{id}'                , [EmpresaController::class,   'obtenerEmpresasPorTipo']);                                      // En create/edit de: Conductores y Solicitudes de Retiro (SOLO rol AdminIT/Coordinador).
 		Route::get('sucursales/tipo/{id}'              , [SucursalController::class,  'obtenerSucursalesPorTipo']);                                    // En create/edit de: Solicitudes de Retiro (SOLO rol AdminIT/Coordinador).
 	});
 

@@ -130,40 +130,6 @@ return [
     |
     */
     'custom' => [
-        // Validaciones personalizadas - CamionController
-        'empresa_id' => [
-            'required' => 'Debe seleccionar una empresa.',
-            'integer' => 'El identificador de empresa no es válido.',
-            'exists' => 'La empresa seleccionada no existe en el sistema.',
-        ],
-        'conductor_id' => [
-            'required' => 'Debe seleccionar un conductor.',
-            'integer' => 'El identificador de conductor no es válido.',
-            'exists' => 'El conductor seleccionado no existe en el sistema.',
-        ],
-        'tipo_camion_id' => [
-            'required' => 'Debe seleccionar un tipo de camión.',
-            'integer' => 'El identificador de tipo de camión no es válido.',
-            'exists' => 'El tipo de camión seleccionado no existe en el sistema.',
-        ],
-        'patente' => [
-            'required' => 'Debe ingresar la patente del camión.',
-            'string' => 'La patente debe ser una cadena de texto.',
-            'max' => 'La patente no debe exceder los :max caracteres.',
-        ],
-        'arrendado' => [
-            'required' => 'Debe indicar si el camión es arrendado.',
-            'boolean' => 'El valor del campo arrendado debe ser verdadero o falso.',
-        ],
-        'rendimiento_optimo' => [
-            'numeric' => 'El rendimiento óptimo debe ser un número.',
-            'min' => 'El rendimiento óptimo no puede ser negativo.',
-            'max' => 'El rendimiento óptimo no puede superar :max.',
-        ],
-        'observacion_inactividad' => [
-            'string' => 'La observación debe ser una cadena de texto.',
-        ],
-
         // Validaciones personalizadas - ConductorController
         'empresa_id' => [
             'required' => 'Debe seleccionar una empresa.',
@@ -556,16 +522,6 @@ return [
         'key' => 'clave',
         'owner' => 'propietario',
         'expiration' => 'expiración',
-
-        // Mensajes de validación para tabla camiones
-        'empresa_id' => 'empresa',
-        'conductor_id' => 'conductor',
-        'tipo_camion_id' => 'tipo de camión',
-        'patente' => 'patente',
-        'arrendado' => 'arrendado',
-        'rendimiento_optimo' => 'rendimiento óptimo',
-        'activo' => 'activo',
-        'observacion_inactividad' => 'observación de inactividad',
 
         // Mensajes de validación para tabla catalogo_relaciones
         'valor_origen_id' => 'valor origen',

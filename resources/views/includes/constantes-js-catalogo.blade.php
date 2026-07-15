@@ -126,8 +126,6 @@ const CATEGORIA_TIPO_EMPRESA            = {{ config('constantes.CATEGORIA_TIPO_E
 const CATEGORIA_TIPO_RETIRO             = {{ config('constantes.CATEGORIA_TIPO_RETIRO') }};
 const CATEGORIA_TIPO_ESPECIE            = {{ config('constantes.CATEGORIA_TIPO_ESPECIE') }};
 const CATEGORIA_TIPO_MATERIA_PRIMA      = {{ config('constantes.CATEGORIA_TIPO_MATERIA_PRIMA') }};
-const CATEGORIA_TIPO_CAMION             = {{ config('constantes.CATEGORIA_TIPO_CAMION') }};
-const CATEGORIA_GRUPO_TIPO_CAMION       = {{ config('constantes.CATEGORIA_GRUPO_TIPO_CAMION') }};
 const CATEGORIA_ESTADOS_RETIRO          = {{ config('constantes.CATEGORIA_ESTADOS_RETIRO') }};
 
 const CATEGORIA_REGION_OPERATIVA			= {{ config('constantes.CATEGORIA_REGION_OPERATIVA') }};

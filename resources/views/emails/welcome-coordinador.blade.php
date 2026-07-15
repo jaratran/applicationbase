@@ -24,7 +24,6 @@
 								<li>Consultar el historial y estado de las solicitudes de retiro.</li>
 								<li>Interactuar con el solicitante mediante comentarios sobre una solicitud.</li>
 								<li>Validar solicitudes de retiro realizadas.</li>
-								<li>Planificar el retiro de subproductos asignando un camión y chofer.</li>
 								<li>Registrar y planificar solicitudes de retiro que no fueron ingresadas por solicitantes en el sistema. Permitiendo contar con todos los retiros planificados en el sistema.</li>
 								<li>Ajustar las solicitudes o cancelarlas si es necesario.</li>
 								<li>Visualizar programas históricos (Planificado y Real).</li>

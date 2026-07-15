@@ -285,7 +285,7 @@ class EmpresaController extends Controller
 
     /**
      * Entrega empresas por Tipo ahora usado en:
-     *                      Create/Edit de Conductores y Camiones.
+     *                      Create/Edit de Conductores.
      *                      Create/Edit de Solicitudes de Retiro. En el caso de usuario AdminIT/Coordinador.
      */
 	public function obtenerEmpresasPorTipo($idTipo)

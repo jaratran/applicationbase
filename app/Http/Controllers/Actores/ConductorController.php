@@ -286,20 +286,6 @@ class ConductorController extends Controller
 	}
 
 	/**
-	 * Método para obtener los conductores por empresa:
-	 * Permite rellenar el selector de conductores utilizado por el mantenedor de Camiones.
-	 * Laravel incluye automáticamente nombre_completo porque lo tenemos en $appends del modelo Conductor.
-	 */
-	public function obtenerConductoresPorEmpresa($empresaId)
-	{
-		return Conductor::where('empresa_id', $empresaId)
-			->where('activo', true)
-			->orderBy('nombre')
-			->orderBy('apellido')
-			->get(['id', 'nombre', 'apellido']);
-	}
-
-	/**
 	 * Método para obtener un PIN único para vincular conductor con Telegram.
 	 */
 	public function generarPinTelegram(Conductor $conductor)

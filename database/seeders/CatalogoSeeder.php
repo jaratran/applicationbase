@@ -39,22 +39,6 @@ class CatalogoSeeder extends Seeder
             'Tipo Materia Prima' => [
                 'Subproductos',
             ],
-            'Tipo Camión' => [
-                'Camion Simple',
-                'Camion - Carro Plano',
-                'Camión Grúa',
-                'Rampa Frigorífica',
-                'Rampa Plana',
-                'Estanque 30000 Lt',
-                'Estanque 15000 Lt',
-                'Estanque 15000 Lt - Carro',
-                'Batea',
-            ],
-            'Grupo de Tipo Camión' => [
-                'BT',
-                'TK',
-                'BIN',
-            ],
         ];
 
         foreach ($listas as $categoriaNombre => $valores) {

@@ -53,14 +53,6 @@ return [
     'password_update_error'         => 'Error al actualizar la contraseña. Intenta nuevamente.',
     'unauthorized_profile_edit'     => 'No tienes permiso para editar el perfil de otro usuario.',
 
-    // Redirecciones en controlador CamiónController.php
-    'truck_created_successfully'    => 'Se ha creado el camión correctamente.',
-    'truck_creation_error'          => 'No se pudo crear el camión. Intenta nuevamente.',
-    'truck_updated_successfully'    => 'Se ha modificado el camión correctamente.',
-    'truck_update_error'            => 'No se pudo actualizar el camión. Intenta nuevamente.',
-    'truck_status_changed'          => 'El camión ha sido correctamente :status.',
-    'truck_status_change_error'     => 'No se pudo cambiar el estado del camión.',
-
     // Redirecciones en controlador ConductorController.php
     'driver_created_successfully'   => 'Se ha creado el conductor correctamente.',
     'driver_creation_error'         => 'Ocurrió un error al intentar crear el conductor.',

@@ -24,7 +24,7 @@
         <!-- MANTENEDORES DE ACTORES -->
         <!-- Esto es sólo para Admin-IT, Coodinadores y Coordinadores XII -->
         @if( in_array(Auth::user()->rol_id, [ config('constantes.ROL_COORDINADOR'), config('constantes.ROL_COORDINADOR_XII'), config('constantes.ROL_ADMINISTRADOR_IT') ]) )
-            <li class="nav-item {{ Route::is('usuario.index') || Route::is('sucursal.index') || Route::is('empresa.index') || Route::is('conductor.index') || Route::is('camion.index') ? 'active' : '' }}">
+            <li class="nav-item {{ Route::is('usuario.index') || Route::is('sucursal.index') || Route::is('empresa.index') || Route::is('conductor.index') ? 'active' : '' }}">
                 <div class="nav-link fw-bold">
                     <i class="fa fa-list"></i> Gestión
                 </div>
@@ -61,13 +61,6 @@
                            class="nav-link {{ Route::is('conductor.index') ? 'active' : '' }}"
                            {{ Route::is('conductor.index') ? 'aria-current=page' : '' }}>
                            <i class="fas fa-id-badge me-2 text-secondary"></i>Conductores
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('camion.index') }}"
-                           class="nav-link {{ Route::is('camion.index') ? 'active' : '' }}"
-                           {{ Route::is('camion.index') ? 'aria-current=page' : '' }}>
-                           <i class="fas fa-truck me-2 text-secondary"></i>Camiones
                         </a>
                     </li>
                 </ul>
