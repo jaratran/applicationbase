@@ -43,8 +43,4 @@ return [
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
     ],
-
-    'telegram' => [
-        'bot_token' => env('TELEGRAM_BOT_TOKEN'),
-    ],
 ];

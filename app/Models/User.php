@@ -69,7 +69,7 @@ class User extends Authenticatable
 
 
     /**
-     * Método getNombreCompletoAttribute (->nombre_completo) en Conductor para combinar nombre y apellido fácilmente.
+     * Combina el nombre y los apellidos del usuario para su presentación.
      *
      */
     public function getNombreCompletoAttribute()

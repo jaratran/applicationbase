@@ -26,17 +26,6 @@ return [
         'update_error'              => 'Ocurrió un error al actualizar los parámetros. Por favor, inténtelo nuevamente.',
     ],
 
-    'telegram' => [
-        'pin_generado'              => 'PIN generado, tiene una validez de :minutos minutos. Entregue este código al conductor: /vincular :pin',
-        'desvinculado_exito'        => 'Vinculación de Telegram eliminada correctamente.',
-        'desvinculado_error'        => 'No se pudo desvincular al conductor. Intente nuevamente.',     
-        
-        'vinculacion_exitosa'       => '✅ ¡Hola :nombre! Tu cuenta ha sido vinculada correctamente. Ahora recibirás notificaciones por este medio.',
-        'desvinculacion_admin'      => '🚫 Hola :nombre, tu cuenta ha sido desvinculada de LaPortada por un administrador. Si esto fue un error, comunícate con tu coordinador.',
-        'pin_invalido'              => '⚠️ El código ingresado no es válido o ha expirado. Por favor, solicite un nuevo código con el coordinador.',
-        'error_vinculacion'         => '❌ Ocurrió un error al intentar completar la vinculación. Contactese con el coordinador.',        
-    ],
-
     // Aquí puedes ir agrupando por módulo o tipo
     // 'usuarios' => [
     //     'update_success' => 'El usuario fue actualizado correctamente.',

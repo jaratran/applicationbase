@@ -53,14 +53,6 @@ return [
     'password_update_error'         => 'Error al actualizar la contraseña. Intenta nuevamente.',
     'unauthorized_profile_edit'     => 'No tienes permiso para editar el perfil de otro usuario.',
 
-    // Redirecciones en controlador ConductorController.php
-    'driver_created_successfully'   => 'Se ha creado el conductor correctamente.',
-    'driver_creation_error'         => 'Ocurrió un error al intentar crear el conductor.',
-    'driver_updated_successfully'   => 'Se ha modificado el conductor correctamente.',
-    'driver_update_error'           => 'Ocurrió un error al intentar actualizar la información del conductor.',
-    'driver_status_changed'         => 'El conductor ha sido correctamente :status.',
-    'driver_status_change_error'    => 'No se pudo cambiar el estado del conductor.',
-
     // Redirecciones en controlador EmpresaController.php
     'company_created_successfully'            => 'Se ha creado la empresa correctamente.',
     'company_creation_error'                  => 'No se pudo crear la empresa. Por favor, revisa los datos e inténtalo nuevamente.',

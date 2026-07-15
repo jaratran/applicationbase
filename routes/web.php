@@ -15,7 +15,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Actores\UsuarioController;
 use App\Http\Controllers\Actores\EmpresaController;
 use App\Http\Controllers\Actores\SucursalController;
-use App\Http\Controllers\Actores\ConductorController;
 use App\Http\Controllers\SolicitudesRetiroController;
 
 /*
@@ -90,13 +89,12 @@ Route::middleware(['auth'])->group(function () {
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------
 	// MANTENEDORES DE ACTORES
-	// Esto es sólo para Admin-IT, Coodinadores X y Coordinador XII
+	// Esto es sólo para Admin-IT y Coordinadores X.
 	Route::middleware(['check.role:'   . config('constantes.ROL_COORDINADOR') . ','
-										. config('constantes.ROL_COORDINADOR_XII') . ','
 										. config('constantes.ROL_ADMINISTRADOR_IT')])->group(function () {
 
 
-		// PERO esto es sólo para los 2 roles originales: Admin-IT y Coodinadores
+		// Usuarios, Empresas y Sucursales comparten esta restricción de roles.
 		Route::middleware(['check.role:'   . config('constantes.ROL_COORDINADOR') . ','
 											. config('constantes.ROL_ADMINISTRADOR_IT')])->group(function () {
 
@@ -131,20 +129,6 @@ Route::middleware(['auth'])->group(function () {
 				'destroy' => 'sucursal.destroy',
 			]);
 		});
-
-		// Esto es para los 3 roles: Admin-IT, Coodinadores X y Coordinador XII
-		//----------------------------------------------------------------------------------------------------------------------------------------------
-		Route::post('conductores/{conductor}/telegram/generar-pin', [ConductorController::class, 'generarPinTelegram'])->name('conductores.telegram.generar-pin');
-		Route::post('conductores/{conductor}/telegram/desvincular', [ConductorController::class, 'desvincularTelegram'])->name('conductores.telegram.desvincular');
-		Route::resource('actores/conductor', ConductorController::class)->names([
-			'index'   => 'conductor.index',
-			'create'  => 'conductor.create',
-			'store'   => 'conductor.store',
-			'show'    => 'conductor.show',
-			'edit'    => 'conductor.edit',
-			'update'  => 'conductor.update',
-			'destroy' => 'conductor.destroy',
-		]);
 
 	});
 
@@ -198,7 +182,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('productora/{id}/plantas-vinculadas', [EmpresaController::class,  'plantasVinculadas'])->name('productora.plantas-vinculadas');
 		Route::get('planta/{id}/productoras-vinculadas', [SucursalController::class, 'productorasVinculadas'])->name('planta.productoras-vinculadas');
 
-		Route::get('empresas/tipo/{id}'                , [EmpresaController::class,   'obtenerEmpresasPorTipo']);                                      // En create/edit de: Conductores y Solicitudes de Retiro (SOLO rol AdminIT/Coordinador).
+		Route::get('empresas/tipo/{id}'                , [EmpresaController::class,   'obtenerEmpresasPorTipo']);                                      // En create/edit de Solicitudes de Retiro (SOLO rol AdminIT/Coordinador).
 		Route::get('sucursales/tipo/{id}'              , [SucursalController::class,  'obtenerSucursalesPorTipo']);                                    // En create/edit de: Solicitudes de Retiro (SOLO rol AdminIT/Coordinador).
 	});
 

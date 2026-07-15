@@ -92,10 +92,8 @@ return [
 
 	/*
     |--------------------------------------------------------------------------
-    | Regiones - Usados para denotar región de operación de Conductores
+    | Regiones operativas
     |--------------------------------------------------------------------------
-    |
-    | Agregamos esta sección para implementar la migración de adición del campo región operativa a la tabla de conductores.
     |
     | Referencian el ID del registro en la tabla REGIONES - No se cargan desde la base de datos ni están en el catálogo.
     |

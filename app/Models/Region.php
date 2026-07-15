@@ -15,7 +15,6 @@ class Region extends Model
     ];
 
 	// Se refiere a las regiones operativas para cursar retiros.
-	// Se asocian conductores.
     protected $casts = [
         'operativa' => 'boolean',
     ];

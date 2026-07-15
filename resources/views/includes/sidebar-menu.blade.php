@@ -22,15 +22,15 @@
         @endif
 
         <!-- MANTENEDORES DE ACTORES -->
-        <!-- Esto es sólo para Admin-IT, Coodinadores y Coordinadores XII -->
-        @if( in_array(Auth::user()->rol_id, [ config('constantes.ROL_COORDINADOR'), config('constantes.ROL_COORDINADOR_XII'), config('constantes.ROL_ADMINISTRADOR_IT') ]) )
-            <li class="nav-item {{ Route::is('usuario.index') || Route::is('sucursal.index') || Route::is('empresa.index') || Route::is('conductor.index') ? 'active' : '' }}">
+        <!-- Esto es sólo para Admin-IT y Coordinadores X -->
+        @if( in_array(Auth::user()->rol_id, [ config('constantes.ROL_COORDINADOR'), config('constantes.ROL_ADMINISTRADOR_IT') ]) )
+            <li class="nav-item {{ Route::is('usuario.index') || Route::is('sucursal.index') || Route::is('empresa.index') ? 'active' : '' }}">
                 <div class="nav-link fw-bold">
                     <i class="fa fa-list"></i> Gestión
                 </div>
                 <ul class="sidebar-submenu nav flex-column ms-3 ps-3 list-unstyled">
 
-					<!-- PERO esto es sólo para los 2 roles originales: Admin-IT y Coodinadores -->
+					<!-- Usuarios, Empresas y Sucursales comparten esta restricción de roles. -->
 					@if( in_array(Auth::user()->rol_id, [ config('constantes.ROL_COORDINADOR'), config('constantes.ROL_ADMINISTRADOR_IT') ]) )
 						<li>
 							<a href="{{ route('usuario.index') }}"
@@ -54,15 +54,6 @@
 							</a>
 						</li>
 					@endif
-
-			        <!-- Esto si es para los 3 roles : Admin-IT, Coodinadores y Coordinadores XII -->
-                    <li>
-                        <a href="{{ route('conductor.index') }}"
-                           class="nav-link {{ Route::is('conductor.index') ? 'active' : '' }}"
-                           {{ Route::is('conductor.index') ? 'aria-current=page' : '' }}>
-                           <i class="fas fa-id-badge me-2 text-secondary"></i>Conductores
-                        </a>
-                    </li>
                 </ul>
             </li>
         @endif

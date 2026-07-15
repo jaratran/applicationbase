@@ -130,35 +130,6 @@ return [
     |
     */
     'custom' => [
-        // Validaciones personalizadas - ConductorController
-        'empresa_id' => [
-            'required' => 'Debe seleccionar una empresa.',
-            'integer' => 'El identificador de empresa no es válido.',
-            'exists' => 'La empresa seleccionada no existe en el sistema.',
-        ],
-        'rut' => [
-            'required' => 'Debe ingresar el RUT del conductor.',
-            'string' => 'El RUT debe ser una cadena de texto.',
-            'max' => 'El RUT no debe exceder los :max caracteres.',
-        ],
-        'nombre' => [
-            'required' => 'Debe ingresar el nombre del conductor.',
-            'string' => 'El nombre debe ser una cadena de texto.',
-            'max' => 'El nombre no debe exceder los :max caracteres.',
-        ],
-        'apellido' => [
-            'required' => 'Debe ingresar el apellido del conductor.',
-            'string' => 'El apellido debe ser una cadena de texto.',
-            'max' => 'El apellido no debe exceder los :max caracteres.',
-        ],
-        'telefono' => [
-            'string' => 'El teléfono debe ser una cadena de texto.',
-            'max' => 'El teléfono no debe exceder los :max caracteres.',
-        ],
-        'observacion_inactividad' => [
-            'string' => 'La observación debe ser una cadena de texto.',
-        ],
-
         // Validaciones personalizadas - EmpresaController
         'tipo_empresa_id' => [
             'required' => 'Debe seleccionar un tipo de empresa.',
@@ -537,15 +508,6 @@ return [
         // Mensajes de validación para tabla comunas
         'nombre' => 'nombre',
         'region_id' => 'región de comuna',
-
-        // Mensajes de validación para tabla conductores
-        'empresa_id' => 'empresa',
-        'rut' => 'RUT',
-        'nombre' => 'nombre',
-        'apellido' => 'apellido',
-        'telefono' => 'teléfono',
-        'activo' => 'activo',
-        'observacion_inactividad' => 'observación de inactividad',
 
         // Mensajes de validación para tabla design_parameters
         'titulo_design' => 'título',
