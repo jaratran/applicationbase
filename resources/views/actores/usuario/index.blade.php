@@ -159,11 +159,11 @@
                                                             <i class="fa fa-eye"></i>
                                                         </button>
 
-                                                        @if ($user->activo)
+                                                        @if ($user->activo && $manageableUserIds->contains($user->id))
                                                             <a class="btn btn-warning btn-xs text-white" href="{{ route('usuario.edit', ['usuario' => Crypt::encrypt($user->id)]) }}">
                                                                 <i class="fa fa-edit"></i>
                                                             </a>
-                                                        @else
+                                                        @elseif(!$user->activo && $manageableUserIds->contains($user->id))
                                                             <button type="button" class="btn btn-warning btn-xs text-white btnEditarInactivo"">
                                                                 <i class="fa fa-edit"></i>
                                                             </button>

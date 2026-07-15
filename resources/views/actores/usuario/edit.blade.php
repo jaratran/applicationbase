@@ -56,9 +56,14 @@
 									<div class="row">
 										<div class="form-group col-md-6 mt-4">
 											<label>Rol de Usuario</label>
-											<select class="form-control select2" id="rol_id" name="rol_id" required>
-												<option value="">{{ $usuario->rol->nombre }}</option>
+											<select class="form-control select2" id="rol_id" name="rol_id" required {{ $canChangeRole ? '' : 'disabled' }}>
+												@foreach($roles as $role)
+													<option value="{{ $role->id }}" {{ old('rol_id', $usuario->rol_id) == $role->id ? 'selected' : '' }}>{{ $role->nombre }}</option>
+												@endforeach
 											</select>
+											@if(!$canChangeRole)
+												<input type="hidden" name="rol_id" value="{{ $usuario->rol_id }}">
+											@endif
 											<input type="hidden" id="rol_actual" value="{{ $usuario->rol_id }}">
 										</div>
 										<!-- Botón para Asignar o Liberar Categoría de Agrupadores -->
@@ -443,8 +448,6 @@
                 // 🧷 Flag para evitar siguiente submit
                 this.enviado = true;
             });
-
-            catalogo2select2(CATEGORIA_ROL_USUARIO, "rol_id", "Seleccione Rol de Usuario", "rol_actual");
 
 			empresaUsuarioRol($('#rol_actual').val());
 			sucursalUsuarioRol($('#rol_actual').val());

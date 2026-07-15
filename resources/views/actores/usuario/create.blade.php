@@ -57,7 +57,10 @@
 								<div class="form-group col-md-4 mt-4">
 									<label>Rol de Usuario</label>
 									<select class="form-control select2" id="rol_id" name="rol_id" required>
-										<option value="">Cargando Roles ...</option>
+										<option value="">Seleccione Rol de Usuario</option>
+										@foreach($roles as $role)
+											<option value="{{ $role->id }}" {{ old('rol_id') == $role->id ? 'selected' : '' }}>{{ $role->nombre }}</option>
+										@endforeach
 									</select>
 								</div>
 
@@ -409,8 +412,6 @@
                 // 🧷 Flag para evitar siguiente submit
                 this.enviado = true;
             });
-
-            catalogo2select2(CATEGORIA_ROL_USUARIO, "rol_id", "Seleccione Rol de Usuario");
 
 			empresaUsuarioRol($('#rol_id').val());
 			sucursalUsuarioRol($('#rol_id').val());

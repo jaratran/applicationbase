@@ -11,8 +11,11 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 use App\Models\User;
+use App\Services\UserRoleAssignment;
 
 class UsuarioController extends Controller
 {
@@ -24,7 +27,7 @@ class UsuarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(UserRoleAssignment $roleAssignment)
     {
         $usuario = User::with([
                                 'rol:id,nombre',
@@ -47,7 +50,14 @@ class UsuarioController extends Controller
                                 'email_verified_at' // 👈🏼 ESTA ES LA CLAVE
                             ]);
 
-        return view('actores.usuario.index', ['usuario' => $usuario]);
+        $manageableUserIds = $usuario
+            ->filter(fn (User $user) => $roleAssignment->canManageUser(Auth::user(), $user))
+            ->pluck('id');
+
+        return view('actores.usuario.index', [
+            'usuario' => $usuario,
+            'manageableUserIds' => $manageableUserIds,
+        ]);
     } 
 
     /**
@@ -55,9 +65,11 @@ class UsuarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(UserRoleAssignment $roleAssignment)
     {
-        return view("actores/usuario.create");
+        return view("actores/usuario.create", [
+            'roles' => $roleAssignment->assignableRoles(Auth::user()),
+        ]);
     }
 
     /**
@@ -66,35 +78,38 @@ class UsuarioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, UserRoleAssignment $roleAssignment)
     {
-        try {
-            // NOTA: Se mantiene el campo 'comuna' por compatibilidad con los blades actuales.
-            // Este valor es luego asignado al modelo en 'comuna_id'.
+        $assignableRoleIds = $roleAssignment->assignableRoles(Auth::user())->pluck('id');
+
+        // Se mantiene el campo 'comuna' por compatibilidad con los blades actuales.
+        // Este valor es luego asignado al modelo en 'comuna_id'.
+        $request->validate([
+            'rut_usuario'        => 'required|string|max:12|unique:users,rut_usuario',
+            'nombre_usuario'     => 'required|string|max:255',
+            'apellidos_usuario'  => 'required|string|max:255',
+            'rol_id'             => ['required', 'integer', Rule::in($assignableRoleIds)],
+            'email'              => 'required|email|max:255|unique:users,email',
+            'telefono'           => 'required|string|max:30',
+            'comuna'             => 'required|integer|exists:comunas,id',
+            'direccion'          => 'required|string|max:255',
+            'avatar'             => 'nullable|mimetypes:image/jpeg,image/png,image/gif,image/bmp|max:2048',
+        ]);
+
+        $rol = intval($request->input('rol_id'));
+
+        if ($rol === config('constantes.ROL_SOLICITANTE_PLANTA')) {
             $request->validate([
-                'rut_usuario'        => 'required|string|max:12|unique:users,rut_usuario',
-                'nombre_usuario'     => 'required|string|max:255',
-                'apellidos_usuario'  => 'required|string|max:255',
-                'rol_id'             => 'required|integer|exists:catalogos,id',
-                'email'              => 'required|email|max:255|unique:users,email',
-                'telefono'           => 'required|string|max:30',
-                'comuna'             => 'required|integer|exists:comunas,id',
-                'direccion'          => 'required|string|max:255',
-                'avatar'             => 'nullable|mimetypes:image/jpeg,image/png,image/gif,image/bmp|max:2048',
+                'sucursal_id' => 'required|integer|exists:sucursales,id',
             ]);
+        }
+        if ($rol === config('constantes.ROL_SOLICITANTE_PRODUCTOR')) {
+            $request->validate([
+                'empresa_id' => 'required|integer|exists:empresas,id',
+            ]);
+        }
 
-            $rol = intval($request->input('rol_id'));
-
-            if ($rol === config('constantes.ROL_SOLICITANTE_PLANTA')  ) {
-                $request->validate([
-                    'sucursal_id' => 'required|integer|exists:sucursales,id',
-                ]);
-            }
-            if ($rol === config('constantes.ROL_SOLICITANTE_PRODUCTOR') ) {
-                $request->validate([
-                    'empresa_id' => 'required|integer|exists:empresas,id',
-                ]);
-            }
+        try {
 
             $usuario = new User();
             $usuario->rut_usuario = $request->rut_usuario;
@@ -130,7 +145,7 @@ class UsuarioController extends Controller
             // Disparo directo de la notificación personalizada.
             // Se evita el uso de MustVerifyEmail y del evento Registered para tener control completo.
             // event(new Registered($usuario)); // Laravel lanzará el proceso de verificación - Evitamos esta forma hasta que corrigamos el doble envío de correos
-            $usuario->notify(new CustomVerifyWelcomeEmail($usuario)); // Envía correo de bienvenida personalizado y sensible a roles
+            $usuario->notify(new CustomVerifyWelcomeEmail($usuario)); // Envía el correo personalizado de bienvenida y activación.
 
             // El siguiente mensaje interpola el email del usuario recién creado. Revisar el archivo resources/lang/es/auth.php para ver cómo se define.
             return redirect('actores/usuario')->with('status', __('auth.user_created_and_activation_sent', ['email' => $request->email] )); // Mensaje definido en resources/lang/es/auth.php
@@ -193,7 +208,7 @@ class UsuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, UserRoleAssignment $roleAssignment)
     {
         $ide = Crypt::decrypt($id);
 
@@ -223,7 +238,13 @@ class UsuarioController extends Controller
                                 'comuna_id'
                             ]);
 
-        return view('actores/usuario.edit', ["usuario" => $usuario]);
+        abort_unless($roleAssignment->canManageUser(Auth::user(), $usuario), 403);
+
+        return view('actores/usuario.edit', [
+            'usuario' => $usuario,
+            'roles' => $roleAssignment->assignableRoles(Auth::user(), $usuario),
+            'canChangeRole' => $roleAssignment->canChangeRole(Auth::user(), $usuario),
+        ]);
     }
 
     /**
@@ -233,15 +254,20 @@ class UsuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, UserRoleAssignment $roleAssignment)
     {
+        $usuario = User::findOrFail($id);
+        abort_unless($roleAssignment->canManageUser(Auth::user(), $usuario), 403);
+
+        $assignableRoleIds = $roleAssignment->assignableRoles(Auth::user(), $usuario)->pluck('id');
+
         // NOTA: Se mantiene el campo 'comuna' por compatibilidad con los blades actuales.
         // Este valor es luego asignado al modelo en 'comuna_id'.
         $request->validate([
             'rut_usuario'        => 'required|string|max:12|unique:users,rut_usuario,' . $id,
             'nombre_usuario'     => 'required|string|max:255',
             'apellidos_usuario'  => 'required|string|max:255',
-            'rol_id'             => 'required|integer|exists:catalogos,id',
+            'rol_id'             => ['required', 'integer', Rule::in($assignableRoleIds)],
             'email'              => 'required|email|max:255|unique:users,email,' . $id,
             'telefono'           => 'required|string|max:30',
             'comuna'             => 'required|integer|exists:comunas,id',
@@ -263,7 +289,6 @@ class UsuarioController extends Controller
         }
 
         try {
-            $usuario = User::find($id);
             $usuario->rut_usuario = $request->rut_usuario;
             $usuario->nombre_usuario = $request->nombre_usuario;
             $usuario->apellidos_usuario = $request->apellidos_usuario;
@@ -355,7 +380,7 @@ class UsuarioController extends Controller
         // Disparo directo de la notificación personalizada.
         // Se evita el uso de MustVerifyEmail y del evento Registered para tener control completo.
         // event(new Registered($user)); // Laravel lanzará el proceso de verificación - Evitamos esta forma hasta que corrigamos el doble envío de correos
-        $user->notify(new \App\Notifications\CustomVerifyWelcomeEmail($user)); // Vuelve a enviar correo de bienvenida personalizado y sensible a roles
+        $user->notify(new \App\Notifications\CustomVerifyWelcomeEmail($user)); // Vuelve a enviar el correo personalizado de bienvenida y activación.
 
         return response()->json(['message' => __('auth.welcome_successfully_sent')]); // Mensaje definido en resources/lang/es/auth.php
     }
