@@ -588,7 +588,6 @@ return [
         'avatar' => 'avatar',
         'comuna_id' => 'comuna',
         'direccion' => 'dirección',
-        'es_admin' => 'privilegios de administrador',
         'activo' => 'activo',
         'observacion_inactividad' => 'observación de inactividad',
         'fecha_login' => 'fecha de último ingreso',

@@ -79,7 +79,6 @@ class DatabaseSeeder extends Seeder
                 'rol_id' => $rolId,
                 'email' => 'admin@applicationbase.local',
                 'comuna_id' => $comunaId,
-                'es_admin' => 1,
                 'activo' => true,
                 'password' => Hash::make($password),
             ]);

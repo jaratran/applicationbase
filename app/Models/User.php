@@ -31,7 +31,6 @@ class User extends Authenticatable
         'comuna_id',
         'direccion',
         'avatar',
-        'es_admin',
         'activated',
         'fecha_login',
         'remember_token',
@@ -46,7 +45,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'rol_id' => 'integer', // Esto se agrega por comparaciones de rol en el envío de correo de bienvenida (en la asignación de texto-email se usa 'match' para subordinarla al rol).
+        'rol_id' => 'integer', // La autorización compara roles configurados usando identidad numérica estricta.
     ];
 
     /**

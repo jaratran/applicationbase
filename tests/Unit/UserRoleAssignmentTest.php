@@ -142,6 +142,26 @@ class UserRoleAssignmentTest extends TestCase
         $this->assertFalse($this->assignment->canResendWelcome($administrator, $target));
     }
 
+    #[Test]
+    public function historical_admin_flag_does_not_grant_authority_to_an_ordinary_role(): void
+    {
+        $ordinaryUser = $this->user(config('constantes.ROL_PERSONAL_PRODUCCION'), 1);
+        $ordinaryUser->setAttribute('es_admin', 1);
+        $target = $this->user(config('constantes.ROL_PERSONAL_PRODUCCION'), 2);
+
+        $this->assertFalse($this->assignment->canManageUser($ordinaryUser, $target));
+        $this->assertFalse($this->assignment->canChangeStatus($ordinaryUser, $target));
+    }
+
+    #[Test]
+    public function admin_flag_cannot_be_mass_assigned(): void
+    {
+        $user = new User();
+        $user->fill(['es_admin' => 1]);
+
+        $this->assertNull($user->getAttribute('es_admin'));
+    }
+
     private function user(int $roleId, ?int $id = null): User
     {
         $user = new User();
