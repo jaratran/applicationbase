@@ -1,12 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container app-page">
+    <div class="app-page-header">
+        <div>
+            <h1 class="app-page-title">Mi Perfil</h1>
+            <p class="app-page-description">Consulte y mantenga su información personal y de acceso.</p>
+        </div>
+    </div>
 	<div class="row">
         <div class="col-md-4">
             <div class="card">
-				<div class="card-header bg-primary text-white fs-5">
-					Mi Perfil
+				<div class="card-header bg-primary text-white">
+					Fotografía de perfil
 				</div>
 
 				<div class="card-body">
@@ -40,8 +46,8 @@
 
 		<div class="col-md-8">
             <div class="card">
-				<div class="card-header bg-primary text-white fs-5">
-					Mi Datos Personales
+				<div class="card-header bg-primary text-white">
+					Datos personales
 				</div>
 
 				<div class="card-body">

@@ -2,3 +2,190 @@
 body {
     font-family: 'Roboto', "Segoe UI", Calibri, Arial, sans-serif;
 }
+
+.app-authenticated {
+    background-color: var(--bs-tertiary-bg);
+}
+
+/* Convenciones visuales compartidas de las pantallas autenticadas. */
+.app-authenticated main > .container {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.app-page-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.app-page-title {
+    margin-bottom: .25rem;
+    color: var(--bs-primary);
+    font-size: calc(1.3rem + .6vw);
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.app-page-description {
+    margin-bottom: 0;
+    color: var(--bs-secondary-color);
+    font-size: 1rem;
+}
+
+.app-page-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.app-authenticated main .card {
+    --bs-card-border-color: var(--bs-border-color-translucent);
+    --bs-card-border-radius: .75rem;
+    --bs-card-inner-border-radius: calc(.75rem - 1px);
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+}
+
+.app-authenticated main .card-header {
+    padding: .875rem 1.25rem;
+    font-weight: 600;
+}
+
+.app-authenticated main .card-body {
+    padding: 1.25rem;
+}
+
+.app-authenticated main .card-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    padding: .875rem 1.25rem;
+    background-color: transparent;
+}
+
+.app-authenticated main .card-footer .btn {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.app-authenticated main .bg-light.border.rounded.p-3 {
+    border-color: var(--bs-border-color-translucent) !important;
+    border-radius: .75rem !important;
+    background-color: var(--bs-tertiary-bg) !important;
+}
+
+.app-authenticated main .bg-light.border.rounded.p-3 > h4,
+.app-authenticated main .bg-light.border.rounded.p-3 > h5,
+.app-authenticated main .bg-light.border.rounded.p-3 > h6 {
+    margin-bottom: 1rem;
+    color: var(--bs-primary);
+    font-weight: 600;
+}
+
+.app-authenticated main .form-group {
+    margin-bottom: 1rem;
+}
+
+.app-authenticated main .form-label,
+.app-authenticated main .form-group > label,
+.app-authenticated main .control-label {
+    margin-bottom: .375rem;
+    font-weight: 600;
+}
+
+.app-authenticated main .form-text,
+.app-authenticated main .help-block {
+    font-size: .875em;
+}
+
+.app-authenticated main .help-block {
+    color: var(--bs-danger);
+}
+
+.app-authenticated main .table {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+.app-authenticated main .table > thead > tr > th {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.app-authenticated main .datatable-contenedor-externo {
+    padding: 1rem;
+    border: var(--bs-border-width) solid var(--bs-border-color-translucent);
+    border-radius: .75rem;
+}
+
+.app-authenticated main .datatable-controles-superiores {
+    align-items: end;
+    padding-bottom: 1rem;
+    border-bottom: var(--bs-border-width) solid var(--bs-border-color-translucent);
+}
+
+.app-authenticated main .filtro {
+    width: 100% !important;
+}
+
+.app-authenticated main .filtro > label {
+    padding-top: 0;
+    color: var(--bs-secondary-color);
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+.app-authenticated main .modal-content {
+    border: 0;
+    border-radius: .75rem;
+    box-shadow: var(--bs-box-shadow-lg);
+}
+
+.panel-kpi-card {
+    border: 0;
+    border-left-width: .25rem;
+    border-left-style: solid;
+}
+
+.panel-kpi-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+.panel-chart {
+    position: relative;
+    min-height: 260px;
+}
+
+@media (max-width: 575.98px) {
+    .app-authenticated main > .container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .app-authenticated main .card-body,
+    .app-authenticated main .card-header,
+    .app-authenticated main .card-footer {
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+
+    .panel-chart {
+        min-height: 230px;
+    }
+}
+
+@media (min-width: 768px) {
+    .app-page-header {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .app-page-actions {
+        flex-shrink: 0;
+    }
+}

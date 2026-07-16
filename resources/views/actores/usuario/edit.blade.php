@@ -9,13 +9,16 @@
 @endsection
 
 @section('content')
-<div class="container">
+<div class="container app-page">
+    <div class="app-page-header">
+        <div>
+            <h1 class="app-page-title">Editar Usuario</h1>
+            <p class="app-page-description">Actualice los datos personales y organizacionales de la cuenta.</p>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-primary text-white fs-5">
-                    Editar Usuario
-                </div>
                 <form id="form_editar_usuario" action="{{ route('usuario.update', $usuario->id) }}" method="POST" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}

@@ -28,21 +28,23 @@
 @endsection
 
 @section('content')
-<div class="container">
+<div class="container app-page">
+    <div class="app-page-header">
+        <div>
+            <h1 class="app-page-title">Empresas</h1>
+            <p class="app-page-description">Administre las organizaciones y sus datos de contacto.</p>
+        </div>
+        <div class="app-page-actions">
+            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ route('empresa.create') }}'">
+                <i class="fa fa-plus me-1" aria-hidden="true"></i>Nueva Empresa
+            </button>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-primary text-white fs-5">
-                    Listado de Empresas
-                </div>
                 <div class="card-body">
                     @include('includes.alertas-sistema')
-
-                    <div class="form-group col-md-12 mb-2">
-                        <button type="button" class="btn btn-primary mb-2" onclick="window.location.href='{{ route('empresa.create') }}'">
-                            <i class="fa fa-plus"></i> Nueva Empresa
-                        </button>
-                    </div>
 
                     <div id="empresasTable" class="datatable-contenedor-externo">
 

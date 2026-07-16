@@ -9,13 +9,16 @@
 @endsection
 
 @section('content')
-<div class="container">
+<div class="container app-page">
+    <div class="app-page-header">
+        <div>
+            <h1 class="app-page-title">Editar Empresa</h1>
+            <p class="app-page-description">Actualice la organización, sus datos de contacto y configuración.</p>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-primary text-white fs-5">
-                    Editar Empresa
-                </div>
                 <form action="{{ route('empresa.update', $empresa->id) }}" method="POST" id="formEdit">
                     @csrf
                     @method('PUT')

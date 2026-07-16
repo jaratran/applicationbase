@@ -9,13 +9,16 @@
 @endsection
 
 @section('content')
-<div class="container">
+<div class="container app-page">
+    <div class="app-page-header">
+        <div>
+            <h1 class="app-page-title">Crear Usuario</h1>
+            <p class="app-page-description">Registre los datos personales y organizacionales de la nueva cuenta.</p>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-primary text-white fs-5">
-                    Crear Usuario
-                </div>
                 <form id="form_crear_usuario" action="{{ url('actores/usuario') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">

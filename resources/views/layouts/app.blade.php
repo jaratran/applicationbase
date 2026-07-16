@@ -64,7 +64,7 @@
         @yield('head-scripts')
     </head>
 
-    <body id="app-layout" class="small d-flex flex-column min-vh-100">
+    <body id="app-layout" class="small d-flex flex-column min-vh-100{{ Auth::check() ? ' app-authenticated' : '' }}">
         @if ( Auth::check() )
             <!-- Navbar -->
            @include('includes.navbar')

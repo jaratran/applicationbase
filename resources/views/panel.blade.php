@@ -2,11 +2,6 @@
 
 @section('head-scripts')
     <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <style>
-        .panel-kpi-card { border: 0; border-left: .25rem solid var(--bs-primary); }
-        .panel-chart { position: relative; min-height: 260px; }
-        @media (max-width: 575.98px) { .panel-chart { min-height: 230px; } }
-    </style>
 @endsection
 
 @section('content')
@@ -40,15 +35,17 @@
 <div class="container py-3 py-lg-4">
     @include('includes.alertas-sistema')
 
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-3 mb-4">
+    <div class="app-page-header">
         <div>
-            <h1 class="h3 text-primary mb-1">Panel de Control</h1>
+            <h1 class="app-page-title">Panel de Control</h1>
             <p class="text-muted mb-1">Bienvenido/a{{ Auth::user()->nombre_usuario ? ', '.Auth::user()->nombre_usuario : '' }}.</p>
             <p class="mb-0">Contenido demostrativo de los componentes disponibles para un Panel de Control.</p>
         </div>
-        <a href="{{ route('perfil.index') }}" class="btn btn-primary flex-shrink-0">
-            <i class="fas fa-user-circle me-2" aria-hidden="true"></i>Ver mi perfil
-        </a>
+        <div class="app-page-actions">
+            <a href="{{ route('perfil.index') }}" class="btn btn-primary">
+                <i class="fas fa-user-circle me-2" aria-hidden="true"></i>Ver mi perfil
+            </a>
+        </div>
     </div>
 
     <div class="row g-3 mb-4" id="panel-kpis">
@@ -60,8 +57,8 @@
                             <div class="text-muted small mb-1">{{ $indicador['titulo'] }}</div>
                             <div class="h3 mb-0">{{ $indicador['valor'] }}</div>
                         </div>
-                        <div class="rounded-circle bg-{{ $indicador['color'] }} bg-opacity-10 text-{{ $indicador['color'] }} d-flex align-items-center justify-content-center"
-                            style="width: 2.75rem; height: 2.75rem;" aria-hidden="true">
+                        <div class="panel-kpi-icon rounded-circle bg-{{ $indicador['color'] }} bg-opacity-10 text-{{ $indicador['color'] }} d-flex align-items-center justify-content-center"
+                            aria-hidden="true">
                             <i class="fas {{ $indicador['icono'] }} fa-lg"></i>
                         </div>
                     </div>

@@ -7,13 +7,16 @@
 @endsection
 
 @section('content')
-<div class="container">
+<div class="container app-page">
+    <div class="app-page-header">
+        <div>
+            <h1 class="app-page-title">Crear Empresa</h1>
+            <p class="app-page-description">Registre la organización, sus datos de contacto y configuración.</p>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-primary text-white fs-5">
-                    Crear Empresa
-                </div>
                 <form action="{{ route('empresa.store') }}" method="POST" id="formCreate">
                     @csrf
                     <div class="card-body">

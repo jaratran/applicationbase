@@ -23,21 +23,23 @@
 @endsection
 
 @section('content')
-<div class="container">
+<div class="container app-page">
+    <div class="app-page-header">
+        <div>
+            <h1 class="app-page-title">Usuarios</h1>
+            <p class="app-page-description">Administre las cuentas, su vigencia y acceso a la aplicación.</p>
+        </div>
+        <div class="app-page-actions">
+            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url('actores/usuario/create') }}'">
+                <i class="fa fa-plus me-1" aria-hidden="true"></i>Nuevo Usuario
+            </button>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-primary text-white fs-5">
-                    Listado de Usuarios
-                </div>
                 <div class="card-body">
                     @include('includes.alertas-sistema')
-
-                    <div class="form-group col-md-12 mb-2">
-                        <button type="button" class="btn btn-primary mb-2" onclick="window.location.href='{{ url('actores/usuario/create') }}'">
-                            <i class="fa fa-plus"></i> Nuevo Usuario
-                        </button>
-                    </div>
 
                     <div id="usuariosTable" class="datatable-contenedor-externo">
 
