@@ -12,27 +12,17 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Str;
-use App\Providers\RouteServiceProvider;
 
 class ResetPasswordController extends Controller
 {
     use ResetsPasswords;
 
     /**
-     * Redirección luego de restablecer la contraseña.
-     *
-     * @var string
-     */
-    // protected $redirectTo = RouteServiceProvider::HOME;
-    // Lo mandamos al login para que inicie sesión con la nueva contraseña.
-    // protected $redirectTo = '/login'; // reemplazado por el método redirectTo()
-
-    /**
      * Luego de reestablecer contraseña, redirigir al login obligatoriamente.
      */
     protected function redirectTo()
     {
-        return '/login';     // Lo mandamos al login para que inicie sesión con la nueva contraseña.
+        return '/login';
     }
 
     /**

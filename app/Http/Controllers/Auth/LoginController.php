@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-use App\Providers\RouteServiceProvider;
-
 class LoginController extends Controller
 {
     /*
@@ -32,7 +30,7 @@ class LoginController extends Controller
      * @var string
      */
 
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = 'panel';
 
     /**
      * Create a new controller instance.

@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Http\Controllers\PanelController;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -76,7 +75,7 @@ class PanelTest extends TestCase
     #[Test]
     public function post_login_destination_remains_the_panel(): void
     {
-        $this->assertSame('panel', RouteServiceProvider::HOME);
+        $this->assertSame('panel', Route::getRoutes()->getByName('panel.index')->uri());
     }
 
     private function prepareViewParameters(): void

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\VerifiesEmails;
-use App\Providers\RouteServiceProvider;
 
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -38,7 +37,7 @@ class VerificationController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = 'panel';
 
     /**
      * Create a new controller instance.
